@@ -2,94 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://yoursite.com/atom.xml" rel="self"/>
-  <link href="http://yoursite.com/"/>
-  <updated>2017-05-08T00:47:27+08:00</updated>
-  <id>http://yoursite.com/</id>
+  <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
+  <link href="http://chenhaoxiang.github.io/"/>
+  <updated>2017-05-08T01:39:43+08:00</updated>
+  <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[陈浩翔]]></title>
-    <link href="http://yoursite.com/blog/2017/05/08/chx/"/>
-    <updated>2017-05-08T00:16:35+08:00</updated>
-    <id>http://yoursite.com/blog/2017/05/08/chx</id>
-    <content type="html"><![CDATA[<h1>你好</h1>
-
-<h2>大家好</h2>
-
-<p><strong>加粗</strong></p>
-
-<p><code>标量</code> 有一个灰色的背景</p>
-
-<ul>
-<li>java
-
-<ul>
-<li>http</li>
-</ul>
-</li>
-<li>html</li>
-<li>php</li>
-</ul>
-
-
-<blockquote><p>引用
-嘿嘿</p></blockquote>
-
-<p><a href="http://chenhaoxiang.cn">陈浩翔</a></p>
-
-<p><img src="http://avatar.csdn.net/F/7/6/1_qq_26525215.jpg" alt="图片的描述-alt" /></p>
-
-<p>插入视频  宽 高  没播放时显示的图片 注意空格
-<video width='640' height='320' preload='metadata' controls poster='http://avatar.csdn.net/F/7/6/1_qq_26525215.jpg'><source src='http://static-jkxy.qiniudn.com/event/jkxy_profile20150318.mp4' type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'></video></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>public class Chx{
-</span><span class='line'>  public static void main(String srgs[]){
-</span><span class='line'>      System.out.print("你好啊");
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>高亮代码 语言 描述 来源地址</p>
-
-<figure class='code'><figcaption><span>This is a java</span><a href='http://www.chenhaoxiang.cn'>陈浩翔</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Java</span><span class="o">{</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="n">srgs</span><span class="o">[]){</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;你好啊&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>这是Java代码</span><a href='http://www.chenhaoxiang.cn'>link </a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Java</span><span class="o">{</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="n">srgs</span><span class="o">[]){</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;你好啊&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
   
 </feed>
