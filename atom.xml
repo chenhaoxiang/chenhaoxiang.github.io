@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
-  <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-05-08T00:47:28+08:00</updated>
-  <id>http://chenhaoxiang.github.io/</id>
+  <link href="http://yoursite.com/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2017-05-08T00:47:27+08:00</updated>
+  <id>http://yoursite.com/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[陈浩翔]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/08/chx/"/>
+    <link href="http://yoursite.com/blog/2017/05/08/chx/"/>
     <updated>2017-05-08T00:16:35+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/08/chx</id>
+    <id>http://yoursite.com/blog/2017/05/08/chx</id>
     <content type="html"><![CDATA[<h1>你好</h1>
 
 <h2>大家好</h2>

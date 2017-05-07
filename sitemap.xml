@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://chenhaoxiang.github.io/blog/2017/05/08/chx/</loc>
+<loc>http://yoursite.com/blog/2017/05/08/chx/</loc>
 <lastmod>2017-05-08T00:16:35+08:00</lastmod>
 </url>
 <url>
-<loc>http://chenhaoxiang.github.io/blog/archives/</loc>
+<loc>http://yoursite.com/blog/archives/</loc>
 </url>
 <url>
-<loc>http://chenhaoxiang.github.io/</loc>
+<loc>http://yoursite.com/</loc>
 </url>
 <url>
-<loc>http://chenhaoxiang.github.io/chenhaoxiang/</loc>
+<loc>http://yoursite.com/blog/categories/android/</loc>
 </url>
 <url>
-<loc>http://chenhaoxiang.github.io/blog/categories/android/</loc>
-</url>
-<url>
-<loc>http://chenhaoxiang.github.io/blog/categories/java/</loc>
+<loc>http://yoursite.com/blog/categories/java/</loc>
 </url>
 </urlset>
