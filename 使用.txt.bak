@@ -1,0 +1,37 @@
+﻿source\_includes中的head.html一个谷歌的路径需要改成百度的
+<script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+
+rake install
+编译成最新的静态网站
+rake generate 
+
+开启服务器 4000端口
+rake preview 
+
+
+进入source\_posts目录，生成md文件 写博客  复制粘贴也行，要保证md文件格式
+rake new_post['英文名']
+
+rake new_post['chx']
+
+生成单页面 - 首页面没有跳转地址
+
+rake new_page['目录名-英文']
+
+部署到github
+
+与本地的Octopress目录绑定
+建立起github 的网页
+rake setup_github_pages
+将本地的静态网站部署到github
+rake deploy
+
+git@github.com:your_username/your_username.github.io.git
+
+更新至_deploy 这个目录就是github的仓库
+rake deploy  
+
+表示将这个目录下的所有文件添加到git的版本管理工具中
+git add .
+
+
