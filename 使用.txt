@@ -28,6 +28,7 @@ rake deploy
 
 git@github.com:your_username/your_username.github.io.git
 
+
 更新至_deploy 这个目录就是github的仓库
 rake deploy  
 
@@ -36,5 +37,30 @@ git add .
 
 git commit -m 'your message'
 
+source 表示分支
 git push origin source
 
+添加导航页面 
+source\_includes\custom\navigation.html
+
+
+博客的自定义主题
+1.到github上找主题   
+https://github.com/tommy351/Octopress-Theme-Slash
+下载主题 
+git clone git://github.com/tommy351/Octopress-Theme-Slash.git .themes/slash
+
+
+2、安装主题
+rake install['themename']
+
+3.重新生成
+rake generate
+
+
+自定义域名:
+创建 source/CNAME 文件并指定域名
+
+echo 'chenhaoxiang.cn' >> source/CNAME
+# OR
+echo 'www.chenhaoxiang.cn' >> source/CNAME
