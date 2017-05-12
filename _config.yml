@@ -6,7 +6,7 @@ url: http://chenhaoxiang.github.io
 title: 人生之旅_谙忆
 subtitle: 学不止步,梦不停歇.
 author: 陈浩翔
-simple_search: https://www.baidu.com/search
+simple_search: https://www.google.com.hk/
 description:
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
@@ -41,17 +41,18 @@ rdiscount:
     - smart
 highlighter: pygments # default python pygments have been replaced by pygments.rb
 
-paginate: 10          # Posts per page on the blog index
+paginate: 10          # 每页展现blog的数量，如果blog数量大于这个，会产生翻页   Posts per page on the blog index
 paginate_path: "posts/:num"  # Directory base for pagination URLs eg. /posts/2/
-recent_posts: 5       # Posts in the sidebar Recent Posts section
-excerpt_link: "Read on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
+recent_posts: 5       # 右侧最近发表模块里blog的数量   Posts in the sidebar Recent Posts section
+excerpt_link: "阅读全文 &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
 excerpt_separator: "<!--more-->"
 
 titlecase: true       # Converts page and post titles to titlecase
 
 # list each of the sidebar modules you want to include, in the order you want them to appear.
 # To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+# 侧边栏
+default_asides: [asides/recent_posts.html, asides/earth.html, asides/github.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html, asides/blog_link.html]
 
 # Each layout uses the default asides, but they can have their own asides instead. Simply uncomment the lines below
 # and add an array with the asides you want to use.
@@ -63,8 +64,14 @@ default_asides: [asides/recent_posts.html, asides/github.html, asides/delicious.
 #   3rd Party Settings    #
 # ----------------------- #
 
-# Github repositories
-github_user:
+# 地球
+earth: true
+
+# 友情链接
+blog_link: true
+
+# Github repositories 
+github_user: chenhaoxiang
 github_repo_count: 0
 github_show_profile_link: true
 github_skip_forks: true
@@ -102,3 +109,6 @@ facebook_like: false
 
 # 分享
 jia_share: true
+
+# 评论
+changyan_comment: true

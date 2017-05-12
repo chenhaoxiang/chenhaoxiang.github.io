@@ -3,10 +3,18 @@ layout: post
 title: "hello"
 date: 2017-05-08 13:17:54 +0800
 comments: true
-categories: 
+categories: test
+tags: [test,java]
+keyword: seoTest, test
+description: 刚刚搭建的博客，测试
 ---
-# 你好
+#浏览博客请移步我的CSDN
 
-## hello
+现在因事情比较多，博客还在CSDN尚未搬过来。
+今天有点时间，花费了一下午弄了下这个博客。
+等哪天有时间了，受朋友的启发(他用Python写了个CSDN的博客导出工具)
+，打算用Java写个CSDN的博客导出工具。
 
-测试
+<!--more-->
+
+CSDN网址在友情链接！

@@ -33,9 +33,12 @@ git@github.com:your_username/your_username.github.io.git
 rake deploy  
 
 表示将这个目录下的所有文件添加到git的版本管理工具中
+git checkout source 检查
 git add .
 
 git commit -m 'your message'
+
+git commit -m ''
 
 source 表示分支
 git push origin source
@@ -64,3 +67,8 @@ rake generate
 echo 'chenhaoxiang.cn' >> source/CNAME
 # OR
 echo 'www.chenhaoxiang.cn' >> source/CNAME
+
+侧边栏:
+\source\_includes\asides
+友情链接:
+blog_link.html
