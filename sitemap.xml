@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://chenhaoxiang.github.io/blog/2017/05/14/study-in-imooc/</loc>
+<lastmod>2017-05-14T22:18:54+08:00</lastmod>
+</url>
+<url>
 <loc>http://chenhaoxiang.github.io/blog/2017/05/08/hello/</loc>
 <lastmod>2017-05-08T13:17:54+08:00</lastmod>
 </url>
@@ -18,5 +22,8 @@
 </url>
 <url>
 <loc>http://chenhaoxiang.github.io/blog/categories/test/</loc>
+</url>
+<url>
+<loc>http://chenhaoxiang.github.io/blog/categories/javashe-ji-mo-shi/</loc>
 </url>
 </urlset>
