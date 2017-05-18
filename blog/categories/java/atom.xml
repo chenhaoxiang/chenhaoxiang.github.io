@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Java | 人生之旅_谙忆]]></title>
+  <title><![CDATA[Category: Java | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-05-18T16:35:55+08:00</updated>
+  <updated>2017-05-18T21:58:17+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -14,24 +14,1292 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Java设计模式之模板方法模式]]></title>
+    <title type="html"><![CDATA[【Redis】Java之Redis工具类]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/05/18/redisUtil/"/>
+    <updated>2017-05-18T21:29:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/05/18/redisUtil</id>
+    <content type="html"><![CDATA[<p>我就不介绍Redis是什么了。
+(一个月前写的工具类，一直忘记分享了，算是比较全的Java-Redis工具类)
+直接上代码吧。</p>
+
+<p>先给出在spring 中配置Redis的代码。你在其他类用的时候，直接用注解自动注入就可以了。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h2>redis.properties</h2>
+
+<pre><code>##访问地址
+redis.host=127.0.0.1
+##访问端口
+redis.port=6379
+##注意，如果没有password，此处不设置值，但这一项要保留
+redis.password=你的密码
+
+#最大能够保持idel状态的对象数
+redis.maxIdle=150
+#连接池的最大数据库连接数。设为0表示无限制 最大分配的对象数
+redis.maxActive=300
+#连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true
+redis.blockWhenExhausted=true
+#获取连接时的最大等待毫秒数(如果设置为阻塞时BlockWhenExhausted),如果超时就抛异常, 小于零:阻塞不确定的时间,  默认-1
+redis.maxWait=10000
+#在borrow一个jedis实例时，是否提前进行alidate操作；如果为true，则得到的jedis实例均是可用的；
+redis.testOnBorrow=true
+#jedis调用returnObject方法时，是否进行有效检查 #
+redis.testOnReturn=true
+#在空闲时检查有效性, 默认false
+redis.testWhileIdle=true
+#表示idle object evitor两次扫描之间要sleep的毫秒数；
+redis.timeBetweenEvictionRunsMillis=30000
+#表示一个对象至少停留在idle状态的最短时间，
+#然后才能被idle object evitor扫描并驱逐；这一项只有在timeBetweenEvictionRunsMillis大于0时才有意义；
+redis.minEvictableIdleTimeMillis=-1
+
+#连接空闲的最小时间,达到此值后空闲链接将会被移除,且保留“minIdle”个空闲连接数。
+#如果minEvictableIdleTimeMillis&gt;0，则此项设置无意义，且只有在timeBetweenEvictionRunsMillis大于0时才有意义；
+redis.softMinEvictableIdleTimeMillis=60000
+</code></pre>
+
+<h2>spring.xml中配置redis</h2>
+
+<pre><code class="xml spring.xml中配置redis">  &lt;!-- S Redis 配置--&gt;
+    &lt;!-- scanner redis properties  --&gt;
+    &lt;context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/&gt;
+    &lt;!--（1）如果你有多个数据源需要通过
+    &lt;context:property-placeholder管理，且不愿意放在一个配置文件里，
+    那么一定要加上ignore-unresolvable=“true"(每一个都需要加这个属性)--&gt;
+    &lt;!--（2）注意新版的（从3.0版本开始弃用）JedisPoolConfig的property name，
+    不是maxActive而是maxTotal，而且没有maxWait属性，建议看一下Jedis源码。--&gt;
+    &lt;!-- redis连接池 --&gt;
+    &lt;bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"&gt;
+        &lt;property name="maxTotal" value="${redis.maxActive}"&gt;&lt;/property&gt;
+        &lt;property name="maxIdle" value="${redis.maxIdle}"&gt;&lt;/property&gt;
+        &lt;property name="maxWaitMillis" value="${redis.maxWait}"&gt;&lt;/property&gt;
+        &lt;property name="testOnBorrow" value="${redis.testOnBorrow}"&gt;&lt;/property&gt;
+        &lt;property name="testOnReturn" value="${redis.testOnReturn}"&gt;&lt;/property&gt;
+        &lt;property name="blockWhenExhausted" value="${redis.blockWhenExhausted}"&gt;&lt;/property&gt;
+        &lt;property name="testWhileIdle" value="${redis.testWhileIdle}"&gt;&lt;/property&gt;
+        &lt;property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"&gt;&lt;/property&gt;
+        &lt;property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"&gt;&lt;/property&gt;
+        &lt;property name="softMinEvictableIdleTimeMillis" value="${redis.softMinEvictableIdleTimeMillis}"&gt;&lt;/property&gt;
+    &lt;/bean&gt;
+    &lt;!-- redis连接工厂 --&gt;
+    &lt;bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.password}"  p:pool-config-ref="jedisPoolConfig"
+          p:usePool="true"/&gt;
+    &lt;!-- redis操作模板，这里采用尽量面向对象的模板 --&gt;
+    &lt;!--&lt;bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"&gt;
+        使用上句会无法使用模糊匹配
+    --&gt;
+    &lt;!--
+        p:enable-transaction-support="false"
+        设置setEnableTransactionSupport(true)，当前线程会强制先 MULTI命令
+     --&gt;
+    &lt;bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
+          p:enable-transaction-support="true"&gt;
+        &lt;property name="connectionFactory" ref="connectionFactory"/&gt;
+        &lt;!-- 如果不配置Serializer，那么存储的时候只能使用String，如果用对象类型存储，那么会提示错误 can't cast to String！！！--&gt;
+        &lt;property name="keySerializer"&gt;
+            &lt;!--对key的默认序列化器。默认值是StringSerializer--&gt;
+            &lt;bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/&gt;
+        &lt;/property&gt;
+        &lt;!--是对value的默认序列化器，默认值是取自DefaultSerializer的JdkSerializationRedisSerializer。--&gt;
+        &lt;property name="valueSerializer"&gt;
+            &lt;bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/&gt;
+        &lt;/property&gt;
+        &lt;!--存储Map时key需要的序列化配置--&gt;
+        &lt;property name="hashKeySerializer"&gt;
+            &lt;bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/&gt;
+        &lt;/property&gt;
+        &lt;!--存储Map时value需要的序列化配置--&gt;
+        &lt;property name="hashValueSerializer"&gt;
+            &lt;bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/&gt;
+        &lt;/property&gt;
+        &lt;!--开启事务
+        系统自动帮我们拿到了事务中绑定的连接。可以在一个方法的多次对Redis增删该查中，始终使用同一个连接。
+        --&gt;
+        &lt;property name="enableTransactionSupport" value="true"/&gt;
+        &lt;!--在Spring中@Transactional 也是可以进行事物控制的。--&gt;
+    &lt;/bean&gt;
+    &lt;!-- 缓存管理器: 使用redis 当做缓存 --&gt;
+    &lt;!--&lt;bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager"&gt;--&gt;
+        &lt;!--&lt;constructor-arg ref="redisTemplate"/&gt;--&gt;
+    &lt;!--&lt;/bean&gt;--&gt;
+    &lt;!-- cache配置 --&gt;
+    &lt;!-- E Redis 配置--&gt;
+</code></pre>
+
+<h2>Redis操作的接口</h2>
+
+<pre><code class="java Redis操作的接口">
+package com.uifuture.utils.redis;
+
+import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.util.CollectionUtils;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: 陈浩翔.
+ * Date: 2017/4/10.
+ * Time: 上午 12:11.
+ * Explain: Redis操作的接口
+ */
+public interface RedisCommand&lt;K, V&gt; {
+
+    /**
+     * 用户排序通过注册时间的 权重值
+     * @param date
+     * @return
+     */
+    double getCreateTimeScore(long date);
+    /**
+     * 获取Redis中所有的键的key
+     * @return
+     */
+    Set&lt;K&gt; getAllKeys();
+
+    /**
+     * 获取所有的普通key-value
+     * @return
+     */
+    Map&lt;K,V&gt; getAllString();
+
+    /**
+     * 获取所有的Set -key-value
+     * @return
+     */
+    Map&lt;K,Set&lt;V&gt;&gt; getAllSet();
+    /**
+     * 获取所有的ZSet正序  -key-value 不获取权重值
+     * @return
+     */
+    Map&lt;K,Set&lt;V&gt;&gt; getAllZSetReverseRange();
+    /**
+     * 获取所有的ZSet倒序  -key-value 不获取权重值
+     * @return
+     */
+    Map&lt;K,Set&lt;V&gt;&gt; getAllZSetRange();
+
+    /**
+     * 获取所有的List -key-value
+     * @return
+     */
+    Map&lt;K,List&lt;V&gt;&gt; getAllList();
+
+    /**
+     * 获取所有的Map -key-value
+     * @return
+     */
+    Map&lt;K,Map&lt;K,V&gt;&gt; getAllMap();
+
+    /**
+     * 添加一个list
+     * @param key
+     * @param objectList
+     */
+    void addList(K key, List&lt;V&gt; objectList);
+    /**
+     * 向list中增加值
+     * @param key
+     * @param obj
+     * @return 返回在list中的下标
+     */
+    long addList(K key,V obj);
+    /**
+     *
+     * 向list中增加值
+     * @param key
+     * @param obj
+     * @return 返回在list中的下标
+     */
+    long addList(K key,V ...obj);
+
+    /**
+     *
+     * 输出list
+     * @param key List的key
+     * @param s 开始下标
+     * @param e 结束的下标
+     * @return
+     */
+    List&lt;V&gt; getList(K key, long s, long e);
+    /**
+     * 输出完整的list
+     * @param key
+     */
+    List&lt;V&gt; getList(K key);
+    /**
+     * 获取list集合中元素的个数
+     * @param key
+     * @return
+     */
+    long getListSize(K key);
+    /**
+     * 移除list中某值
+     * 移除list中 count个value为object的值,并且返回移除的数量,
+     * 如果count为0,或者大于list中为value为object数量的总和,
+     * 那么移除所有value为object的值,并且返回移除数量
+     * @param key
+     * @param object
+     * @return 返回移除数量
+     */
+    long removeListValue(K key,V object);
+    /**
+     * 移除list中某值
+     * @param key
+     * @param object
+     * @return 返回移除数量
+     */
+    long removeListValue(K key,V... object);
+
+    /**
+     * 批量删除key对应的value
+     * @param keys
+     */
+    void remove(final K... keys);
+    /**
+     * 删除缓存
+     * 根据key精确匹配删除
+     * @param key
+     */
+    void remove(final K key);
+
+    /**
+     * 通过分数删除ZSet中的值
+     * @param key
+     * @param s
+     * @param e
+     */
+    void removeZSetRangeByScore(String key,double s , double e);
+    /**
+     * 设置Set的过期时间
+     * @param key
+     * @param time
+     * @return
+     */
+    Boolean setSetExpireTime(String key,Long time);
+
+    /**
+     * 设置ZSet的过期时间
+     * @param key
+     * @param time
+     * @return
+     */
+    Boolean setZSetExpireTime(String key,Long time);
+    /**
+     * 判断缓存中是否有key对应的value
+     * @param key
+     * @return
+     */
+    boolean exists(final K key);
+
+    /**
+     * 读取String缓存 可以是对象
+     * @param key
+     * @return
+     */
+    V get(final K key);
+    /**
+     * 读取String缓存 可以是对象
+     * @param key
+     * @return
+     */
+    List&lt;V&gt; get(final K... key);
+    /**
+     * 读取缓存 可以是对象 根据正则表达式匹配
+     * @param regKey
+     * @return
+     */
+    List&lt;Object&gt; getByRegular(final K regKey);
+
+
+    /**
+     * 写入缓存 可以是对象
+     * @param key
+     * @param value
+     */
+    void set(final K key, V value);
+
+    /**
+     * 写入缓存
+     * @param key
+     * @param value
+     * @param expireTime 过期时间 -单位s
+     * @return
+     */
+    void set(final K key, V value, Long expireTime);
+
+    /**
+     * 设置一个key的过期时间（单位：秒）
+     * @param key
+     * @param expireTime
+     * @return
+     */
+    boolean setExpireTime(K key, Long expireTime);
+
+    /**
+     * 获取key的类型
+     * @param key
+     * @return
+     */
+    DataType getType(K key);
+
+    /**
+     * 删除map中的某个对象
+     * @param key   map对应的key
+     * @param field map中该对象的key
+     */
+    void removeMapField(K key, V... field);
+    /*
+     * 获取map对象
+     * @param key map对应的key
+     * @return
+     */
+    Map&lt;K,V&gt; getMap(K key);
+    /*
+     * 获取map对象
+     * @param key map对应的key
+     * @return
+     */
+    Long getMapSize(K key);
+    /**
+     * 获取map缓存中的某个对象
+     * @param key map对应的key
+     * @param field map中该对象的key
+     * @return
+     */
+    &lt;T&gt; T getMapField(K key, K field);
+    /**
+     * 判断map中对应key的key是否存在
+     * @param key map对应的key
+     * @return
+     */
+    Boolean hasMapKey(K key,K field);
+
+    /**
+     * 获取map对应key的value
+     * @param key map对应的key
+     * @return
+     */
+    List&lt;V&gt; getMapFieldValue(K key);
+    /**
+     * 获取map的key
+     * @param key map对应的key
+     * @return
+     */
+    Set&lt;V&gt; getMapFieldKey(K key);
+    /**
+     * 添加map
+     * @param key
+     * @param map
+     */
+    void addMap(K key, Map&lt;K,V&gt; map);
+    /**
+     * 向key对应的map中添加缓存对象
+     * @param key   cache对象key
+     * @param field map对应的key
+     * @param value     值
+     */
+    void addMap(K key, K field, Object value);
+    /**
+     * 向key对应的map中添加缓存对象
+     * @param key   cache对象key
+     * @param field map对应的key
+     * @param time 过期时间-整个MAP的过期时间
+     * @param value     值
+     */
+    void addMap(K key, K field, V value,long time);
+
+    /**
+     * 向set中加入对象
+     * @param key  对象key
+     * @param obj  值
+     */
+    void addSet(K key, V... obj);
+
+    /**
+     * 处理事务时锁定key
+     * @param key
+     */
+    void watch(String key);
+
+    /**
+     * 移除set中的某些值
+     * @param key  对象key
+     * @param obj  值
+     */
+    long removeSetValue(K key, V obj);
+    /**
+     * 移除set中的某些值
+     * @param key  对象key
+     * @param obj  值
+     */
+    long removeSetValue(K key, V... obj);
+
+    /**
+     * 获取set的对象数
+     * @param key  对象key
+     */
+    long getSetSize(K key);
+
+    /**
+     * 判断set中是否存在这个值
+     * @param key  对象key
+     */
+    Boolean hasSetValue(K key,V obj);
+    /**
+     * 获得整个set
+     * @param key  对象key
+     */
+    Set&lt;V&gt; getSet(K key);
+
+    /**
+     * 获得set 并集
+     * @param key
+     * @param otherKey
+     * @return
+     */
+    Set&lt;V&gt; getSetUnion(K key,K otherKey);
+
+    /**
+     * 获得set 并集
+     * @param key
+     * @param set
+     * @return
+     */
+    Set&lt;V&gt; getSetUnion(K key,Set&lt;Object&gt; set);
+
+    /**
+     * 获得set 交集
+     * @param key
+     * @param otherKey
+     * @return
+     */
+    Set&lt;V&gt; getSetIntersect(K key,K otherKey);
+
+    /**
+     * 获得set 交集
+     * @param key
+     * @param set
+     * @return
+     */
+    Set&lt;V&gt; getSetIntersect(K key,Set&lt;Object&gt; set);
+
+    /**
+     * 模糊移除 支持*号等匹配移除
+     * @param blears
+     */
+    void removeBlear(K... blears);
+
+    /**
+     * 修改key名 如果不存在该key或者没有修改成功返回false
+     * @param oldKey
+     * @param newKey
+     * @return
+     */
+    Boolean renameIfAbsent(String oldKey,String newKey);
+    /**
+     * 模糊移除 支持*号等匹配移除
+     * @param blear
+     */
+    void removeBlear(K blear);
+
+    /**
+     * 根据正则表达式来移除key-value
+     * @param blears
+     */
+    void removeByRegular(String... blears);
+
+    /**
+     * 根据正则表达式来移除key-value
+     * @param blears
+     */
+    void removeByRegular(String blears);
+
+    /**
+     * 根据正则表达式来移除 Map中的key-value
+     * @param key
+     * @param blears
+     */
+    void removeMapFieldByRegular(K key,K... blears);
+
+    /**
+     * 根据正则表达式来移除 Map中的key-value
+     * @param key
+     * @param blear
+     */
+    void removeMapFieldByRegular(K key,K blear);
+
+    /**
+     * 移除key 对应的value
+     * @param key
+     * @param value
+     * @return
+     */
+    Long removeZSetValue(K key, V... value);
+    /**
+     * 移除key ZSet
+     * @param key
+     * @return
+     */
+    void removeZSet(K key);
+    /**
+     *删除，键为K的集合，索引start&lt;=index&lt;=end的元素子集
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    void removeZSetRange(K key,Long start,Long end);
+
+    /**
+     * 并集 将key对应的集合和key1对应的集合合并到key2中
+     * 如果分数相同的值，都会保留
+     * 原来key2的值会被覆盖
+     * @param key
+     * @param key1
+     * @param key2
+     */
+    void setZSetUnionAndStore(String key,String key1, String key2);
+
+    /**
+     * 获取整个有序集合ZSET，正序
+     * @param key
+     */
+    &lt;T&gt; T getZSetRange(K key);
+
+    /**
+     * 获取有序集合ZSET
+     * 键为K的集合，索引start&lt;=index&lt;=end的元素子集，正序
+     * @param key
+     * @param start 开始位置
+     * @param end 结束位置
+     */
+    &lt;T&gt; T getZSetRange(K key,long start,long end);
+    /**
+     * 获取整个有序集合ZSET，倒序
+     * @param key
+     */
+    Set&lt;Object&gt; getZSetReverseRange(K key);
+
+    /**
+     * 获取有序集合ZSET
+     * 键为K的集合，索引start&lt;=index&lt;=end的元素子集，倒序
+     * @param key
+     * @param start 开始位置
+     * @param end 结束位置
+     */
+    Set&lt;V&gt; getZSetReverseRange(K key,long start,long end);
+
+    /**
+     * 通过分数(权值)获取ZSET集合 正序 -从小到大
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    Set&lt;V&gt; getZSetRangeByScore(String key, double start, double end);
+
+    /**
+     * 通过分数(权值)获取ZSET集合 倒序 -从大到小
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    Set&lt;V&gt; getZSetReverseRangeByScore(String key, double start, double end);
+
+    /**
+     * 键为K的集合，索引start&lt;=index&lt;=end的元素子集
+     * 返回泛型接口（包括score和value），正序
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    Set&lt;ZSetOperations.TypedTuple&lt;V&gt;&gt; getZSetRangeWithScores(K key, long start, long end);
+    /**
+     * 键为K的集合，索引start&lt;=index&lt;=end的元素子集
+     * 返回泛型接口（包括score和value），倒序
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    Set&lt;ZSetOperations.TypedTuple&lt;V&gt;&gt; getZSetReverseRangeWithScores(K key, long start, long end);
+
+    /**
+     * 键为K的集合
+     * 返回泛型接口（包括score和value），正序
+     * @param key
+     * @return
+     */
+    Set&lt;ZSetOperations.TypedTuple&lt;V&gt;&gt; getZSetRangeWithScores(K key);
+    /**
+     * 键为K的集合
+     * 返回泛型接口（包括score和value），倒序
+     * @param key
+     * @return
+     */
+    Set&lt;ZSetOperations.TypedTuple&lt;V&gt;&gt; getZSetReverseRangeWithScores(K key);
+
+    /**
+     * 键为K的集合，sMin&lt;=score&lt;=sMax的元素个数
+     * @param key
+     * @param sMin
+     * @param sMax
+     * @return
+     */
+    long getZSetCountSize(K key,double sMin,double sMax);
+
+    /**
+     * 获取Zset 键为K的集合元素个数
+     * @param key
+     * @return
+     */
+    long getZSetSize(K key);
+
+    /**
+     * 获取键为K的集合，value为obj的元素分数
+     * @param key
+     * @param value
+     * @return
+     */
+    double getZSetScore(K key,V value);
+
+    /**
+     * 元素分数增加，delta是增量
+     * @param key
+     * @param value
+     * @param delta
+     * @return
+     */
+    double incrementZSetScore(K key,V value,double delta);
+
+    /**
+     * 添加有序集合ZSET
+     * 默认按照score升序排列，存储格式K(1)==V(n)，V(1)=S(1)
+     * @param key
+     * @param score
+     * @param value
+     * @return
+     */
+    Boolean addZSet(String key ,double score, Object value);
+
+    /**
+     * 添加有序集合ZSET
+     * @param key
+     * @param value
+     * @return
+     */
+    Long addZSet(K key,TreeSet&lt;V&gt; value);
+
+    /**
+     * 添加有序集合ZSET
+     * @param key
+     * @param score
+     * @param value
+     * @return
+     */
+    Boolean addZSet(K key,double[] score, Object[] value);
+
+
+
+}
+</code></pre>
+
+<h2>Redis的工具类</h2>
+
+<pre><code class="java Redis的工具类">
+package com.uifuture.utils.redis;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: 陈浩翔.
+ * Date: 2017/4/10.
+ * Time: 上午 12:51.
+ * Explain: Redis的工具类
+ * 增删改 -不能在这里面抓取异常 -因为可能有事务处理
+ */
+@Component
+public class RedisHandle implements RedisCommand&lt;String, Object&gt; {
+    private Logger logger = Logger.getLogger(RedisHandle.class);
+    @Autowired
+    protected RedisTemplate redisTemplate;
+    /**
+     * 出异常，重复操作的次数
+     */
+    private static Integer times = 5;
+
+    @Override
+    public double getCreateTimeScore(long date) {
+        return date/ 100000.0;
+    }
+
+    @Override
+    public Set&lt;String&gt; getAllKeys() {
+        return redisTemplate.keys("*");
+    }
+
+    @Override
+    public Map&lt;String, Object&gt; getAllString() {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();
+        Iterator&lt;String&gt; iterator = stringSet.iterator();
+        while (iterator.hasNext()) {
+            String k = iterator.next();
+            if (getType(k) == DataType.STRING) {
+                map.put(k, get(k));
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map&lt;String, Set&lt;Object&gt;&gt; getAllSet() {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        Map&lt;String, Set&lt;Object&gt;&gt; map = new HashMap&lt;String, Set&lt;Object&gt;&gt;();
+        Iterator&lt;String&gt; iterator = stringSet.iterator();
+        while (iterator.hasNext()) {
+            String k = iterator.next();
+            if (getType(k) == DataType.SET) {
+                map.put(k, getSet(k));
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map&lt;String, Set&lt;Object&gt;&gt; getAllZSetRange() {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        Map&lt;String, Set&lt;Object&gt;&gt; map = new HashMap&lt;String, Set&lt;Object&gt;&gt;();
+        Iterator&lt;String&gt; iterator = stringSet.iterator();
+        while (iterator.hasNext()) {
+            String k = iterator.next();
+            if (getType(k) == DataType.ZSET) {
+                logger.debug("k:"+k);
+                map.put(k, getZSetRange(k));
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map&lt;String, Set&lt;Object&gt;&gt; getAllZSetReverseRange() {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        Map&lt;String, Set&lt;Object&gt;&gt; map = new HashMap&lt;String, Set&lt;Object&gt;&gt;();
+        Iterator&lt;String&gt; iterator = stringSet.iterator();
+        while (iterator.hasNext()) {
+            String k = iterator.next();
+            if (getType(k) == DataType.ZSET) {
+                map.put(k, getZSetReverseRange(k));
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map&lt;String, List&lt;Object&gt;&gt; getAllList() {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        Map&lt;String, List&lt;Object&gt;&gt; map = new HashMap&lt;String, List&lt;Object&gt;&gt;();
+        Iterator&lt;String&gt; iterator = stringSet.iterator();
+        while (iterator.hasNext()) {
+            String k = iterator.next();
+            if (getType(k) == DataType.LIST) {
+                map.put(k, getList(k));
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public Map&lt;String, Map&lt;String, Object&gt;&gt; getAllMap() {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        Map&lt;String, Map&lt;String, Object&gt;&gt; map = new HashMap&lt;String, Map&lt;String, Object&gt;&gt;();
+        Iterator&lt;String&gt; iterator = stringSet.iterator();
+        while (iterator.hasNext()) {
+            String k = iterator.next();
+            if (getType(k) == DataType.HASH) {
+                map.put(k, getMap(k));
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public void addList(String key, List&lt;Object&gt; objectList) {
+        for (Object obj : objectList) {
+            addList(key, obj);
+        }
+    }
+
+    @Override
+    public long addList(String key, Object obj) {
+        return redisTemplate.boundListOps(key).rightPush(obj);
+    }
+
+    @Override
+    public long addList(String key, Object... obj) {
+        return redisTemplate.boundListOps(key).rightPushAll(obj);
+    }
+
+    @Override
+    public List&lt;Object&gt; getList(String key, long s, long e) {
+        return redisTemplate.boundListOps(key).range(s, e);
+    }
+
+    @Override
+    public List&lt;Object&gt; getList(String key) {
+        return redisTemplate.boundListOps(key).range(0, getListSize(key));
+    }
+
+    @Override
+    public long getListSize(String key) {
+        return redisTemplate.boundListOps(key).size();
+    }
+
+    @Override
+    public long removeListValue(String key, Object object) {
+        return redisTemplate.boundListOps(key).remove(0, object);
+    }
+
+    @Override
+    public long removeListValue(String key, Object... objects) {
+        long r = 0;
+        for (Object object : objects) {
+            r += removeListValue(key, object);
+        }
+        return r;
+    }
+
+    @Override
+    public void remove(String... key) {
+        if (key != null &amp;&amp; key.length &gt; 0) {
+            if (key.length == 1) {
+                remove(key[0]);
+            } else {
+                redisTemplate.delete(CollectionUtils.arrayToList(key));
+            }
+        }
+    }
+
+    @Override
+    public void removeBlear(String... blears) {
+        for (String blear : blears) {
+            removeBlear(blear);
+        }
+    }
+
+    @Override
+    public Boolean renameIfAbsent(String oldKey, String newKey) {
+        return redisTemplate.renameIfAbsent(oldKey, newKey);
+    }
+
+    @Override
+    public void removeBlear(String blear) {
+        redisTemplate.delete(redisTemplate.keys(blear));
+    }
+
+    @Override
+    public void removeByRegular(String... blears) {
+        for (String blear : blears) {
+            removeBlear(blear);
+        }
+    }
+
+    @Override
+    public void removeByRegular(String blear) {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        for (String s : stringSet) {
+            if (Pattern.compile(blear).matcher(s).matches()) {
+                redisTemplate.delete(s);
+            }
+        }
+    }
+
+    @Override
+    public void removeMapFieldByRegular(String key, String... blears) {
+        for (String blear : blears) {
+            removeMapFieldByRegular(key, blear);
+        }
+    }
+
+    @Override
+    public void removeMapFieldByRegular(String key, String blear) {
+        Map&lt;String, Object&gt; map = getMap(key);
+        Set&lt;String&gt; stringSet = map.keySet();
+        for (String s : stringSet) {
+            if (Pattern.compile(blear).matcher(s).matches()) {
+                redisTemplate.boundHashOps(key).delete(s);
+            }
+        }
+    }
+
+    @Override
+    public Long removeZSetValue(String key, Object... value) {
+        return redisTemplate.boundZSetOps(key).remove(value);
+    }
+
+    @Override
+    public void removeZSet(String key) {
+        removeZSetRange(key, 0L, getZSetSize(key));
+    }
+
+    @Override
+    public void removeZSetRange(String key, Long start, Long end) {
+        redisTemplate.boundZSetOps(key).removeRange(start, end);
+    }
+
+    @Override
+    public void setZSetUnionAndStore(String key,String key1, String key2) {
+        redisTemplate.boundZSetOps(key).unionAndStore(key1,key2);
+    }
+
+    @Override
+    public Set&lt;Object&gt; getZSetRange(String key) {
+        return getZSetRange(key, 0, getZSetSize(key));
+    }
+
+    @Override
+    public Set&lt;Object&gt; getZSetRange(String key, long s, long e) {
+        return redisTemplate.boundZSetOps(key).range(s, e);
+    }
+
+    @Override
+    public Set&lt;Object&gt; getZSetReverseRange(String key) {
+        return getZSetReverseRange(key, 0, getZSetSize(key));
+    }
+
+    @Override
+    public Set&lt;Object&gt; getZSetReverseRange(String key, long start, long end) {
+        return redisTemplate.boundZSetOps(key).reverseRange(start, end);
+    }
+
+    @Override
+    public Set&lt;Object&gt; getZSetRangeByScore(String key, double start, double end) {
+        return redisTemplate.boundZSetOps(key).rangeByScore(start, end);
+    }
+    @Override
+    public Set&lt;Object&gt; getZSetReverseRangeByScore(String key, double start, double end) {
+        return redisTemplate.boundZSetOps(key).reverseRangeByScore(start, end);
+    }
+
+    @Override
+    public Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; getZSetRangeWithScores(String key, long start, long end) {
+        return redisTemplate.boundZSetOps(key).rangeWithScores(start, end);
+    }
+
+    @Override
+    public Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; getZSetReverseRangeWithScores(String key, long start, long end) {
+        return redisTemplate.boundZSetOps(key).reverseRangeWithScores(start, end);
+    }
+
+    @Override
+    public Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; getZSetRangeWithScores(String key) {
+        return getZSetRangeWithScores(key, 0, getZSetSize(key));
+    }
+
+    @Override
+    public Set&lt;ZSetOperations.TypedTuple&lt;Object&gt;&gt; getZSetReverseRangeWithScores(String key) {
+        return getZSetReverseRangeWithScores(key, 0, getZSetSize(key));
+    }
+
+    @Override
+    public long getZSetCountSize(String key, double sMin, double sMax) {
+        return redisTemplate.boundZSetOps(key).count(sMin, sMax);
+    }
+
+    @Override
+    public long getZSetSize(String key) {
+        return redisTemplate.boundZSetOps(key).size();
+    }
+
+    @Override
+    public double getZSetScore(String key, Object value) {
+        return redisTemplate.boundZSetOps(key).score(value);
+    }
+
+    @Override
+    public double incrementZSetScore(String key, Object value, double delta) {
+        return redisTemplate.boundZSetOps(key).incrementScore(value, delta);
+    }
+
+    @Override
+    public Boolean addZSet(String key, double score, Object value) {
+        return redisTemplate.boundZSetOps(key).add(value, score);
+    }
+
+    @Override
+    public Long addZSet(String key, TreeSet&lt;Object&gt; value) {
+        return redisTemplate.boundZSetOps(key).add(value);
+    }
+
+    @Override
+    public Boolean addZSet(String key, double[] score, Object[] value) {
+        if (score.length != value.length) {
+            return false;
+        }
+        for (int i = 0; i &lt; score.length; i++) {
+            if (addZSet(key, score[i], value[i]) == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void remove(String key) {
+        if (exists(key)) {
+            redisTemplate.delete(key);
+        }
+    }
+
+    @Override
+    public void removeZSetRangeByScore(String key,double s , double e) {
+        redisTemplate.boundZSetOps(key).removeRangeByScore(s,e);
+    }
+
+    @Override
+    public Boolean setSetExpireTime(String key, Long time) {
+        return redisTemplate.boundSetOps(key).expire(time, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public Boolean setZSetExpireTime(String key, Long time) {
+        return redisTemplate.boundZSetOps(key).expire(time, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public boolean exists(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    @Override
+    public Object get(String key) {
+        return redisTemplate.boundValueOps(key).get();
+    }
+
+    @Override
+    public List&lt;Object&gt; get(String... keys) {
+        List&lt;Object&gt; list = new ArrayList&lt;Object&gt;();
+        for (String key : keys) {
+            list.add(get(key));
+        }
+        return list;
+    }
+
+    @Override
+    public List&lt;Object&gt; getByRegular(String regKey) {
+        Set&lt;String&gt; stringSet = getAllKeys();
+        List&lt;Object&gt; objectList = new ArrayList&lt;Object&gt;();
+        for (String s : stringSet) {
+            if (Pattern.compile(regKey).matcher(s).matches() &amp;&amp; getType(s) == DataType.STRING) {
+                objectList.add(get(s));
+            }
+        }
+        return objectList;
+    }
+
+    @Override
+    public void set(String key, Object value) {
+        redisTemplate.boundValueOps(key).set(value);
+    }
+
+    @Override
+    public void set(String key, Object value, Long expireTime) {
+        redisTemplate.boundValueOps(key).set(value, expireTime, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public boolean setExpireTime(String key, Long expireTime) {
+        return redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
+    }
+
+
+    @Override
+    public DataType getType(String key) {
+        return redisTemplate.type(key);
+    }
+
+
+    @Override
+    public void removeMapField(String key, Object... field) {
+        redisTemplate.boundHashOps(key).delete(field);
+    }
+
+    @Override
+    public Long getMapSize(String key) {
+        return redisTemplate.boundHashOps(key).size();
+    }
+
+    @Override
+    public Map&lt;String, Object&gt; getMap(String key) {
+        return redisTemplate.boundHashOps(key).entries();
+    }
+
+    @Override
+    public &lt;T&gt; T getMapField(String key, String field) {
+        return (T) redisTemplate.boundHashOps(key).get(field);
+    }
+
+    @Override
+    public Boolean hasMapKey(String key, String field) {
+        return redisTemplate.boundHashOps(key).hasKey(field);
+    }
+
+    @Override
+    public List&lt;Object&gt; getMapFieldValue(String key) {
+        return redisTemplate.boundHashOps(key).values();
+    }
+
+    @Override
+    public Set&lt;Object&gt; getMapFieldKey(String key) {
+        return redisTemplate.boundHashOps(key).keys();
+    }
+
+    @Override
+    public void addMap(String key, Map&lt;String, Object&gt; map) {
+        redisTemplate.boundHashOps(key).putAll(map);
+    }
+
+    @Override
+    public void addMap(String key, String field, Object value) {
+        redisTemplate.boundHashOps(key).put(field, value);
+    }
+
+    @Override
+    public void addMap(String key, String field, Object value, long time) {
+        redisTemplate.boundHashOps(key).put(field, value);
+        redisTemplate.boundHashOps(key).expire(time, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public void watch(String key) {
+        redisTemplate.watch(key);
+    }
+
+    @Override
+    public void addSet(String key, Object... obj) {
+        redisTemplate.boundSetOps(key).add(obj);
+    }
+
+    @Override
+    public long removeSetValue(String key, Object obj) {
+        return redisTemplate.boundSetOps(key).remove(obj);
+    }
+
+    @Override
+    public long removeSetValue(String key, Object... obj) {
+        if (obj != null &amp;&amp; obj.length &gt; 0) {
+            return redisTemplate.boundSetOps(key).remove(obj);
+        }
+        return 0L;
+    }
+
+    @Override
+    public long getSetSize(String key) {
+        return redisTemplate.boundSetOps(key).size();
+    }
+
+    @Override
+    public Boolean hasSetValue(String key, Object obj) {
+        Boolean boo = null;
+        int t =0;
+        while (true){
+            try {
+                boo = redisTemplate.boundSetOps(key).isMember(obj);
+                break;
+            } catch (Exception e) {
+                logger.error("key[" + key + "],obj[" + obj + "]判断Set中的值是否存在失败,异常信息:" + e.getMessage());
+                t++;
+            }
+            if(t&gt;times){
+                break;
+            }
+        }
+        logger.info("key[" + key + "],obj[" + obj + "]是否存在,boo:" + boo);
+        return boo;
+    }
+
+    @Override
+    public Set&lt;Object&gt; getSet(String key) {
+        return redisTemplate.boundSetOps(key).members();
+    }
+
+    @Override
+    public Set&lt;Object&gt; getSetUnion(String key, String otherKey) {
+        return redisTemplate.boundSetOps(key).union(otherKey);
+    }
+
+    @Override
+    public Set&lt;Object&gt; getSetUnion(String key, Set&lt;Object&gt; set) {
+        return redisTemplate.boundSetOps(key).union(set);
+    }
+
+    @Override
+    public Set&lt;Object&gt; getSetIntersect(String key, String otherKey) {
+        return redisTemplate.boundSetOps(key).intersect(otherKey);
+    }
+
+    @Override
+    public Set&lt;Object&gt; getSetIntersect(String key, Set&lt;Object&gt; set) {
+        return redisTemplate.boundSetOps(key).intersect(set);
+    }
+
+}
+</code></pre>
+
+<p>这个是我当时写一个Web项目的时候，慢慢整合而成的，比较完整的Redis操作工具类，基本上可以满足你操纵Redis的绝大多数需要了。</p>
+
+<p>因为不是个什么完整的项目，就没有上传到github上为大家提供这几个代码的下载了，只能麻烦需要的朋友直接拷贝下了。</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【设计模式】Java设计模式之模板方法模式]]></title>
     <link href="http://chenhaoxiang.github.io/blog/2017/05/14/study-in-imooc/"/>
     <updated>2017-05-14T22:18:54+08:00</updated>
     <id>http://chenhaoxiang.github.io/blog/2017/05/14/study-in-imooc</id>
-    <content type="html"><![CDATA[<h1>模板方法模式初探</h1>
-
-<p>我们先这样来想象一个生活中的场景，<br/>
+    <content type="html"><![CDATA[<p>我们先这样来想象一个生活中的场景，<br/>
 就是我们在银行柜台进行办理业务的时候，会进行这几步:<br/>
 Step1:进门取号<br/>
 Step2:填写单据<br/>
 Step3:等待叫号<br/>
 Step4:窗口办理</p>
 
-<p>在这里，无论是你我还是他/她，都会遵循这个模板进行业务的办理！</p>
-
-<p>我们具体看Step2，银行是无法知道我们的信息的，所以无法由银行具体实现了，所以留下接口，需要我们自己去实现。</p>
-
-<p>现在我们再继续看下去</p>
+<p>在这里，无论是你我还是他/她，都会遵循这个模板进行业务的办理！
+我们具体看Step2，银行是无法知道我们的信息的，所以无法由银行具体实现了，所以留下接口，需要我们自己去实现。<br/>
+现在我们再继续看下去</p>
 
 <!-- more -->
 
