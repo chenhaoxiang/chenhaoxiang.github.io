@@ -43,7 +43,7 @@ git commit -m ''
 source 表示分支
 git push origin source
 
-添加导航页面 
+添加上面导航页面的路径：
 source\_includes\custom\navigation.html
 
 

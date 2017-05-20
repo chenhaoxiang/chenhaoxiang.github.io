@@ -1,20 +1,13 @@
 ---
 layout: post
-title: "Java设计模式之模板方法模式"
+title: "【设计模式】Java设计模式之模板方法模式"
 date: 2017-05-14 22:18:54 +0800
 comments: true
-categories: Java_design_mode
+categories: java
 tags: [design_mode,java]
 keyword: 陈浩翔, 谙忆, 模板方法模式, Java
 description: 模板方法模式是类的行为模式。准备一个抽象类，将部分逻辑以具体方法以及具体构造函数的形式实现，然后声明一些抽象方法来迫使子类实现剩余的逻辑。不同的子类可以以不同的方式实现这些抽象方法，从而对剩余的逻辑有不同的实现。这就是模板方法模式的用意。
 ---
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-#模板方法模式初探
 
 我们先这样来想象一个生活中的场景，  
 就是我们在银行柜台进行办理业务的时候，会进行这几步:  
@@ -24,9 +17,7 @@ Step3:等待叫号
 Step4:窗口办理  
   
 在这里，无论是你我还是他/她，都会遵循这个模板进行业务的办理！
-
 我们具体看Step2，银行是无法知道我们的信息的，所以无法由银行具体实现了，所以留下接口，需要我们自己去实现。  
-
 现在我们再继续看下去  
 
 <!-- more -->
