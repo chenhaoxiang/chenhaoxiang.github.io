@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-05-20T16:10:43+08:00</updated>
+  <updated>2017-06-04T19:17:44+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -14,10 +14,224 @@
 
   
   <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】Cocos2d-X网络编程-HttpRequest/HttpClient/HttpResponse]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse/"/>
+    <updated>2017-05-31T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse</id>
+    <content type="html"><![CDATA[<p>Cocos2d-x封装了3个类来处理HTTP请求：<br/>
+HttpRequest,HttpClient和HttpResponse.</p>
+
+<p>使用HttpRequest,HttpClient和HttpResponse这3个类进行Http进行请求时，需要遵循一定流程</p>
+
+<p>请求过程: <br/>
+1.创建HttpRequest的实例。<br/>
+2.设置请求方式，Get、Post等。(千万不要以为只有get和post方式哦,这是一般新手以为的,只是其他请求方式我们平时用到的很少)<br/>
+3.设置请求地址和发送的数据(如果没有发送的数据，可不设置发送数据)。<br/>
+4.设置响应回调函数，在回调函数中处理获取的数据。<br/>
+5.创建HttpClient实例，发送请求。<br/>
+6.释放请求连接。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>使用Cocos2d封装的HttpRequest设置请求信息</h1>
+
+<p>HttpRequest：<br/>
+是一种数据类型，它提供了一些方法用来定义或获取HTTP请求的参数，<br/>
+常用方法包括下面几种:<br/>
+设置请求连接<br/>
+void setUrl(const char * url);<br/>
+设置请求类型<br/>
+void setRequestType(Type type);</p>
+
+<p>这里的Type是Cocos2d-x定义的一个枚举类型，包括5种类型。<br/>
+源码:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">class</span> <span class="nc">CC_DLL</span> <span class="nl">HttpRequest</span> <span class="p">:</span> <span class="k">public</span> <span class="n">Ref</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>    <span class="cm">/**</span>
+</span><span class='line'><span class="cm">     * The HttpRequest type enum used in the HttpRequest::setRequestType.</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="k">enum</span> <span class="k">class</span> <span class="nc">Type</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">GET</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">POST</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">PUT</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">DELETE</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">UNKNOWN</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">};</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设置回调函数:<br/>
+void setResponseCallback(Ref* pTarget,SEL_HttpResponse pSelector);</p>
+
+<p>设置请求的数据，参数buffer是提交的数据，len是请求数据的长度(使用发送数据的实际长度):<br/>
+void setRequestData(const char* buffer,unsigned int len);</p>
+
+<p>头文件和命名空间:</p>
+
+<figure class='code'><figcaption><span>头文件和命名空间</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &quot;network/HttpRequest.h&quot; </span><span class="c1">//1</span>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="p">;</span> <span class="c1">//2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>完整的Request对象创建</p>
+
+<figure class='code'><figcaption><span>完整的Request对象创建</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">auto</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpRequest</span><span class="p">();</span>
+</span><span class='line'><span class="c1">//设置请求网址</span>
+</span><span class='line'><span class="n">request</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="s">&quot;请填写你需要请求的网址&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//设置请求类型</span>
+</span><span class='line'><span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">GET</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//设置请求的数据</span>
+</span><span class='line'><span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;data&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>使用Cocos2d封装的HttpClient发送请求</h1>
+
+<p>HttpClient:
+ 用来控制请求相关的参数，比如发送请求，设置请求超时时间。<br/>
+它使用单例模型。 这一模式的目的是使得类的一个对象成为系统中的唯一实例。<br/>
+cocos2d中多处用到这一模型。<br/>
+比如Director对象，创建Director::getInstance().获取的都是同一个对象，方便统一管理<br/>
+又比如，音频处理对象： SimpleAudioEngine::getInstance();</p>
+
+<p>常用方法<br/>
+发送请求：
+send(HttpRequest* request)<br/>
+设置连接超时时间:<br/>
+setTimeoutForConnect(int value)</p>
+
+<figure class='code'><figcaption><span>头文件和命名空间</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include &quot;network/HttpClient.h&quot;</span>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="p">;</span> <span class="c1">//2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>创建HttpClient对象</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//创建HttpClient对象</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span><span class="c1">//getInstance静态成员函数-单例模式模型</span>
+</span><span class='line'><span class="n">client</span><span class="o">-&gt;</span><span class="n">setTimeoutForConnect</span><span class="p">(</span><span class="mi">60</span><span class="p">);</span><span class="c1">//当客户端向服务端发送请求超过这个时间，就会返回一个错误信息</span>
+</span><span class='line'><span class="n">client</span><span class="o">-&gt;</span><span class="n">setTimeoutForRead</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="c1">//接收数据的读取时间</span>
+</span><span class='line'><span class="n">client</span><span class="o">-&gt;</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>使用Cocos2d封装的HttpResponse处理返回的结果</h1>
+
+<p>HttpResponse:<br/>
+包含服务器返回的数据等信息。使用HttpResponse提供的方法可以获取这些数据。<br/>
+常用方法：<br/>
+std::vector<char> * getResponseData();<br/>
+获取请求返回的数据 -返回的是一个char型的数组</p>
+
+<p>getResponseState<br/>
+获取服务器返回的状态，返回值是一个整数，200表示请求成功，400表示服务器错误，404表示服务器上找不到相应的文件。</p>
+
+<p>issucced(),用来判断是否返回成功。</p>
+
+<figure class='code'><figcaption><span>实现回调函数</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="c1">//实现回调函数</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">complete</span><span class="p">(</span><span class="n">HttpClient</span> <span class="o">*</span><span class="n">client</span><span class="p">,</span> <span class="n">HttpResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">){</span>
+</span><span class='line'>  <span class="c1">//使用HttpResponse类的相关函数，获取状态和数据</span>
+</span><span class='line'>  <span class="n">log</span><span class="p">(</span><span class="s">&quot;response code is:%d&quot;</span><span class="p">,</span><span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseCode</span><span class="p">());</span><span class="c1">//获取请求返回的状态码</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="o">-&gt;</span><span class="n">isSucceed</span><span class="p">()){</span><span class="c1">//判断返回是否成功  成功就返回true</span>
+</span><span class='line'>      <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseData</span><span class="p">();</span>
+</span><span class='line'>      <span class="n">log</span><span class="p">(</span><span class="s">&quot;response data is:&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="c1">//for (int i = 0; i &lt; data-&gt;size(); i++){</span>
+</span><span class='line'>      <span class="c1">// log(&quot;%c&quot;,(*data)[i]);</span>
+</span><span class='line'>      <span class="c1">// //因为data是一个指针，所以需要取内容操作符，(*data)这样获取的就是数组的首地址，然后再加上角标</span>
+</span><span class='line'>      <span class="c1">//}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">else</span><span class="p">{</span>
+</span><span class='line'>      <span class="n">log</span><span class="p">(</span><span class="s">&quot;error msg is:%s&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getErrorBuffer</span><span class="p">());</span> <span class="c1">// getErrorBuffer-会返回请求数据错误的信息</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>完整源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170531/httpTest' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[【C++】C++构造函数和析构函数]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor/"/>
+    <link href="http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor%20-%20%E5%89%AF%E6%9C%AC/"/>
     <updated>2017-05-20T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor</id>
+    <id>http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor - 副本</id>
     <content type="html"><![CDATA[<p>C++提供构造函数来处理对象的初始化。<br/>
 构造函数是一种特殊的成员函数，不需要用户来调用，定义对象时被自动执行。<br/>
 构造函数名字与类名相同，无返回类型(void也不能有哦)。</p>
