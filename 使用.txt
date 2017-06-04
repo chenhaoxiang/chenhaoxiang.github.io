@@ -36,9 +36,7 @@ rake deploy
 git checkout source 检查
 git add .
 
-git commit -m 'your message'
-
-git commit -m ''
+git commit -m 'C++基础'
 
 source 表示分支
 git push origin source
