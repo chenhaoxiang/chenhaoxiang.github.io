@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-06-07T21:31:29+08:00</updated>
+  <updated>2017-06-07T21:44:50+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -483,173 +483,6 @@ GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-S
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[【Cocos2d-x】Cocos2d-X网络编程-HttpRequest/HttpClient/HttpResponse]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse/"/>
-    <updated>2017-05-31T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse</id>
-    <content type="html"><![CDATA[<p>Cocos2d-x封装了3个类来处理HTTP请求：<br/>
-HttpRequest,HttpClient和HttpResponse.</p>
-
-<p>使用HttpRequest,HttpClient和HttpResponse这3个类进行Http进行请求时，需要遵循一定流程</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>请求过程: <br/>
-1.创建HttpRequest的实例。<br/>
-2.设置请求方式，Get、Post等。(千万不要以为只有get和post方式哦,这是一般新手以为的,只是其他请求方式我们平时用到的很少)<br/>
-3.设置请求地址和发送的数据(如果没有发送的数据，可不设置发送数据)。<br/>
-4.设置响应回调函数，在回调函数中处理获取的数据。<br/>
-5.创建HttpClient实例，发送请求。<br/>
-6.释放请求连接。</p>
-
-<h1>使用Cocos2d封装的HttpRequest设置请求信息</h1>
-
-<p>HttpRequest：<br/>
-是一种数据类型，它提供了一些方法用来定义或获取HTTP请求的参数，<br/>
-常用方法包括下面几种:<br/>
-设置请求连接<br/>
-void setUrl(const char * url);<br/>
-设置请求类型<br/>
-void setRequestType(Type type);</p>
-
-<p>这里的Type是Cocos2d-x定义的一个枚举类型，包括5种类型。<br/>
-源码:<br/>
-<code>C++
-class CC_DLL HttpRequest : public Ref
-{
-public:
-    /**
-     * The HttpRequest type enum used in the HttpRequest::setRequestType.
-     */
-    enum class Type
-    {
-        GET,
-        POST,
-        PUT,
-        DELETE,
-        UNKNOWN,
-    };
-...
-}
-</code>
-设置回调函数:<br/>
-void setResponseCallback(Ref* pTarget,SEL_HttpResponse pSelector);</p>
-
-<p>设置请求的数据，参数buffer是提交的数据，len是请求数据的长度(使用发送数据的实际长度):<br/>
-void setRequestData(const char* buffer,unsigned int len);</p>
-
-<p>头文件和命名空间:
-<figure class='code'><figcaption><span>头文件和命名空间</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">network</span><span class="o">/</span><span class="n">HttpRequest</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="c1">//1&lt;/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="p">;</span> <span class="c1">//2</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">完整的</span><span class="n">Request</span><span class="err">对象创建</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span> <span class="err">完整的</span><span class="n">Request</span><span class="err">对象创建</span>
-</span><span class='line'>    <span class="k">auto</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpRequest</span><span class="p">();</span>
-</span><span class='line'>    <span class="c1">//设置请求网址</span>
-</span><span class='line'>    <span class="n">request</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="err">请填写你需要请求的网址</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
-</span><span class='line'>    <span class="c1">//设置请求类型</span>
-</span><span class='line'>    <span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">GET</span><span class="p">);</span>
-</span><span class='line'>    <span class="c1">//设置请求的数据</span>
-</span><span class='line'>    <span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">data</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
-</span><span class='line'>    <span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h1>使用Cocos2d封装的HttpClient发送请求</h1>
-
-<p>HttpClient:
- 用来控制请求相关的参数，比如发送请求，设置请求超时时间。<br/>
-它使用单例模型。 这一模式的目的是使得类的一个对象成为系统中的唯一实例。<br/>
-cocos2d中多处用到这一模型。<br/>
-比如Director对象，创建Director::getInstance().获取的都是同一个对象，方便统一管理<br/>
-又比如，音频处理对象： SimpleAudioEngine::getInstance();</p>
-
-<p>常用方法<br/>
-发送请求：
-send(HttpRequest* request)<br/>
-设置连接超时时间:<br/>
-setTimeoutForConnect(int value)</p>
-
-<pre><code class="C++ 头文件和命名空间">#include "network/HttpClient.h"
-using namespace cocos2d::network; //2
-</code></pre>
-
-<pre><code class="C++ 创建HttpClient对象">    //创建HttpClient对象
-    auto client = HttpClient::getInstance();//getInstance静态成员函数-单例模式模型
-    client-&gt;setTimeoutForConnect(60);//当客户端向服务端发送请求超过这个时间，就会返回一个错误信息
-    client-&gt;setTimeoutForRead(100);//接收数据的读取时间
-    client-&gt;send(request);
-</code></pre>
-
-<h1>使用Cocos2d封装的HttpResponse处理返回的结果</h1>
-
-<p>HttpResponse:<br/>
-包含服务器返回的数据等信息。使用HttpResponse提供的方法可以获取这些数据。<br/>
-常用方法：<br/>
-std::vector<char> * getResponseData();<br/>
-获取请求返回的数据 -返回的是一个char型的数组</p>
-
-<p>getResponseState<br/>
-获取服务器返回的状态，返回值是一个整数，200表示请求成功，400表示服务器错误，404表示服务器上找不到相应的文件。</p>
-
-<p>issucced(),用来判断是否返回成功。</p>
-
-<pre><code class="c++ 实现回调函数">//实现回调函数
-void HelloWorld::complete(HttpClient *client, HttpResponse *response){
-    //使用HttpResponse类的相关函数，获取状态和数据
-    log("response code is:%d",response-&gt;getResponseCode());//获取请求返回的状态码
-    if (response-&gt;isSucceed()){//判断返回是否成功  成功就返回true
-        std::vector&lt;char&gt; * data = response-&gt;getResponseData();
-        log("response data is:");
-        //for (int i = 0; i &lt; data-&gt;size(); i++){
-        //  log("%c",(*data)[i]);
-        //  //因为data是一个指针，所以需要取内容操作符，(*data)这样获取的就是数组的首地址，然后再加上角标
-        //}
-    }
-
-    else{
-        log("error msg is:%s", response-&gt;getErrorBuffer()); // getErrorBuffer-会返回请求数据错误的信息
-    }
-
-}
-</code></pre>
-
-<h1>完整源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170531/httpTest' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[【C++】C++构造函数和析构函数]]></title>
     <link href="http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor%20-%20%E5%89%AF%E6%9C%AC/"/>
     <updated>2017-05-20T13:38:54+08:00</updated>
@@ -780,6 +613,162 @@ CTime::~CTime(){
 
 <blockquote cite='陈浩翔'>
 GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520/test3' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【C++】C++类和对象]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/05/20/class-and-object/"/>
+    <updated>2017-05-20T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/05/20/class-and-object</id>
+    <content type="html"><![CDATA[<p>最近在公司弄游戏开发，C++基础也不是特别好，所以就打算继续开始学习C++。</p>
+
+<p>既然从头学习C++，就打算写一个系列教程。C++学习之路。
+我是在边学习C++，边学习cocos2dx 3.X，白天时间不是很多，
+先把C++系列写完再写coco2dx的教程。
+希望对大家有帮助。
+（可能基础知识不是很详细，对没有其他语言基础的人来说不是很友好，请见谅）</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>每个实体都可以看成一个对象。在C++中，对象的类型被称为类。
+类代表了某一批对象的共性和特征。</p>
+
+<p>类是对象的抽象，而对象是类的具体实现。</p>
+
+<p>在C++中要使用一个类，首先要定义一个类。</p>
+
+<h1>定义类</h1>
+
+<p>定义类和声明结构体的结构是相似的。</p>
+
+<h2>定义结构体</h2>
+
+<pre><code class="C++ 定义结构体">
+struct Student{
+    char name[128];
+    int age;
+    char add[128];
+};
+</code></pre>
+
+<h2>类的定义格式</h2>
+
+<pre><code class="C++ 类的定义格式">
+class 类名{
+    private:
+        成员数据;
+        成员函数;
+    public:
+        成员数据;
+        成员函数;
+    protected:
+        成员数据;
+        成员函数;
+};
+</code></pre>
+
+<p>private,public,protected这3个限定符就不介绍了<br/>
+建议把：<br/>
+public放前面<br/>
+private放最后</p>
+
+<p>别忘了最后的分号哦。<br/>
+struct默认是public<br/>
+class默认是private</p>
+
+<h2>一个简单的例子</h2>
+
+<pre><code class="C++ ">// test.cpp : 定义控制台应用程序的入口点。
+//
+
+#include "stdafx.h"
+using namespace std;
+
+class Student
+{
+public:
+    void print()
+    {
+        cout &lt;&lt;  age  &lt;&lt; endl;
+    }
+    int getAge();
+private:
+    char name[128] ;
+    int age = 20;
+    char addr[128] ;
+};
+inline int Student::getAge(){
+    return age;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+    Student stu;
+    stu.print();
+    stu.getAge();
+    getchar();
+    return 0;
+}
+</code></pre>
+
+<h1>类和对象的使用</h1>
+
+<h2>对象成员的引用</h2>
+
+<p>程序中访问对象成员有以下三种方法：<br/>
+1、通过对象名和成员访问运算符".&ldquo;来访问<br/>
+2、通过指向对象的指针来访问<br/>
+3、通过引用来访问</p>
+
+<pre><code class="C++">    Student stu;
+    //通过对象名和成员访问运算符"."来访问  
+    stu.print();
+    stu.getAge();
+    //通过指向对象的指针来访问  
+    Student *p = &amp;stu;
+    p-&gt;print();
+    p-&gt;getAge();
+
+    //通过引用来访问  
+    Student &amp;s = stu;//表明s是stu的别名
+    s.print();
+    s.getAge();
+</code></pre>
+
+<h2>类声明和成员函数实现的分离</h2>
+
+<p>类的定义和成员函数的实现一般不放在一起，而是放在不同的文件中。</p>
+
+<p>一般来说，在大型项目中，将类的声明放在单独的头文件中，一般以类名命名。
+成员函数的实现放在该类对应的cpp文件中。
+这样就将类的声明和实现进行了分离.</p>
+
+<p>如果需要使用某个对象，直接引用那个对象声明的头文件即可，而不需要再重复声明了！</p>
+
+<p>这样工程的结构就清晰很多了。</p>
+
+<p>这章很简单，没多少要写的，你有语言基础的话，这章用个5分钟就可以过了~~
+这里我写了2个例子</p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520' target='_blank'>点我进行下载</a>】</strong></p>
 </blockquote>
 
 

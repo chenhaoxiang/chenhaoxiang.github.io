@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Cocos2dx | 谙忆-人生之旅]]></title>
+  <link href="http://chenhaoxiang.github.io/blog/categories/cocos2dx/atom.xml" rel="self"/>
+  <link href="http://chenhaoxiang.github.io/"/>
+  <updated>2017-06-07T21:44:50+08:00</updated>
+  <id>http://chenhaoxiang.github.io/</id>
+  <author>
+    <name><![CDATA[陈浩翔]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】Cocos2d-X网络编程-HttpRequest/HttpClient/HttpResponse]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse/"/>
+    <updated>2017-05-31T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse</id>
+    <content type="html"><![CDATA[<p>Cocos2d-x封装了3个类来处理HTTP请求：<br/>
+HttpRequest,HttpClient和HttpResponse.</p>
+
+<p>使用HttpRequest,HttpClient和HttpResponse这3个类进行Http进行请求时，需要遵循一定流程</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>请求过程: <br/>
+1.创建HttpRequest的实例。<br/>
+2.设置请求方式，Get、Post等。(千万不要以为只有get和post方式哦,这是一般新手以为的,只是其他请求方式我们平时用到的很少)<br/>
+3.设置请求地址和发送的数据(如果没有发送的数据，可不设置发送数据)。<br/>
+4.设置响应回调函数，在回调函数中处理获取的数据。<br/>
+5.创建HttpClient实例，发送请求。<br/>
+6.释放请求连接。</p>
+
+<h1>使用Cocos2d封装的HttpRequest设置请求信息</h1>
+
+<p>HttpRequest：<br/>
+是一种数据类型，它提供了一些方法用来定义或获取HTTP请求的参数，<br/>
+常用方法包括下面几种:<br/>
+设置请求连接<br/>
+void setUrl(const char * url);<br/>
+设置请求类型<br/>
+void setRequestType(Type type);</p>
+
+<p>这里的Type是Cocos2d-x定义的一个枚举类型，包括5种类型。<br/>
+源码:<br/>
+<code>C++
+class CC_DLL HttpRequest : public Ref
+{
+public:
+    /**
+     * The HttpRequest type enum used in the HttpRequest::setRequestType.
+     */
+    enum class Type
+    {
+        GET,
+        POST,
+        PUT,
+        DELETE,
+        UNKNOWN,
+    };
+...
+}
+</code>
+设置回调函数:<br/>
+void setResponseCallback(Ref* pTarget,SEL_HttpResponse pSelector);</p>
+
+<p>设置请求的数据，参数buffer是提交的数据，len是请求数据的长度(使用发送数据的实际长度):<br/>
+void setRequestData(const char* buffer,unsigned int len);</p>
+
+<p>头文件和命名空间:
+<figure class='code'><figcaption><span>头文件和命名空间</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">network</span><span class="o">/</span><span class="n">HttpRequest</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="c1">//1&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="p">;</span> <span class="c1">//2</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">完整的</span><span class="n">Request</span><span class="err">对象创建</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span> <span class="err">完整的</span><span class="n">Request</span><span class="err">对象创建</span>
+</span><span class='line'>    <span class="k">auto</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpRequest</span><span class="p">();</span>
+</span><span class='line'>    <span class="c1">//设置请求网址</span>
+</span><span class='line'>    <span class="n">request</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="err">请填写你需要请求的网址</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'>    <span class="c1">//设置请求类型</span>
+</span><span class='line'>    <span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">GET</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">//设置请求的数据</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">data</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+</span><span class='line'>    <span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h1>使用Cocos2d封装的HttpClient发送请求</h1>
+
+<p>HttpClient:
+ 用来控制请求相关的参数，比如发送请求，设置请求超时时间。<br/>
+它使用单例模型。 这一模式的目的是使得类的一个对象成为系统中的唯一实例。<br/>
+cocos2d中多处用到这一模型。<br/>
+比如Director对象，创建Director::getInstance().获取的都是同一个对象，方便统一管理<br/>
+又比如，音频处理对象： SimpleAudioEngine::getInstance();</p>
+
+<p>常用方法<br/>
+发送请求：
+send(HttpRequest* request)<br/>
+设置连接超时时间:<br/>
+setTimeoutForConnect(int value)</p>
+
+<pre><code class="C++ 头文件和命名空间">#include "network/HttpClient.h"
+using namespace cocos2d::network; //2
+</code></pre>
+
+<pre><code class="C++ 创建HttpClient对象">    //创建HttpClient对象
+    auto client = HttpClient::getInstance();//getInstance静态成员函数-单例模式模型
+    client-&gt;setTimeoutForConnect(60);//当客户端向服务端发送请求超过这个时间，就会返回一个错误信息
+    client-&gt;setTimeoutForRead(100);//接收数据的读取时间
+    client-&gt;send(request);
+</code></pre>
+
+<h1>使用Cocos2d封装的HttpResponse处理返回的结果</h1>
+
+<p>HttpResponse:<br/>
+包含服务器返回的数据等信息。使用HttpResponse提供的方法可以获取这些数据。<br/>
+常用方法：<br/>
+std::vector<char> * getResponseData();<br/>
+获取请求返回的数据 -返回的是一个char型的数组</p>
+
+<p>getResponseState<br/>
+获取服务器返回的状态，返回值是一个整数，200表示请求成功，400表示服务器错误，404表示服务器上找不到相应的文件。</p>
+
+<p>issucced(),用来判断是否返回成功。</p>
+
+<pre><code class="c++ 实现回调函数">//实现回调函数
+void HelloWorld::complete(HttpClient *client, HttpResponse *response){
+    //使用HttpResponse类的相关函数，获取状态和数据
+    log("response code is:%d",response-&gt;getResponseCode());//获取请求返回的状态码
+    if (response-&gt;isSucceed()){//判断返回是否成功  成功就返回true
+        std::vector&lt;char&gt; * data = response-&gt;getResponseData();
+        log("response data is:");
+        //for (int i = 0; i &lt; data-&gt;size(); i++){
+        //  log("%c",(*data)[i]);
+        //  //因为data是一个指针，所以需要取内容操作符，(*data)这样获取的就是数组的首地址，然后再加上角标
+        //}
+    }
+
+    else{
+        log("error msg is:%s", response-&gt;getErrorBuffer()); // getErrorBuffer-会返回请求数据错误的信息
+    }
+
+}
+</code></pre>
+
+<h1>完整源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170531/httpTest' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+</feed>
