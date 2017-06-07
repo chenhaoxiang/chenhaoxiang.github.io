@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://chenhaoxiang.github.io/blog/2017/06/03/const-object-member/</loc>
+<lastmod>2017-06-03T21:38:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://chenhaoxiang.github.io/blog/2017/06/03/static-member/</loc>
+<lastmod>2017-06-03T18:38:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://chenhaoxiang.github.io/blog/2017/06/03/this-pointer/</loc>
+<lastmod>2017-06-03T13:38:54+08:00</lastmod>
+</url>
+<url>
 <loc>http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse/</loc>
 <lastmod>2017-05-31T13:38:54+08:00</lastmod>
 </url>
