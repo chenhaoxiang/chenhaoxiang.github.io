@@ -36,7 +36,7 @@ rake deploy
 git checkout source 检查
 git add .
 
-git commit -m 'C++基础'
+git commit -m 'Cocos2d-X网络编程-HttpRequest/HttpClient/HttpResponse'
 
 source 表示分支
 git push origin source
