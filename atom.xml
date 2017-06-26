@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-06-07T21:44:50+08:00</updated>
+  <updated>2017-06-26T21:55:17+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,216 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】开发基础-Cocos简介与环境搭建]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/06/05/cocos2dx-about/"/>
+    <updated>2017-06-05T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/06/05/cocos2dx-about</id>
+    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
+Cocos2d-x介绍与环境搭建<br/>
+1.移动平台游戏引擎介绍<br/>
+2.Cocos2d家谱介绍<br/>
+3.Cocos2d-x设计目标<br/>
+4.在Windows平台下开始开发Cocos2d-x游戏</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>[TOC]</p>
+
+<h1>1.移动平台游戏引擎介绍</h1>
+
+<h2>游戏引擎的定义</h2>
+
+<p>游戏引擎是指一些已编写好的可编辑游戏系统或者一些互交式图像应用程序的核心组件，游戏软件的主程序。<br/>
+通俗一点理解就是：<br/>
+游戏引擎其实就是一个半成品，它能帮你做什么，就是开发游戏。就是说，一些基础的工作帮你做好了。<br/>
+你拿过来之后，根据你的需求，根据你要开发的游戏的特点加上一些你自己的东西，那么这就是游戏引擎。<br/>
+如果没有游戏引擎，你完全可以自己做那些事情，有了游戏引擎之后，很多东西就不用自己去做了。<br/>
+游戏引擎你也可以理解成框架或者库！</p>
+
+<h2>游戏引擎包含以下子系统</h2>
+
+<p>渲染引擎:<br/>
+把从计算机中0101的代码变成我们能够识别的图像的过程！<br/>
+这样理解更好：相当与你拿一个染料桶在墙上刷染料，把染料刷到墙上的过程，这个就是渲染的过程。</p>
+
+<p>物理引擎:<br/>
+其实就是模拟现实的物理环境，比如重力等</p>
+
+<p>碰撞检测系统、音效、脚本引擎、电脑动画、人工智能、网络引擎以及场景管理。</p>
+
+<h2>移动平台游戏引擎中主要可以分为</h2>
+
+<p>2D引擎和3D引擎</p>
+
+<h3>2D引擎主要有</h3>
+
+<p>Coco2d-iphone,Cocos2d-x,Corona SDK,Construct 2,WiEngine和Cyclone 2D</p>
+
+<p>Coco2d-iphone和Cocos2d-x看名字就知道有些联系了，Cocos2d-x很多类似管理的东西，比如对象，类的设计就是从Coco2d-iphone过度过来的。<br/>
+Corona SDK是用Lua脚本编写的</p>
+
+<h3>3D引擎主要有</h3>
+
+<p>Unity3D,Unreal Development Kit,ShiVa 3D 和Marmalade</p>
+
+<p>现在很火的就是Unity3D</p>
+
+<h2>HTML 5的游戏引擎</h2>
+
+<p>Cocos2d-js,X-Canvas和Sphinx等</p>
+
+<h1>2.Cocos2d家谱介绍</h1>
+
+<p><img src="http://i.imgur.com/yeghXaA.png" alt="" /></p>
+
+<p>其实这个家谱已经过时了，不过可以看到Cocos2d的发展路线<br/>
+有兴趣的大家可以自行搜索了解</p>
+
+<h1>3.Cocos2d-x设计目标</h1>
+
+<h2>Cocos2d-x目标</h2>
+
+<p><img src="http://i.imgur.com/ORpTwbq.png" alt="" /></p>
+
+<p>为什么Cocos2d这么优秀，为什么这么多人接受和推广它。<br/>
+我们看上面的图，首先，从横向来讲，cocos2d可以用很多平台开发，基于不同平台开发，很方便！<br/>
+还有发布平台，写一个程序，发布到多个平台！(节省大量时间和成本)</p>
+
+<p>从纵向往上来看，可以绑定Javascript和Lua脚本<br/>
+从纵向往下来看，就是和硬件有关了</p>
+
+<h2>Cocos2d-x绑定Javascript和Lua脚本</h2>
+
+<p>解释性的语言，结构非常严谨，编译速度很快！</p>
+
+<p>也就是在开发过程中，我们不止能使用c++开发，也能使用javascript和lua脚本开发！</p>
+
+<p><img src="http://i.imgur.com/40Xt1bX.png" alt="" /></p>
+
+<p>可以看到，我们有4条线路来开发游戏<br/>
+1、C线路：通过c++<br/>
+2、D线路：通过Lua(我们不需要管和c++的绑定)<br/>
+3、B线路：JS绑定的引擎 cocos2d-js如果想开发本地游戏，需要调用cocos2d-x(我们不需要管怎么绑定的，只要会JS，就能开发本地游戏)<br/>
+4、A线路：开发网页游戏</p>
+
+<h1>4.在Windows平台下开始开发Cocos2d-x游戏</h1>
+
+<p>为什么选择在Window下开发游戏，因为对硬件设备要求没那么高<br/>
+而且先从window先学习cocos2dx是最容易学习的</p>
+
+<h2>使用Visual Studio开发工具</h2>
+
+<p>在这里我使用的是Visual Studio 2013<br/>
+操作系统是使用的Windows 7</p>
+
+<h2>下载和使用Cocos2d-x案例</h2>
+
+<p>网址：<a href="http://www.cocos2d-x.org/">http://www.cocos2d-x.org/</a>
+<img src="http://i.imgur.com/2GQ3y9p.png" alt="" />
+下载:
+<img src="http://i.imgur.com/vnnItnl.png" alt="" /></p>
+
+<p>下载解压之后：
+<img src="http://i.imgur.com/aZAgVPh.png" alt="" /></p>
+
+<h3>build目录</h3>
+
+<p>我们要学习的话，先进入build目录里面，这个里面很多是工程文件
+.sln是基于微软的VS工具的解决方案<br/>
+ cocos2d_tests.xcodeproj和cocos2d_libs.xcodeproj在window下看起来是文件夹<br/>
+但是如果拿到mac系统里，但是其实就是mac xcode的工程文件，在xcode就可以运行cocos2d_tests.xcodeproj这个文件，运行之后，就会启动相关的案例代码<br/>
+在window就是启动cocos2d-win32.sln这个启动相关的案例代码<br/>
+<img src="http://i.imgur.com/kxLbiVg.png" alt="" /></p>
+
+<p>我们主要运行的就cpp-tests，cpp-tests就是我们看到的大部分帮助例子在这里！<br/>
+要想运行的，需要把这个设置为启动项目！然后就会看到这个是加粗的字体<br/>
+<img src="http://i.imgur.com/vHP1ovd.png" alt="" />
+然后运行它，第一次编译时间会比较长<br/>
+<img src="http://i.imgur.com/N6iotba.png" alt="" />
+运行之后，里面都是一些演示实例，大家可以看看<br/>
+看源代码的话，就搜索数字后面的名字，找源代码进行学习</p>
+
+<p>在window下开发选择win32，因为实际上在window下用VS开发出来，需要有模拟器来运行游戏场景，但是由于我们没有真机，所以把游戏场景在window的一个小窗口显示出来的，所以叫win32程序。
+win32程序在最后发布的时候其实是没有用的，win32其实只是开发，模拟测试，还有学习的环境</p>
+
+<p>install-deps-linux.sh就是基于Linux的安装开发的文件</p>
+
+<h3>cocos目录</h3>
+
+<p>cocos2d引擎的源代码，全部放在这里</p>
+
+<h3>docs目录</h3>
+
+<p><img src="http://i.imgur.com/Wsl7Xmr.png" alt="" />
+文档目录，一开始是空的，只有上面的文件</p>
+
+<h3>extensions目录</h3>
+
+<p>扩展的内库 - 一般也都是cocos2d团队开发的，但是它是扩展的</p>
+
+<h3>external目录</h3>
+
+<p>第三方的扩展库，比如使用其他的物理引擎等</p>
+
+<h3>plugin目录</h3>
+
+<p>插件什么的</p>
+
+<h3>templates目录</h3>
+
+<p>这是模板，我们使用指令生成cocos2dx的模板，都是从这个模板里面生成的工程代码的</p>
+
+<h3>tests目录</h3>
+
+<p>就是刚刚的项目的cpp-tests的源码</p>
+
+<h3>tools目录</h3>
+
+<p>工具目录
+<img src="http://i.imgur.com/0gjch9N.png" alt="" />
+通过cocos的工具，python脚本编写的，可以帮助我们创建一个工程出来</p>
+
+<h2>生成API文档</h2>
+
+<p>看文件夹docs，里面没有帮助文档
+<img src="http://i.imgur.com/kGgdSMr.png" alt="" />
+现在里面的内容是帮助我们生成帮助API文档的<br/>
+类似Java的网页式的帮助文档<br/>
+使用Doxygen(无法生成图片)和Graphviz工具，结合使用<br/>
+Doxygen:<br/>
+<a href="http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc">http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc</a><br/>
+Graphviz:<br/>
+<a href="http://www.graphviz.org/Download_windows.php">http://www.graphviz.org/Download_windows.php</a><br/>
+下载然后都安装就好了。<br/>
+启动Doxygen
+<img src="http://i.imgur.com/4DEtFRw.png" alt="" />
+然后File->open<br/>
+打开cocos2d-x-3.13.1\docs下的doxygen.config文件<br/>
+我们不需要做其他事情，然后直接Run
+<img src="http://i.imgur.com/Kdr1MRs.png" alt="" />
+会在docs目录下生成html目录，找到index.html文件
+<img src="http://i.imgur.com/NmTwVH6.png" alt="" />
+然后直接用浏览器打开就行了<br/>
+<img src="http://i.imgur.com/8m5aul3.png" alt="" />
+这就是我们刚刚生成的cocos2dx的文档</p>
+
+<p>在此感谢CSDN学院关东升老师的教学视频！</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【C++】const对象和const成员]]></title>
