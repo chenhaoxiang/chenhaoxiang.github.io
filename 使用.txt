@@ -2,6 +2,8 @@
 <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
 
 rake install
+
+
 编译成最新的静态网站
 rake generate 
 
@@ -70,3 +72,4 @@ echo 'www.chenhaoxiang.cn' >> source/CNAME
 \source\_includes\asides
 友情链接:
 blog_link.html
+
