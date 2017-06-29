@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://chenhaoxiang.github.io/blog/2017/06/07/cocos2dx-hello/</loc>
+<lastmod>2017-06-07T13:38:54+08:00</lastmod>
+</url>
+<url>
 <loc>http://chenhaoxiang.github.io/blog/2017/06/05/cocos2dx-about/</loc>
 <lastmod>2017-06-05T13:38:54+08:00</lastmod>
 </url>
