@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cocos2d-x | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/cocos2d-x/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-06-30T22:12:34+08:00</updated>
+  <updated>2017-07-01T22:54:41+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,279 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】开发基础-Cocos2d-x坐标系]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/06/14/cocos2dx-coordinate-system/"/>
+    <updated>2017-06-14T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/06/14/cocos2dx-coordinate-system</id>
+    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
+1.UI坐标<br/>
+2.OpenGL坐标<br/>
+3.世界坐标和模型坐标<br/>
+4.实例：世界坐标转换为模型坐标<br/>
+5.实例：模型坐标转换为世界坐标</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>UI坐标和OpenGL坐标</h1>
+
+<p><img src="http://i.imgur.com/tXyhhzQ.png" alt="" /><br/>
+UI坐标就是Android和iOS等应用开发的时候使用的二维坐标系。它的坐标原点是在左上角的。<br/>
+UI坐标也叫视图坐标，它是和我们的OpenGL坐标是不一样的。OpenGL坐标是基于左下角的
+<img src="http://i.imgur.com/698Z9ws.png" alt="" /> <br/>
+OpenGL坐标是一种3D坐标，OpenGL是一个渲染的标准，渲染标准的坐标系是一种3D坐标系。<br/>
+所以OpenGL主要是给3D世界来做渲染，但是cocos2d觉得OpenGL速度快，所以就把OpenGL拿过来了做为一个引擎，这样的话，cocos2d就使用OpenGL坐标作为默认坐标<br/>
+OpenGL坐标在二维世界里，并没有什么太大的问题，不过就是Z轴基本不用。但是有时候也会用到，就是在绘制的顺序的时候，就需要Z轴了。</p>
+
+<p>比如绘制两个精灵在一个位置，精灵之间会有遮挡的问题，这个就和z轴的绘制顺序有关了。</p>
+
+<h2>从UI坐标到OpenGL坐标的转换</h2>
+
+<p>其实就是左上角，左下角之间的转换。<br/>
+屏幕的高度 - OpenGL坐标 = UI坐标<br/>
+屏幕的高度 - UI坐标 = OpenGL坐标<br/>
+<code>
+Vec2 touchLocation = touch-&gt;getLocationInView(); //获取触摸点的位置，UI坐标系里的坐标
+Vec2 touchLocation2 = Director::getInstance()-&gt;convertToGL(touchLocation);
+</code>
+touch是触摸点(Touch)对象</p>
+
+<h2>右手坐标系和左手坐标系</h2>
+
+<p><img src="http://i.imgur.com/kCbPAIl.png" alt="" /><br/>
+在3D坐标系里，有两种坐标。一种是Z轴指向外面的坐标，一种是Z轴指向内部的坐标，如上图</p>
+
+<p><img src="http://i.imgur.com/GQ9rtZL.png" alt="" /><br/>
+指向外面的坐标称为右手坐标系<br/>
+指向内部的坐标称为左手坐标系<br/>
+大家用左右手演示一下就明白了。
+注意大拇指指向X轴正方向，食指向上，中指弯曲<br/>
+OpenGL属于右手坐标！<br/>
+微软平台的Direct3D是左手坐标！<br/>
+这两个是类似的技术</p>
+
+<h1>世界坐标和模型坐标</h1>
+
+<p>由于OpenGL坐标有可以分为：世界坐标和模型坐标，所以Cocos2d-x的坐标也有世界坐标和模型坐标。</p>
+
+<p>举一个例子：<br/>
+比如你去问路，可能有人会告诉你先向南走1000米，再向东走500米、<br/>
+也可能会有人告诉你，先向右走1000米，再向左走500米、</p>
+
+<p>世界坐标:<br/>
+先向南走1000米，再向东走500米、也就是说以地球为参照物<br/>
+模型坐标(也叫本地坐标):<br/>
+先向右走1000米，再向左走500米、这里是以自身为参照物</p>
+
+<p>所谓模型是什么，就是这个物体，这个精灵，也就是称为模型。<br/>
+虽然cocos2d画的是2D对象，但是实际上是以3D技术来绘制的，因此还是叫模型坐标</p>
+
+<p>世界坐标的整个坐标的参考系在第三方！也就是不是本身</p>
+
+<p>比如：<br/>
+<img src="http://i.imgur.com/5q7jsI6.png" alt="" /><br/>
+看上图，坐标系上有ABC三个点，C是坐标原点，A参考C，B也参考C，那么，C的坐标就是A和B坐标的坐标系<br/>
+所以我们把以C为参考的坐标(也就是以第三方为参考系的坐标)称为世界坐标<br/>
+所以A的坐标是(5,5),B的坐标是(6,4)</p>
+
+<p>采用A的模型坐标来描述B的位置:<br/>
+我们也可以这么说，B相对于A的坐标是(1,-1),这样B就把A作为它的参考系，A就是模型坐标了！<br/>
+也就是B在A这个模型坐标里所在的位置是(1,-1)</p>
+
+<h2>世界坐标与模型坐标互相转换</h2>
+
+<p>通过Node对象如下函数实现：<br/>
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">Vec2</span> <span class="n">convertToNodeSpace</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">worldPoint</span> <span class="p">)</span> <span class="c1">//将世界坐标转换为模型坐标。坐标原点看成模型(对象，精灵)的左下角所在</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">convertToNodeSpaceAR</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">worldPoint</span> <span class="p">)</span> <span class="c1">//将世界坐标转换为模型坐标。AR表示相对于锚点。&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Vec2</span> <span class="n">convertTouchToNodeSpace</span> <span class="p">(</span> <span class="n">Touch</span> <span class="o">*</span> <span class="n">touch</span> <span class="p">)</span> <span class="c1">//将世界坐标中触摸点转换为模型坐标。</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">convertTouchToNodeSpaceAR</span> <span class="p">(</span> <span class="n">Touch</span> <span class="o">*</span> <span class="n">touch</span> <span class="p">)</span> <span class="c1">//将世界坐标中触摸点转换为模型坐标。AR表示相对于锚点。</span>
+</span><span class='line'><span class="c1">//凡是后面是ToNodeSpace的这个函数，是从世界坐标到模型坐标的转换  Node就是节点，也就是我们说的模型</span>
+</span><span class='line'><span class="c1">//所有带有AR的，表示相对于锚点，也就是坐标原点看成模型(对象，精灵)的锚点所在&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Vec2</span> <span class="n">convertToWorldSpace</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">nodePoint</span> <span class="p">)</span> <span class="c1">//将模型坐标中触摸点转换为世界坐标。</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">convertToWorldSpaceAR</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">nodePoint</span> <span class="p">)</span> <span class="c1">//将模型坐标中触摸点转换为世界坐标。AR表示相对于锚点。</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h1>实例：世界坐标转换为模型坐标</h1>
+
+<p><img src="http://i.imgur.com/3yIjKwO.png" alt="" />  <br/>
+Node1和Node2的像素是(300,100)<br/>
+所以很容易得出:<br/>
+A(100,400)<br/>
+C(200,300)
+C相对于A:(100,-100)</p>
+
+<p>B(400,500)
+C相对于B:(-200,-200)</p>
+
+<p>Node2的世界坐标转换为相对于Node1的模型坐标:
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的坐标原点,也就是A点</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">point1</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToNodeSpace</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的锚点,也就是B点</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">point2</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToNodeSpaceAR</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>所以得出的结果就是:
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Node2</span> <span class="n">NodeSpace</span> <span class="o">=</span> <span class="p">(</span><span class="o">%</span><span class="n">f</span><span class="p">,</span><span class="o">%</span><span class="n">f</span><span class="p">)</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="n">point1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">point1</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//Node2 NodeSpace = (100.000000,-100.000000)&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Node2</span> <span class="n">NodeSpaceAR</span> <span class="o">=</span> <span class="p">(</span><span class="o">%</span><span class="n">f</span><span class="p">,</span><span class="o">%</span><span class="n">f</span><span class="p">)</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">point2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point2</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//Node2 NodeSpaceAR = (-200.000000,-200.000000)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<pre><code>bool HelloWorld::init()
+{
+    // 1. super init first
+    if ( !Layer::init() )
+    {
+        return false;
+    }
+
+    auto node1 = Sprite::create("Node1.png");//Sprite是精灵
+    node1-&gt;setPosition(Vec2(400,500));//设置位置
+    node1-&gt;setAnchorPoint(Vec2(1.0, 1.0));//设置锚点
+
+    this-&gt;addChild(node1,0);//层添加精灵
+
+    auto node2 = Sprite::create("Node2.png");//Sprite是精灵
+    node2-&gt;setPosition(Vec2(200, 300));//设置位置
+    node2-&gt;setAnchorPoint(Vec2(0.5, 0.5));//设置锚点
+    this-&gt;addChild(node2, 0);
+
+    Vec2 point1 = node1-&gt;convertToNodeSpace(node2-&gt;getPosition());//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的坐标原点
+
+    Vec2 point2 = node1-&gt;convertToNodeSpaceAR(node2-&gt;getPosition());
+
+    log("Node2 NodeSpace = (%f,%f)",point1.x,point1.y);//Node2 NodeSpace = (100.000000,-100.000000)
+    log("Node2 NodeSpaceAR = (%f,%f)", point2.x, point2.y);//Node2 NodeSpaceAR = (-200.000000,-200.000000)
+
+    return true;
+}
+</code></pre>
+
+<p><img src="http://i.imgur.com/IDhDV2w.png" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170614/code/OpenGLcoordinates' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<h1>实例：模型坐标转换为世界坐标</h1>
+
+<p><img src="http://i.imgur.com/SOqOMNO.png" alt="" /></p>
+
+<p>在游戏场景中有两个Node对象，其中Node1的坐标是(400,500),大小是300<em>100像素<br/>
+Node2是放置在Node1中的，它对于Node1的模型坐标是(0,0),大小是150</em>150像素</p>
+
+<p>Node2相对于Node1的模型坐标转换的世界坐标:<br/>
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">Vec2</span> <span class="n">point1</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToWorldSpace</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">blockquote</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//node2-&gt;getPosition()为Node2在Node1中的模型坐标(相对于Node1的坐标原点得到的坐标) -&gt;(convertToWorldSpace)-&gt;转换为世界坐标，Node2在Node1中的坐标实际上是(0,0),在世界坐标中，Node2的坐标其实就是A点的坐标</span>
+</span></code></pre></td></tr></table></div></figure>
+(150,50)为Node2的宽高<br/>
+A点的坐标 = (400,500) - (150,50) = (250,450)</p></blockquote>
+
+<p>上面的是没加上锚点的，如果加上锚点，是相对于锚点的坐标<br/>
+加上锚点之后，Node1的锚点是B点，所以Node2相对于Node1的锚点的坐标是:</p>
+
+<pre><code>Vec2 point2 = node1-&gt;convertToWorldSpaceAR(node2-&gt;getPosition());
+&gt;//node2-&gt;getPosition()为Node2在Node1中的模型坐标(相对于再加上Node1的锚点的坐标得到的坐标) -&gt;(convertToWorldSpaceAR)-&gt;转换为世界坐标
+</code></pre>
+
+<p>Vec2 point2 得到的其实就是B点的坐标，也就是A点坐标，加上Node1锚点的坐标相对于A点的坐标。也就是(250,450)+(150,50) = (400,500)<br/>
+也就是我们说的Node2的世界坐标！</p>
+
+<pre><code>bool HelloWorld::init()
+{
+    // 1. super init first
+    if (!Layer::init())
+    {
+        return false;
+    }
+
+    auto node1 = Sprite::create("Node1.png");//Sprite是精灵
+    node1-&gt;setPosition(Vec2(400, 500));//设置位置
+    node1-&gt;setAnchorPoint(Vec2(0.5, 0.5));//设置锚点
+
+    this-&gt;addChild(node1, 0);//层添加精灵
+
+    auto node2 = Sprite::create("Node2.png");//Sprite是精灵
+    node2-&gt;setPosition(Vec2(0.0, 0.0));//设置位置
+    node2-&gt;setAnchorPoint(Vec2(0.0, 0.0));//设置锚点
+    node1-&gt;addChild(node2, 0);//把Node2放到Node1
+
+    //将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的坐标原点
+    Vec2 point1 = node1-&gt;convertToWorldSpace(node2-&gt;getPosition());
+    Vec2 point2 = node1-&gt;convertToWorldSpaceAR(node2-&gt;getPosition());
+
+    log("Node2 WorldSpace = (%f,%f)", point1.x, point1.y);//Node2 WorldSpace = (250.000000,450.000000)
+    log("Node2 WorldSpaceAR = (%f,%f)", point2.x, point2.y);//Node2 WorldSpaceAR = (400.000000,500.000000)
+
+    return true;
+}
+</code></pre>
+
+<pre><code class="C++ node1模型坐标来设置位置">node2-&gt;setPosition(Vec2(0.0, 0.0));//设置位置
+node2-&gt;setAnchorPoint(Vec2(0.0, 0.0));//设置锚点
+node1-&gt;addChild(node2, 0);//把Node2放到Node1
+</code></pre>
+
+<p>上面代码是使用node1模型坐标来设置位置的<br/>
+也可以用世界坐标描述
+<code>C++ 世界坐标描述
+node2-&gt;setPosition(Vec2(250, 450));
+node2-&gt;setAnchorPoint(Vec2(0.0, 0.0));
+this-&gt;addChild(node2, 0);
+</code></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170614/code/OpenGLcoordinates2' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【Cocos2d-x】开发基础-Node与Node层级架构]]></title>
@@ -94,7 +367,7 @@ this-&gt;addChild(sprite, 0);
 <p>第一个参数是添加的节点；第二个参数是添加的Node的z轴的顺序(添加节点的时候会有顺序的，相当于绘制的时候的先后顺序)；第三个参数是Tag/标签，可以理解成id，通过这个tag来操作node对象    <br/>
 <img src="http://i.imgur.com/eae63yS.png" alt="" /><br/>
 附带第二个参数的英文介绍：<br/>
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -106,18 +379,19 @@ this-&gt;addChild(sprite, 0);
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LocalZOrder is the &lsquo;key&rsquo; used to sort the node relative to its siblings.&lt;/p&gt;
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">LocalZOrder</span> <span class="n">is</span> <span class="n">the</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">key</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="n">used</span> <span class="n">to</span> <span class="n">sort</span> <span class="n">the</span> <span class="n">node</span> <span class="n">relative</span> <span class="n">to</span> <span class="n">its</span> <span class="n">siblings</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;The Node&rsquo;s parent will sort all its children based on the LocalZOrder value. If two nodes have the same LocalZOrder, then the node that was added first to the children&rsquo;s array will be in front of the other node in the array.&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Node</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span> <span class="n">parent</span> <span class="n">will</span> <span class="n">sort</span> <span class="n">all</span> <span class="n">its</span> <span class="n">children</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">LocalZOrder</span> <span class="n">value</span><span class="p">.</span> <span class="n">If</span> <span class="n">two</span> <span class="n">nodes</span> <span class="n">have</span> <span class="n">the</span> <span class="n">same</span> <span class="n">LocalZOrder</span><span class="p">,</span> <span class="n">then</span> <span class="n">the</span> <span class="n">node</span> <span class="n">that</span> <span class="n">was</span> <span class="n">added</span> <span class="n">first</span> <span class="n">to</span> <span class="n">the</span> <span class="n">children</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span> <span class="n">array</span> <span class="n">will</span> <span class="n">be</span> <span class="n">in</span> <span class="n">front</span> <span class="n">of</span> <span class="n">the</span> <span class="n">other</span> <span class="n">node</span> <span class="n">in</span> <span class="n">the</span> <span class="n">array</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;Also, the Scene Graph is traversed using the &ldquo;In-Order&rdquo; tree traversal algorithm ( &lt;a href="http://en.wikipedia.org/wiki/Tree_traversal#In-order"&gt;http://en.wikipedia.org/wiki/Tree_traversal#In-order&lt;/a&gt; ) And Nodes that have LocalZOrder values &lt; 0 are the &ldquo;left&rdquo; subtree While Nodes with LocalZOrder &gt;=0 are the &ldquo;right&rdquo; subtree.
-</span><span class='line'>&lt;code&gt;
-</span><span class='line'>addChild有4个方法
-</span><span class='line'>&lt;/code&gt;c++
-</span><span class='line'>virtual void addChild   ( Node * child)   &lt;br/&gt;
-</span><span class='line'>virtual void addChild   ( Node * child,int localZOrder)   &lt;br/&gt;
-</span><span class='line'>virtual void addChild   ( Node * child,int localZOrder,int tag)
-</span><span class='line'>virtual void addChild   ( Node * child,int localZOrder,const std::string &amp; name)  &lt;br/&gt;</span></code></pre></td></tr></table></div></figure></p>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Also</span><span class="p">,</span> <span class="n">the</span> <span class="n">Scene</span> <span class="n">Graph</span> <span class="n">is</span> <span class="n">traversed</span> <span class="k">using</span> <span class="n">the</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">In</span><span class="o">-</span><span class="n">Order</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="n">tree</span> <span class="n">traversal</span> <span class="n">algorithm</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://en.wikipedia.org/wiki/Tree_traversal#In-order&quot;</span><span class="o">&gt;</span><span class="nl">http</span><span class="p">:</span><span class="c1">//en.wikipedia.org/wiki/Tree_traversal#In-order&lt;/a&gt; ) And Nodes that have LocalZOrder values &amp;lt; 0 are the &amp;ldquo;left&amp;rdquo; subtree While Nodes with LocalZOrder &gt;=0 are the &amp;ldquo;right&amp;rdquo; subtree.</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">addChild</span><span class="err">有</span><span class="mi">4</span><span class="err">个方法</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span>
+</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">)</span>   <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">)</span>   <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">,</span><span class="kt">int</span> <span class="n">tag</span><span class="p">)</span>
+</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">,</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">name</span><span class="p">)</span>  <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h2>查找子节点</h2>
 
@@ -165,7 +439,7 @@ position是指的位置，anchorPoint是指的锚点<br/>
 如果需要场景中的精灵运动起来，我们可以在游戏循环中使用定时器（Scheduler）对精灵等对象的运行进行调度。<br/>
 因为Node类封装了Scheduler类，所以我们也可以直接使用Node中调用函数。<br/>
 Node中调用函数主要有：<br/>
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -174,15 +448,16 @@ Node中调用函数主要有：<br/>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>void scheduleUpdate ( void )//开始游戏调度，每个Node对象只要调用该函数，那么这个Node对象就会定时地每帧回调用一次自己的update(float dt)函数，每帧调用一次update函数！这是固定的时间和函数&lt;br/&gt;
-</span><span class='line'>//下面这个函数更加个性化，可以自定义回调函数和时间
-</span><span class='line'>void schedule ( SEL_SCHEDULE selector,  float  interval )//与scheduleUpdate函数功能一样，不同的是我们可以指定回调函数（通过selector指定），也可以根据需要指定回调时间间隔
-</span><span class='line'>//一旦调度开始，就会不断循环&lt;/p&gt;
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">void</span> <span class="n">scheduleUpdate</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//开始游戏调度，每个Node对象只要调用该函数，那么这个Node对象就会定时地每帧回调用一次自己的update(float dt)函数，每帧调用一次update函数！这是固定的时间和函数&lt;br/&gt;</span>
+</span><span class='line'><span class="c1">//下面这个函数更加个性化，可以自定义回调函数和时间</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">schedule</span> <span class="p">(</span> <span class="n">SEL_SCHEDULE</span> <span class="n">selector</span><span class="p">,</span>  <span class="kt">float</span>  <span class="n">interval</span> <span class="p">)</span><span class="c1">//与scheduleUpdate函数功能一样，不同的是我们可以指定回调函数（通过selector指定），也可以根据需要指定回调时间间隔</span>
+</span><span class='line'><span class="c1">//一旦调度开始，就会不断循环&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;void unscheduleUpdate ( void )//停止update(float dt)函数调度  和scheduleUpdate对应
-</span><span class='line'>void unschedule ( SEL_SCHEDULE selector )//可以指定具体函数停止调度  和schedule对应&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">unscheduleUpdate</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//停止update(float dt)函数调度  和scheduleUpdate对应</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">unschedule</span> <span class="p">(</span> <span class="n">SEL_SCHEDULE</span> <span class="n">selector</span> <span class="p">)</span><span class="c1">//可以指定具体函数停止调度  和schedule对应&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;void unscheduleAllSelectors ( void )//可以停止所有调度</span></code></pre></td></tr></table></div></figure></p>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">unscheduleAllSelectors</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//可以停止所有调度</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h1>源代码下载地址：</h1>
 
