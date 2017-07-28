@@ -5,12 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>【Cocos2d-x】开发基础-Cocos2d-x核心概念 - 谙忆-人生之旅</title>
+  <title>【小工具】CSDN博客导出工具-Java集成Maven开发 - 谙忆-人生之旅</title>
 
   <meta name="author" content="陈浩翔">
 
   
-  <meta name="description" content="Cocos2d-x的核心概念 导演 场景 层 精灵 菜单">
+  <meta name="description" content="CSDN博客导出工具
+之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。 转载请注明出处：http://chenhaoxiang.cn
+本文源自【人生之旅_谙忆的博客】 CSDNBlogExport CSDN博客导出工具 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/06/10/core-concept/">
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/07/28/CSDNBlogExport/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
@@ -70,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">【Cocos2d-x】开发基础-Cocos2d-x核心概念</h1>
+      <h1 class="entry-title">【小工具】CSDN博客导出工具-Java集成Maven开发</h1>
     
     
       <p class="meta">
@@ -79,89 +81,95 @@
 
 
 
-2017年06月10日
+2017年07月28日
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>本篇博客讲解:<br/>
-1.Cocos2d-x的核心概念</p>
+<div class="entry-content"><p>CSDN博客导出工具<br/>
+之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。</p>
 
 <!-- more -->
 
 
 <hr />
 
-<h1>导演</h1>
-
-<p>导演类Director(v3.0之前是CCDirector)用于管理场景对象。<br/>
-(所以3.0版本和以前的最大区别(我们看到的最大区别)就是类前面的CC，3.0版本是把所以的类前缀CC都去掉了)</p>
-
-<p>采用单例设计模式！(不多解释啦，不知道的朋友请搜索)</p>
-
-<figure class='code'><figcaption><span>获得导演类Director实例语句</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">auto</span> <span class="n">director</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span><span class="c1">//获取唯一的导演  单例模式</span>
-</span></code></pre></td></tr></table></div></figure>
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
 
 
-<h2>导演对象的职责/作用</h2>
+<h1>CSDNBlogExport</h1>
 
-<p>访问和改变场景<br/>
-访问Cocos2d-x的配置信息<br/>
-暂停、继续和停止游戏<br/>
-转换坐标</p>
+<p>CSDN博客导出工具</p>
 
-<p>上面只是导演对象的职责其中一部分，还有其他很多，但我们不需要让导演做很多事情(其他的事被隐藏了)，我们用的最多的应该就是访问和改变场景、暂停、继续和停止游戏和转换坐标</p>
+<p>之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。<br/>
+Had been trying to CSDN blog into their website, but because of the blog is more, inspired by my friend guo behind, will find a time this kind of small tools with Java development.</p>
 
-<h1>场景</h1>
+<h1>only use</h1>
 
-<p>场景类Scene(v3.0之前是CCScene)是构成游戏的界面，类似于电影中的场景。</p>
+<p>直接下载CSDNBlogExport.7z解压使用即可。 <br/>
+Direct download CSDNBlogExport.7z decompression can be used.<br/>
+<img src="http://i.imgur.com/H5mMN3E.png" alt="" /></p>
 
-<p>像导演、场景、包括层，精灵等这些游戏的概念，其实都是从电影行业中过渡过来的。<br/>
-那么，电影行业，我们知道有场景，有导演。<br/>
-场景就是我们拍这场戏，我们布置的景  比如打斗的场景等<br/>
-场景中会有男主角，女主角，那么男女主角就相当于我们这里的精灵了，包括道具什么的(精灵)，这些东西在一起，就构成了层</p>
+<p><img src="http://i.imgur.com/MBLoPTU.png" alt="" /></p>
 
-<p>所以场景里面也会放一些层</p>
+<p>经过测试，667篇博客，开50个线程，在54秒左右可以全部导出到文件。<br/>
+Tested, 667 blog, open 50 threads, in 54 seconds can all exported to a file.</p>
 
-<h2>场景大致可以分为以下几类</h2>
+<p>博客文件导出的存储规则是:<br/>
+软件运行目录\blog\年-月\年-月-日 博客标题名.markdown <br/>
+Blog file exported storage rule is:<br/>
+Software running directory/blog/year-month/year-month-day blog title name.markdown</p>
 
-<p>展示类场景。播放视频或简单的在图像上输出文字，来实现游戏的开场介绍、胜利和失败提示、帮助介绍<br/>
-选项类场景。主菜单，设置游戏参数等(比如开始，暂停，继续菜单)<br/>
-游戏场景。这是游戏的主要内容</p>
+<p><img src="http://i.imgur.com/tWkpxob.png" alt="" /></p>
 
-<p>Scene类图:继承图
-<img src="http://i.imgur.com/2S6h9PZ.png" alt="" /></p>
+<h1>开发</h1>
 
-<h1>层</h1>
+<p>CSDNBlogExport目录下是完整的程序代码<br/>
+使用了WebMagic爬虫框架，本来自己写HttpURLConnection工具类也能实现的，只是比较耗时，偷个小懒，既然别人有更好的工具，为什么不用呢<br/>
+技术含量呢，可以说基本没有什么，但是也是花了大半天时间做的。<br/>
+中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
-<p>层是我们写游戏的重点，我们大约99%以上的时间是在层上实现我们游戏内容。<br/>
-层的管理类似于Photoshop中的图层，它也是一层一层叠在一起</p>
+<p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x75;&#x69;&#102;&#x75;&#x74;&#x75;&#x72;&#x65;&#x40;&#x75;&#x69;&#x66;&#117;&#x74;&#x75;&#114;&#101;&#46;&#99;&#x6f;&#109;">&#117;&#105;&#102;&#117;&#x74;&#x75;&#114;&#x65;&#64;&#x75;&#105;&#102;&#117;&#x74;&#117;&#114;&#x65;&#x2e;&#99;&#111;&#109;</a><br/>
+我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
-<p>我们一般写的很多类都是层，然后在层上面添加精灵等.然后把层放到场景里<br/>
-场景包含层，层包含精灵,菜单等对象</p>
+<p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
 
-<p>理论上来说，层的层数越多(层与层之间有覆盖的问题，后面的层会覆盖先绘制的层)，需要绘制的深度越深，越耗CPU<br/>
-大家可以打开Photoshop，用里面的图层来理解，这样更加直观<br/>
-<img src="http://i.imgur.com/4XUGFsE.png" alt="" /></p>
+<p>也欢迎朋友加入进来与我一起完善本程序。</p>
 
-<h1>精灵</h1>
+<p>本小程序可导出任意CSDN用户的博客，但是仅供学习使用。
+免责声明:如果导出博客侵犯他人权益，引起纠纷的，一概与本人无关。</p>
 
-<p>精灵类Sprite(v3.0之前是CCSprite)是游戏中非常重要的概念，它包括了敌人、玩家控制的对象、静态物体、地图和背景等<br/>
-通常情况它会进行运动，运动方式包括了：移动、旋转、放大、缩小和动画等</p>
+<h1>development</h1>
 
-<h1>菜单</h1>
+<p>CSDNBlogExport directory is a complete program code
+Used WebMagic crawler frame, original, write their own HttpURLConnection tools can be achieved only takes time, steal a little lazy, now that people have a better tools, why not
+Technical content, it was basically have no what, but also spent most of time to do. <br/>
+And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
-<p>菜单在游戏中时非常重要的概念，它提供操作的集合，在Cococ2d-x中菜单类是Menu</p>
+<p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#x75;&#105;&#102;&#117;&#x74;&#117;&#x72;&#x65;&#64;&#117;&#105;&#102;&#x75;&#116;&#x75;&#x72;&#101;&#x2e;&#99;&#x6f;&#x6d;">&#x75;&#105;&#102;&#x75;&#116;&#117;&#114;&#101;&#64;&#x75;&#105;&#102;&#117;&#116;&#117;&#x72;&#101;&#46;&#99;&#x6f;&#x6d;</a></p>
 
-<p>Menu中包含菜单项<br/>
-MenuItem，它有三个子类：<br/>
-MenuItemLabel、MenuItemSprite和MenuItemToggle</p>
+<p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
-<p>之前的HelloWord中的关闭按钮其实就是一个菜单项<br/>
-我们也可以用精灵来实现，但是菜单项封装了一些触摸事件，你不需要关心它事件处理的细节问题</p>
+<p>This version is 1.0 version, hope to meet with friends bug, leave a message or contact me here, I&rsquo;ll repair in time.<br/>
+Also welcome friends to join in with me in perfect this procedure.<br/>
+This small program can export any CSDN user&rsquo;s blog, but only for the use of learning.<br/>
+Disclaimer: if the export blog infringement of rights and interests of others, cause disputes, all has nothing to do with himself.</p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogExport' target='_blank'>点我进行访问</a>】</strong></p>
+</blockquote>
+
+
+<p>如果无法访问，请翻墙哦</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
@@ -186,12 +194,12 @@ MenuItemLabel、MenuItemSprite和MenuItemToggle</p>
 
 
 
-2017年06月10日
+2017年07月28日
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/cocos2d-x/'>cocos2d-x</a>
+    <a class='category' href='/blog/categories/java/'>java</a>
   
 </span>
 
@@ -204,7 +212,7 @@ MenuItemLabel、MenuItemSprite和MenuItemToggle</p>
   
 
 	﻿
-<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/06/10/core-concept" style="margin-bottom: 10px; text-align: center;"></div>
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/07/28/CSDNBlogExport" style="margin-bottom: 10px; text-align: center;"></div>
 
 <!-- JiaThis Button BEGIN -->
 <div class="jiathis_style_24x24" style="float: right;">
@@ -226,7 +234,7 @@ var jiathis_config = {data_track_clickback:'true'};
 	
 		﻿<!--PC版-->
 
-<div id="SOHUCS" sid="/blog/2017/06/10/core-concept"></div>
+<div id="SOHUCS" sid="/blog/2017/07/28/CSDNBlogExport"></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({
@@ -244,10 +252,8 @@ conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2017/06/07/cocos2dx-hello/" title="Previous Post: 【Cocos2d-x】开发基础-第一个Cocos2d-x游戏">&laquo; 【Cocos2d-x】开发基础-第一个Cocos2d-x游戏</a>
+        <a class="basic-alignment left" href="/blog/2017/06/14/cocos2dx-coordinate-system/" title="Previous Post: 【Cocos2d-x】开发基础-Cocos2d-x坐标系">&laquo; 【Cocos2d-x】开发基础-Cocos2d-x坐标系</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2017/06/11/node-hierarchical-structure/" title="Next Post: 【Cocos2d-x】开发基础-Node与Node层级架构">【Cocos2d-x】开发基础-Node与Node层级架构 &raquo;</a>
       
     </p>
   </footer>
