@@ -38,7 +38,7 @@ rake deploy
 git checkout source 检查
 git add .
 
-git commit -m '【Cocos2d-x】开发基础-Cocos简介与环境搭建'
+git commit -m '【小工具】CSDN博客导出工具-Java集成Maven开发'
 
 source 表示分支
 git push origin source

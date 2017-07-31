@@ -75,9 +75,15 @@ Also welcome friends to join in with me in perfect this procedure.
 This small program can export any CSDN user's blog, but only for the use of learning.  
 Disclaimer: if the export blog infringement of rights and interests of others, cause disputes, all has nothing to do with himself.  
 
+#Bug修复记录
+2017.7.31：
+修复html编辑器写完博客后导出博客不全的bug  
+现在版本 v1.1  
+感谢CSDN博主<a href="http://blog.csdn.net/zuochao_2013" target='_blank'>[三名狂客]</a>提出的Bug  
+
 #源代码下载地址：
 <blockquote cite='陈浩翔'>
-GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogExport' target='_blank'>点我进行访问</a>】</strong></p>
+GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogExport' target='_blank'>点我进行访问</a>】</strong>
 </blockquote>
 如果无法访问，请翻墙哦  
 
