@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>【C++】C++构造函数和析构函数 - 谙忆-人生之旅</title>
+  <title>【问题解决】SSM-@Transactional注解事务无效探讨 - 谙忆-人生之旅</title>
 
   <meta name="author" content="陈浩翔">
 
   
-  <meta name="description" content="C++提供构造函数来处理对象的初始化。">
+  <meta name="description" content="Spring SpringMVC MyBatis框架中-@Transactional注解事务无效解决方法">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor%20-%20%E5%89%AF%E6%9C%AC/">
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/07/10/Spring-SpringMVC-MyBatis-Transactional-Invalid/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">【C++】C++构造函数和析构函数</h1>
+      <h1 class="entry-title">【问题解决】SSM-@Transactional注解事务无效探讨</h1>
     
     
       <p class="meta">
@@ -79,167 +79,86 @@
 
 
 
-2017年05月20日
+2017年07月10日
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>C++提供构造函数来处理对象的初始化。<br/>
-构造函数是一种特殊的成员函数，不需要用户来调用，定义对象时被自动执行。<br/>
-构造函数名字与类名相同，无返回类型(void也不能有哦)。</p>
-
-<p>可以由用户自己定义实现，根据需要设计对数据成员进行初始化</p>
+<div class="entry-content"><p>Spring SpringMVC MyBatis框架中-@Transactional注解事务无效解决方法</p>
 
 <!-- more -->
 
 
 <hr />
 
-<p>用上个例子来继续写代码进去<br/>
-CTime为类名</p>
+<p>SpringMVC-Spring-MyBatis框架<br/>
+数据库:SQL SERVER 2008<br/>
+以前都是用的MySQL数据库，没有出现这个问题，现在换成sql server了，结果事务没有起作用了。</p>
 
-<h1>无参数的构造函数：</h1>
-
-<p>在.h文件中进行声明：<br/>
-CTime();<br/>
-在.cpp文件中进行实现：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime::CTime(){
-</span><span class='line'>  m_hour = 0;
-</span><span class='line'>  m_minute = 0;
-</span><span class='line'>  m_second = 0;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>定义对象:<br/>
-CTime time;<br/>
-构造函数不需要我们去调用，定义一个对象的时候，会自动的去调用一个默认的无参构造函数。内部没有其他任何动作！
-一般在构造函数中进行数据的初始化，当然，你还可以进行其他操作。</p>
-
-<p>如果你没写构造函数，在定义一个对象的时候，会自动生成调用一个空构造函数。</p>
-
-<h1>带参数的构造函数</h1>
-
-<p>在.h文件中进行声明： <br/>
-CTime(int hour,int minute,int second);</p>
-
-<p>在.cpp文件中进行实现：</p>
+<p>经过一番测试：<br/>
+排除以下几个问题:
+1.数据库原因，不存在的。MySQL中只有InnoDB引擎支持事务。SqlServer2008的企业版作为收费数据库，不可能不支持事务操作。<br/>
+2.异常类型不是unchecked异常，我写的异常是1/0，为了保险起见，我还抛出RuntimeException试了，结果也是没有回滚。<br/>
+3.是不是配置文件的没配置好，比如Bean，比如:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime::CTime(int hour, int minute, int second){
-</span><span class='line'>  m_hour = hour;
-</span><span class='line'>  m_minute = minute;
-</span><span class='line'>  m_second = second;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!-- 配置事物管理类 --&gt;
+</span><span class='line'>&lt;bean id="transactionManager"
+</span><span class='line'>      class="org.springframework.jdbc.datasource.DataSourceTransactionManager"&gt;
+</span><span class='line'>    &lt;property name="dataSource" ref="dynamicDataSource" /&gt;
+</span><span class='line'>&lt;/bean&gt;
+</span><span class='line'>&lt;!-- 开启注解式事物扫描 --&gt;
+</span><span class='line'>&lt;tx:annotation-driven transaction-manager="transactionManager"  /&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>定义对象:</p>
+<p>检查几遍，排除这个原因。
+4.还有一种情况，因为我以前写的都是对一个数据库的操作，现在是一个数据源多个数据库操作，当时有点怀疑我是不是少配置了什么，导致多数据库时无法启动事务，于是便还原到一个数据库，结果事务还是无效，排除此问题</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime time(10,50,20);</span></code></pre></td></tr></table></div></figure>
+<p>经过一番折腾，在网上找到一篇文章，说原因是applicationContext.xml的父容器先于Servlet的子容器生效，将Service提前加载了。</p>
 
-
-<p>在一个类中可以有多个构造函数，函数名相同，参数不同，构造函数是可以重载的！</p>
-
-<p>如果你有了其他面向对象语言的基础！前面这些章节都会很容易学的。</p>
-
-<p>可以在声明的时候，给参数一个默认的值：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime(int hour,int minute,int second = 0);  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>在调用的时候，可以只传2个值，这个时候的second就会使用默认的值0；</p>
-
-<p>但是注意：
-不能这么写</p>
+<p>于是验证了一下，首先去掉Service实现类的@Service注解，在spring.xml(也就是applicationContext.xml，我起名是spring.xml)，配置该类的Bean:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime(int hour,int minute =0,int second);   </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;bean id="sysUserServiceImp" class="cn.kx59.user.service.imp.SysUserServiceImp"&gt;&lt;/bean&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>
-上面的写法是错误的！
-也就是说，如果你在某个参数给了默认值，则排在它后面的参数你都需要给上默认值才行！</p>
+<p>结果运行之后，事务起作用了。</p>
 
-<p>也不能给构造函数的每个参数都给上默认值</p>
+<p>原因如下:<br/>
+Spring容器优先加载由ServletContextListener（对应applicationContext.xml，我这里是spring.xml）产生的父容器，而SpringMVC（对应spring-mvc.xml）产生的是子容器。<br/>
+子容器Controller进行扫描装配时装配的@Service注解的实例是没有经过事务加强处理，即没有事务处理能力的Service，而父容器进行初始化的Service是保证事务的增强处理能力的。如果不在子容器中将Service exclude掉，此时得到的将是原样的无事务处理能力的Service。
+所以我们要在扫描的时候在子容器中将Service exclude掉就好了。</p>
+
+<p>也就是在spring-mvc.xml中进行如下修改:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime(int hour=0,int minute=0,int second=0);   </span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样会引起歧义！！！</p>
-
-<h1>析构函数</h1>
-
-<p>也是C++中的一个成员函数。<br/>
-析构函数的作用和构造函数相反。<br/>
-命名规则与类名相同，但是需要在类名前加上"~&ldquo;符号。</p>
-
-<p>~在C++中是取反运算符。</p>
-
-<p>析构函数一般式执行对象的清理工作。
-当对象的生命周期结束之后，会自动调用析构函数。</p>
-
-<p>析构函数的作用不是删除对象，而是说，在对象撤销它所占用的内存之前做一些清理工作，清理之后，这个对象的内存可以被分配给其他对象使用。</p>
-
-<p>在设计类的时候，都会给类提供一个析构函数。</p>
-
-<p>构造函数和析构函数都是可以由用户来定义的，但是调用，都是可以由程序来自动调用的。</p>
-
-<p>构造函数是在定义一个对象的时候执行的，而析构函数是在对象生命周期结束之后，自动执行析构函数。</p>
-
-<p>析构函数没有返回值和参数！</p>
-
-<p>注意：析构函数没有参数，不能被重载，因此一个类只能有一个析构函数。如果用户没有定义，编译器会自动生成一个默认的析构函数。</p>
-
-<p>析构函数的作用并不仅限于释放资源，还可以执行用户自己定义的一些操作，比如输出一些信息等。</p>
-
-<p>声明析构函数：</p>
-
-<figure class='code'><figcaption><span>声明析构函数 </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">~</span><span class="n">CTime</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>定义析构函数：</p>
-
-<figure class='code'><figcaption><span>定义析构函数</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">::~</span><span class="n">CTime</span><span class="p">(){</span>
-</span><span class='line'>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;析构函数被执行了...&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!--扫描Controller--&gt;
+</span><span class='line'>&lt;context:component-scan base-package="cn.kx59"&gt;
+</span><span class='line'>    &lt;context:include-filter type="annotation"
+</span><span class='line'>                            expression="org.springframework.stereotype.Controller" /&gt;
+</span><span class='line'>    &lt;!--下面这个是防止事务没起作用，spring.xml的父容器先于Servlet的子容器生效，将Service提前加载了。这里不用再进行加载装配--&gt;
+</span><span class='line'>    &lt;context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /&gt;
+</span><span class='line'>&lt;/context:component-scan&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>析构函数的执行顺序和构造函数的执行顺序是相反的！</p>
+<p>注意: 请将@Transactional注解写在实现类的方法或类上！不建议写在接口类中！  <br/>
+Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是不能继承的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因此，请接受Spring团队的建议并且在具体的类上使用 @Transactional 注解。</p>
 
-<p>也就是最先被定义的对象，最后被执行析构函数！</p>
-
-<p>用 new 分配内存时会调用构造函数，用 delete 释放内存时会调用析构函数。构造函数和析构函数对于类来说是不可或缺的！</p>
-
-<p>在函数内部创建的对象是局部对象，它和局部变量类似，位于栈区，函数执行结束时会调用这些对象的析构函数。</p>
-
-<p>new 创建的对象位于堆区，通过 delete 删除时才会调用析构函数；如果没有 delete，析构函数就不会被执行。</p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520/test3' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
+<p>在以上解决方法中，若将@Transactional 注解写在接口上，则无法实现事务。所以请将 @Transactional 注解写在实现类中！</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
@@ -264,12 +183,12 @@ GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-S
 
 
 
-2017年05月20日
+2017年07月10日
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/c-plus-plus/'>c++</a>
+    <a class='category' href='/blog/categories/java/'>java</a>
   
 </span>
 
@@ -282,7 +201,7 @@ GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-S
   
 
 	﻿
-<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/05/20/constructor-and-destructor - 副本" style="margin-bottom: 10px; text-align: center;"></div>
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/07/10/Spring-SpringMVC-MyBatis-Transactional-Invalid" style="margin-bottom: 10px; text-align: center;"></div>
 
 <!-- JiaThis Button BEGIN -->
 <div class="jiathis_style_24x24" style="float: right;">
@@ -304,7 +223,7 @@ var jiathis_config = {data_track_clickback:'true'};
 	
 		﻿<!--PC版-->
 
-<div id="SOHUCS" sid="/blog/2017/05/20/constructor-and-destructor - 副本"></div>
+<div id="SOHUCS" sid="/blog/2017/07/10/Spring-SpringMVC-MyBatis-Transactional-Invalid"></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({
@@ -322,10 +241,10 @@ conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2017/05/20/class-and-object/" title="Previous Post: 【C++】C++类和对象">&laquo; 【C++】C++类和对象</a>
+        <a class="basic-alignment left" href="/blog/2017/06/14/cocos2dx-coordinate-system/" title="Previous Post: 【Cocos2d-x】开发基础-Cocos2d-x坐标系">&laquo; 【Cocos2d-x】开发基础-Cocos2d-x坐标系</a>
       
       
-        <a class="basic-alignment right" href="/blog/2017/05/31/HttpRequest-HttpResponse/" title="Next Post: 【Cocos2d-x】Cocos2d-X网络编程-HttpRequest/HttpClient/HttpResponse">【Cocos2d-x】Cocos2d-X网络编程-HttpRequest/HttpClient/HttpResponse &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2017/07/28/CSDNBlogExport/" title="Next Post: 【小工具】CSDN博客导出工具-Java集成Maven开发">【小工具】CSDN博客导出工具-Java集成Maven开发 &raquo;</a>
       
     </p>
   </footer>
