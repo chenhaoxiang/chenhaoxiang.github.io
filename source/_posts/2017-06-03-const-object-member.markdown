@@ -3,8 +3,8 @@ layout: post
 title: "【C++】const对象和const成员"
 date: 2017-06-03 21:38:54 +0800
 comments: true
-categories: C++
-tags: [C++, basis]
+categories: c-plus-plus
+tags: [c++, basis]
 keyword: 陈浩翔, 谙忆, C++, const对象和const成员
 description: 定义类对象时可以将其指定为const对象。定义后const对象不能再被修改。const对象不能调用非const类型的成员函数。
 ---

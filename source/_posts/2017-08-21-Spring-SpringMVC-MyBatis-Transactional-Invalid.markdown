@@ -3,8 +3,8 @@ layout: post
 title: "【问题解决】SSM-@Transactional注解事务无效探讨"
 date: 2017-08-21 13:38:54 +0800
 comments: true
-categories: Java
-tags: [Java, Transactional]
+categories: java
+tags: [java, Transactional]
 keyword: 陈浩翔, 谙忆, Java, Transactional
 description: Spring SpringMVC MyBatis框架中-@Transactional注解事务无效解决方法
 ---

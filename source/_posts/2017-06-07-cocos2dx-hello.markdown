@@ -3,8 +3,8 @@ layout: post
 title: "【Cocos2d-x】开发基础-第一个Cocos2d-x游戏"
 date: 2017-06-07 13:38:54 +0800
 comments: true
-categories: Cocos2d-x
-tags: [Cocos2d-x, basis]
+categories: cocos2d-x
+tags: [cocos2d-x, basis]
 keyword: 陈浩翔, 谙忆, C++, Cocos2d-x,第一个Cocos2d-x游戏
 description: 第一个Cocos2d-x游戏 
 ---

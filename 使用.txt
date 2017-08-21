@@ -40,7 +40,7 @@ git checkout source
 
 git add .
 
-git commit -m '【问题解决】SSM-@Transactional注解事务无效探讨'
+git commit -m 'C++友元'
 
 source 表示分支
 git push origin source

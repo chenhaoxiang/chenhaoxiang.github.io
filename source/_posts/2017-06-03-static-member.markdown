@@ -3,8 +3,8 @@ layout: post
 title: "【C++】C++类的静态成员"
 date: 2017-06-03 18:38:54 +0800
 comments: true
-categories: C++
-tags: [C++, basis]
+categories: c-plus-plus
+tags: [c++, basis]
 keyword: 陈浩翔, 谙忆, C++, C++类的静态成员
 description: 以static开头。静态数据成员为各个对象共有，不属于某个具体的对象，所有对象都可以对它进行引用，都可以读取和修改。若一个对象修改了该静态成员的值，则在其他各个对象中该数据成员的值都会同时改变。
 ---

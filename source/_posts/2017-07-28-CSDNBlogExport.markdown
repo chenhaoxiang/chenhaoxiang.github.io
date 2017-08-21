@@ -3,8 +3,8 @@ layout: post
 title: "【小工具】CSDN博客导出工具-Java集成Maven开发"
 date: 2017-07-28 13:38:54 +0800
 comments: true
-categories: Java
-tags: [Java, maven]
+categories: java
+tags: [java, maven]
 keyword: 陈浩翔, 谙忆, Java, maven,CSDN博客导出工具
 description:  CSDN博客导出工具 
 ---

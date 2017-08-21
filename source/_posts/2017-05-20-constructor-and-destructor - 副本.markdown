@@ -3,8 +3,8 @@ layout: post
 title: "【C++】C++构造函数和析构函数"
 date: 2017-05-20 13:38:54 +0800
 comments: true
-categories: C++
-tags: [C++, basis]
+categories: c-plus-plus
+tags: [c++, basis]
 keyword: 陈浩翔, 谙忆, C++, C++构造函数和析构函数
 description: C++提供构造函数来处理对象的初始化。  
 ---

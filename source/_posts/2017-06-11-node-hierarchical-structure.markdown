@@ -3,8 +3,8 @@ layout: post
 title: "【Cocos2d-x】开发基础-Node与Node层级架构"
 date: 2017-06-11 13:38:54 +0800
 comments: true
-categories: Cocos2d-x
-tags: [Cocos2d-x, basis]
+categories: cocos2d-x
+tags: [cocos2d-x, basis]
 keyword: 陈浩翔, 谙忆, C++, Cocos2d-x,Node与Node层级架构
 description: 1.Node与Node层级架2.Node中重要的操作3.Node中重要的属性4.游戏循环与调度  
 

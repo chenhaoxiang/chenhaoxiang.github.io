@@ -3,8 +3,8 @@ layout: post
 title: "【Cocos2d-x】开发基础-Cocos2d-x坐标系"
 date: 2017-06-14 13:38:54 +0800
 comments: true
-categories: Cocos2d-x
-tags: [Cocos2d-x, basis]
+categories: cocos2d-x
+tags: [cocos2d-x, basis]
 keyword: 陈浩翔, 谙忆, C++, Cocos2d-x,Cocos2d-x坐标系
 description: 1.UI坐标2.OpenGL坐标3.世界坐标和模型坐标4.实例：世界坐标转换为模型坐标5.实例：模型坐标转换为世界坐标  
 ---

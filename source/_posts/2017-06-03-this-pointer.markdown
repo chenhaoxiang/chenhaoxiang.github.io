@@ -3,8 +3,8 @@ layout: post
 title: "【C++】This指针和复制构造函数"
 date: 2017-06-03 13:38:54 +0800
 comments: true
-categories: C++
-tags: [C++, basis]
+categories: c-plus-plus
+tags: [c++, basis]
 keyword: 陈浩翔, 谙忆, C++, This指针和复制构造函数
 description: 在每个成员函数中，都包含一个特殊的指针。这个指针的名字是固定的，就是this指针。this指针是指向类对象的指针，它的值是当前被调用的所在对象的地址！  
 ---

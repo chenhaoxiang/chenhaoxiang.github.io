@@ -4,7 +4,7 @@ title: "hello"
 date: 2017-05-08 13:17:54 +0800
 comments: true
 categories: test
-tags: [test,Java]
+tags: [test,java]
 keyword: seoTest, test
 description: 刚刚搭建的博客，测试
 ---

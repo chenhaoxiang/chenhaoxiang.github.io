@@ -3,8 +3,8 @@ layout: post
 title: "【C++】C++友元"
 date: 2017-06-20 13:38:54 +0800
 comments: true
-categories: C++
-tags: [C++, basis]
+categories: c-plus-plus
+tags: [c++, basis]
 keyword: 陈浩翔, 谙忆, C++, C++友元
 description:  C++中可以使用friend关键字来将函数、类声明为某个类的友元 友元包括友元函数和友元类 友元具有一些特权，可以访问private的成员.友元只能授予，不能索取，单向，不能传递 
 ---

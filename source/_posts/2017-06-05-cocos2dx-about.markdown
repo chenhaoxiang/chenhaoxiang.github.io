@@ -3,8 +3,8 @@ layout: post
 title: "【Cocos2d-x】开发基础-Cocos简介与环境搭建"
 date: 2017-06-05 13:38:54 +0800
 comments: true
-categories: Cocos2d-x
-tags: [Cocos2d-x, basis]
+categories: cocos2d-x
+tags: [cocos2d-x, basis]
 keyword: 陈浩翔, 谙忆, C++, Cocos2d-x,Cocos简介与环境搭建
 description: Cocos2d-x介绍与环境搭建 1.移动平台游戏引擎介绍 2.Cocos2d家谱介绍 3.Cocos2d-x设计目标 4.在Windows平台下开始开发Cocos2d-x游戏
 

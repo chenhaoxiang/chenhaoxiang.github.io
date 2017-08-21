@@ -3,8 +3,8 @@ layout: post
 title: "【C++】C++类和对象"
 date: 2017-05-20 13:38:54 +0800
 comments: true
-categories: C++
-tags: [C++, basis]
+categories: c-plus-plus
+tags: [c++, basis]
 keyword: 陈浩翔, 谙忆, C++, C++定义类和对象
 description: 每个实体都可以看成一个对象。在C++中，对象的类型被称为类。类代表了某一批对象的共性和特征。类是对象的抽象，而对象是类的具体实现。在C++中要使用一个类，首先要定义一个类。
 ---

@@ -3,8 +3,8 @@ layout: post
 title: "【Cocos2d-x】开发基础-Cocos2d-x核心概念"
 date: 2017-06-10 13:38:54 +0800
 comments: true
-categories: Cocos2d-x
-tags: [Cocos2d-x, basis]
+categories: cocos2d-x
+tags: [cocos2d-x, basis]
 keyword: 陈浩翔, 谙忆, C++, Cocos2d-x,Cocos2d-x核心概念
 description:  Cocos2d-x的核心概念 导演 场景 层 精灵 菜单
 ---
