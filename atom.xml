@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-21T21:34:04+08:00</updated>
+  <updated>2017-08-21T21:37:20+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -14,125 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[【小工具】CSDN博客导出工具-Java集成Maven开发]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/07/28/CSDNBlogExport/"/>
-    <updated>2017-07-28T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/07/28/CSDNBlogExport</id>
-    <content type="html"><![CDATA[<p>CSDN博客导出工具<br/>
-之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。</p>
-
-<!-- more -->
-
-
-<hr />
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-
-<h1>CSDNBlogExport</h1>
-
-<p>CSDN博客导出工具</p>
-
-<p>之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。<br/>
-Had been trying to CSDN blog into their website, but because of the blog is more, inspired by my friend guo behind, will find a time this kind of small tools with Java development.</p>
-
-<h1>only use</h1>
-
-<p>直接下载CSDNBlogExport.7z解压使用即可。 <br/>
-Direct download CSDNBlogExport.7z decompression can be used.<br/>
-<img src="http://i.imgur.com/H5mMN3E.png" alt="" /></p>
-
-<p><img src="http://i.imgur.com/MBLoPTU.png" alt="" /></p>
-
-<p>经过测试，667篇博客，开50个线程，在54秒左右可以全部导出到文件。<br/>
-Tested, 667 blog, open 50 threads, in 54 seconds can all exported to a file.</p>
-
-<p>博客文件导出的存储规则是:<br/>
-软件运行目录\blog\年-月\年-月-日 博客标题名.markdown <br/>
-Blog file exported storage rule is:<br/>
-Software running directory/blog/year-month/year-month-day blog title name.markdown</p>
-
-<p><img src="http://i.imgur.com/tWkpxob.png" alt="" /></p>
-
-<h1>开发</h1>
-
-<p>CSDNBlogExport目录下是完整的程序代码<br/>
-使用了WebMagic爬虫框架，本来自己写HttpURLConnection工具类也能实现的，只是比较耗时，偷个小懒，既然别人有更好的工具，为什么不用呢<br/>
-技术含量呢，可以说基本没有什么，但是也是花了大半天时间做的。<br/>
-中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
-
-<p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x75;&#105;&#102;&#117;&#116;&#x75;&#114;&#101;&#x40;&#117;&#x69;&#102;&#x75;&#x74;&#117;&#114;&#x65;&#46;&#x63;&#x6f;&#109;">&#117;&#105;&#102;&#117;&#116;&#117;&#114;&#x65;&#64;&#117;&#105;&#x66;&#117;&#116;&#117;&#x72;&#101;&#x2e;&#x63;&#111;&#109;</a><br/>
-我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
-
-<p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
-
-<p>也欢迎朋友加入进来与我一起完善本程序。</p>
-
-<p>本小程序可导出任意CSDN用户的博客，但是仅供学习使用。
-免责声明:如果导出博客侵犯他人权益，引起纠纷的，一概与本人无关。</p>
-
-<h1>development</h1>
-
-<p>CSDNBlogExport directory is a complete program code
-Used WebMagic crawler frame, original, write their own HttpURLConnection tools can be achieved only takes time, steal a little lazy, now that people have a better tools, why not
-Technical content, it was basically have no what, but also spent most of time to do. <br/>
-And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
-
-<p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x75;&#105;&#x66;&#117;&#116;&#117;&#114;&#x65;&#64;&#x75;&#x69;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#x2e;&#99;&#x6f;&#109;">&#117;&#x69;&#102;&#117;&#x74;&#117;&#x72;&#x65;&#x40;&#x75;&#105;&#x66;&#x75;&#x74;&#117;&#x72;&#x65;&#x2e;&#x63;&#111;&#x6d;</a></p>
-
-<p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
-
-<p>This version is 1.0 version, hope to meet with friends bug, leave a message or contact me here, I&rsquo;ll repair in time.<br/>
-Also welcome friends to join in with me in perfect this procedure.<br/>
-This small program can export any CSDN user&rsquo;s blog, but only for the use of learning.<br/>
-Disclaimer: if the export blog infringement of rights and interests of others, cause disputes, all has nothing to do with himself.</p>
-
-<h1>Bug修复记录</h1>
-
-<p>2017.7.31：
-修复html编辑器写完博客后导出博客不全的bug<br/>
-现在版本 v1.1<br/>
-感谢CSDN博主<a href="http://blog.csdn.net/zuochao_2013" target='_blank'>[三名狂客]</a>提出的Bug</p>
-
-<blockquote><p>2017.8.16：<br/>
-进行版本升级，因为CSDN把一个分页的bug给堵上了，原来的版本不能使用，请下载最新版本2.0<br/>
-现在版本 v2.0  <br/>
-感谢CSDN博主<a href="http://blog.csdn.net/u011637069" target='_blank'>[龙腾四海365]</a>提出的Bug</p></blockquote>
-
-<p>本次bug修复后，时间会延长一点，因为我在里面把分页的线程写死了，50个线程，有兴趣的可以自己扩展。<br/>
-经过测试，在输入50线程时，668篇博客的爬取时间为92S。<br/>
-<img src="http://i.imgur.com/XPP3svY.png" alt="" /></p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogExport' target='_blank'>点我进行访问</a>】</strong>
-</blockquote>
-
-
-<p>如果无法访问，请翻墙哦</p>
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
     <title type="html"><![CDATA[【问题解决】SSM-@Transactional注解事务无效探讨]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/07/10/Spring-SpringMVC-MyBatis-Transactional-Invalid/"/>
-    <updated>2017-07-10T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/07/10/Spring-SpringMVC-MyBatis-Transactional-Invalid</id>
+    <link href="http://chenhaoxiang.github.io/blog/2017/08/21/Spring-SpringMVC-MyBatis-Transactional-Invalid/"/>
+    <updated>2017-08-21T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/08/21/Spring-SpringMVC-MyBatis-Transactional-Invalid</id>
     <content type="html"><![CDATA[<p>Spring SpringMVC MyBatis框架中-@Transactional注解事务无效解决方法</p>
 
 <!-- more -->
@@ -206,6 +91,121 @@ Spring容器优先加载由ServletContextListener（对应applicationContext.xml
 Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是不能继承的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因此，请接受Spring团队的建议并且在具体的类上使用 @Transactional 注解。</p>
 
 <p>在以上解决方法中，若将@Transactional 注解写在接口上，则无法实现事务。所以请将 @Transactional 注解写在实现类中！</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【小工具】CSDN博客导出工具-Java集成Maven开发]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/07/28/CSDNBlogExport/"/>
+    <updated>2017-07-28T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/07/28/CSDNBlogExport</id>
+    <content type="html"><![CDATA[<p>CSDN博客导出工具<br/>
+之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+<h1>CSDNBlogExport</h1>
+
+<p>CSDN博客导出工具</p>
+
+<p>之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。<br/>
+Had been trying to CSDN blog into their website, but because of the blog is more, inspired by my friend guo behind, will find a time this kind of small tools with Java development.</p>
+
+<h1>only use</h1>
+
+<p>直接下载CSDNBlogExport.7z解压使用即可。 <br/>
+Direct download CSDNBlogExport.7z decompression can be used.<br/>
+<img src="http://i.imgur.com/H5mMN3E.png" alt="" /></p>
+
+<p><img src="http://i.imgur.com/MBLoPTU.png" alt="" /></p>
+
+<p>经过测试，667篇博客，开50个线程，在54秒左右可以全部导出到文件。<br/>
+Tested, 667 blog, open 50 threads, in 54 seconds can all exported to a file.</p>
+
+<p>博客文件导出的存储规则是:<br/>
+软件运行目录\blog\年-月\年-月-日 博客标题名.markdown <br/>
+Blog file exported storage rule is:<br/>
+Software running directory/blog/year-month/year-month-day blog title name.markdown</p>
+
+<p><img src="http://i.imgur.com/tWkpxob.png" alt="" /></p>
+
+<h1>开发</h1>
+
+<p>CSDNBlogExport目录下是完整的程序代码<br/>
+使用了WebMagic爬虫框架，本来自己写HttpURLConnection工具类也能实现的，只是比较耗时，偷个小懒，既然别人有更好的工具，为什么不用呢<br/>
+技术含量呢，可以说基本没有什么，但是也是花了大半天时间做的。<br/>
+中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
+
+<p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#117;&#105;&#102;&#117;&#x74;&#117;&#114;&#x65;&#64;&#117;&#105;&#102;&#x75;&#116;&#x75;&#x72;&#x65;&#x2e;&#99;&#111;&#109;">&#117;&#x69;&#102;&#117;&#116;&#x75;&#114;&#101;&#64;&#117;&#105;&#x66;&#117;&#x74;&#117;&#114;&#101;&#46;&#x63;&#111;&#109;</a><br/>
+我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
+
+<p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
+
+<p>也欢迎朋友加入进来与我一起完善本程序。</p>
+
+<p>本小程序可导出任意CSDN用户的博客，但是仅供学习使用。
+免责声明:如果导出博客侵犯他人权益，引起纠纷的，一概与本人无关。</p>
+
+<h1>development</h1>
+
+<p>CSDNBlogExport directory is a complete program code
+Used WebMagic crawler frame, original, write their own HttpURLConnection tools can be achieved only takes time, steal a little lazy, now that people have a better tools, why not
+Technical content, it was basically have no what, but also spent most of time to do. <br/>
+And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
+
+<p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#117;&#x69;&#102;&#x75;&#x74;&#x75;&#114;&#x65;&#x40;&#117;&#105;&#102;&#x75;&#x74;&#x75;&#114;&#x65;&#x2e;&#x63;&#111;&#109;">&#x75;&#105;&#x66;&#x75;&#116;&#x75;&#x72;&#x65;&#x40;&#x75;&#105;&#102;&#117;&#x74;&#x75;&#x72;&#x65;&#46;&#x63;&#111;&#109;</a></p>
+
+<p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
+
+<p>This version is 1.0 version, hope to meet with friends bug, leave a message or contact me here, I&rsquo;ll repair in time.<br/>
+Also welcome friends to join in with me in perfect this procedure.<br/>
+This small program can export any CSDN user&rsquo;s blog, but only for the use of learning.<br/>
+Disclaimer: if the export blog infringement of rights and interests of others, cause disputes, all has nothing to do with himself.</p>
+
+<h1>Bug修复记录</h1>
+
+<p>2017.7.31：
+修复html编辑器写完博客后导出博客不全的bug<br/>
+现在版本 v1.1<br/>
+感谢CSDN博主<a href="http://blog.csdn.net/zuochao_2013" target='_blank'>[三名狂客]</a>提出的Bug</p>
+
+<blockquote><p>2017.8.16：<br/>
+进行版本升级，因为CSDN把一个分页的bug给堵上了，原来的版本不能使用，请下载最新版本2.0<br/>
+现在版本 v2.0  <br/>
+感谢CSDN博主<a href="http://blog.csdn.net/u011637069" target='_blank'>[龙腾四海365]</a>提出的Bug</p></blockquote>
+
+<p>本次bug修复后，时间会延长一点，因为我在里面把分页的线程写死了，50个线程，有兴趣的可以自己扩展。<br/>
+经过测试，在输入50线程时，668篇博客的爬取时间为92S。<br/>
+<img src="http://i.imgur.com/XPP3svY.png" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogExport' target='_blank'>点我进行访问</a>】</strong>
+</blockquote>
+
+
+<p>如果无法访问，请翻墙哦</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
