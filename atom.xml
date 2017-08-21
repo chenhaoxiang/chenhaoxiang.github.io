@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-21T21:37:20+08:00</updated>
+  <updated>2017-08-21T21:56:42+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -155,7 +155,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#117;&#105;&#102;&#117;&#x74;&#117;&#114;&#x65;&#64;&#117;&#105;&#102;&#x75;&#116;&#x75;&#x72;&#x65;&#x2e;&#99;&#111;&#109;">&#117;&#x69;&#102;&#117;&#116;&#x75;&#114;&#101;&#64;&#117;&#105;&#x66;&#117;&#x74;&#117;&#114;&#101;&#46;&#x63;&#111;&#109;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#117;&#105;&#102;&#x75;&#116;&#x75;&#114;&#101;&#64;&#x75;&#x69;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x75;&#x69;&#x66;&#x75;&#116;&#x75;&#x72;&#101;&#64;&#x75;&#105;&#x66;&#117;&#x74;&#x75;&#114;&#101;&#x2e;&#99;&#111;&#109;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -173,7 +173,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#117;&#x69;&#102;&#x75;&#x74;&#x75;&#114;&#x65;&#x40;&#117;&#105;&#102;&#x75;&#x74;&#x75;&#114;&#x65;&#x2e;&#x63;&#111;&#109;">&#x75;&#105;&#x66;&#x75;&#116;&#x75;&#x72;&#x65;&#x40;&#x75;&#105;&#102;&#117;&#x74;&#x75;&#x72;&#x65;&#46;&#x63;&#111;&#109;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#117;&#x69;&#102;&#x75;&#x74;&#x75;&#x72;&#x65;&#64;&#x75;&#105;&#102;&#x75;&#x74;&#117;&#x72;&#101;&#x2e;&#99;&#x6f;&#109;">&#x75;&#105;&#102;&#117;&#116;&#x75;&#x72;&#x65;&#x40;&#x75;&#105;&#102;&#x75;&#x74;&#x75;&#x72;&#x65;&#46;&#x63;&#x6f;&#x6d;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -206,6 +206,228 @@ GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogE
 
 
 <p>如果无法访问，请翻墙哦</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【C++】C++友元]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/06/20/c++-friendFunction/"/>
+    <updated>2017-06-20T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/06/20/c++-friendFunction</id>
+    <content type="html"><![CDATA[<p>C++中可以使用friend关键字来将函数、类声明为某个类的友元<br/>
+友元包括友元函数和友元类<br/>
+友元具有一些特权，可以访问private的成员<br/>
+友元只能授予，不能索取，单向，不能传递(比如a是b的友元，b是c的友元，但a不是c的友元)</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>友元函数</h1>
+
+<p>在类体中使用friend关键字对友元函数进行声明：<br/>
+将非成员函数/一般函数声明为友元：<br/>
+friend void func();  //func为非成员函数，不属于任何类<br/>
+将其他类的成员函数声明为友元：<br/>
+friend void CTime::getNum();//getNum为CTime类的成员。</p>
+
+<h1>友元类</h1>
+
+<p>在类体中使用friend关键字将某类声明为自己的友元类。<br/>
+friend CTime;</p>
+
+<p>好处就是方便，可以在其他类或方法直接访问私有成员</p>
+
+<p>缺点：<br/>
+面向对象的基本原则包括封装性和信息隐藏，而由于友元可以访问其他类的私有成员，这是对封装原则的一个破坏。因此使用友元的时候要特别慎重。</p>
+
+<h1>实例</h1>
+
+<figure class='code'><figcaption><span>Time.h</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#ifndef TIME_H</span>
+</span><span class='line'><span class="cp">#define TIME_H </span>
+</span><span class='line'><span class="cp">#include &quot;Date.h&quot;</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">CTime</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">CTime</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">CTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">hour</span><span class="p">,</span> <span class="kt">int</span> <span class="n">minute</span><span class="p">,</span> <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'>  <span class="o">~</span><span class="n">CTime</span><span class="p">();</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">setHour</span><span class="p">(</span><span class="kt">int</span> <span class="n">hour</span><span class="p">);</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">setMinute</span><span class="p">(</span><span class="kt">int</span> <span class="n">minute</span><span class="p">);</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">setSecond</span><span class="p">(</span><span class="kt">int</span> <span class="n">second</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kt">int</span> <span class="nf">getHour</span><span class="p">();</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="nf">getMinute</span><span class="p">();</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="nf">getSecond</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">getNum</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//friend CDate;//声明友元类,需要声明class CDate;    这样整个类都可以访问CTime的私有成员的了,由于我们只在disPlay函数中访问，所以可以用下面的方法</span>
+</span><span class='line'>  <span class="k">friend</span> <span class="kt">void</span> <span class="n">CDate</span><span class="o">::</span><span class="n">disPlay</span><span class="p">(</span><span class="k">const</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">friend</span> <span class="kt">void</span> <span class="nf">func</span><span class="p">();</span><span class="c1">//告诉编译器，CTime这个类，已经将func()这个函数声明为自己的友元函数，这个声明可以放在本CTime类中任何地方</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">m_nHour</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">m_nMinute</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">const</span> <span class="kt">int</span> <span class="n">m_nNum</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#endif</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>Date.h</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#ifndef DATA_H</span>
+</span><span class='line'><span class="cp">#define DATA_H</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">CTime</span><span class="p">;</span><span class="c1">//类的前置声明，一般情况下，是需要声明之后才可以使用的</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">CDate</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="n">CDate</span><span class="p">(</span><span class="kt">int</span> <span class="n">year</span><span class="p">,</span> <span class="kt">int</span> <span class="n">month</span><span class="p">,</span> <span class="kt">int</span> <span class="n">day</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//friend CTime;//在这里声明友元没用，因为友元只能授予，不能索取！</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="nf">disPlay</span><span class="p">(</span><span class="k">const</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span><span class="c1">//使用的是类的引用(引用也是使用指针来实现的),这里不声明是可以的</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">m_nYear</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">m_nMonth</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">m_nDay</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>main.cpp</p>
+
+<figure class='code'><figcaption><span>main.cpp</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include&lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include&quot;Time.h&quot; </span>
+</span><span class='line'><span class="cp">#include &quot;Date.h&quot;</span>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">func</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">const</span> <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="k">const</span> <span class="n">time2</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getNum</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">func</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">CDate</span> <span class="n">date</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">26</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">date</span><span class="p">.</span><span class="n">disPlay</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>演示结果</h2>
+
+<p><img src="http://i.imgur.com/3zb3loZ.png" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170620/code/friendFunction' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>

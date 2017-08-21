@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-21T21:37:20+08:00</updated>
+  <updated>2017-08-21T21:56:42+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,182 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【C++】C++友元]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/06/20/c++-friendFunction/"/>
+    <updated>2017-06-20T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/06/20/c++-friendFunction</id>
+    <content type="html"><![CDATA[<p>C++中可以使用friend关键字来将函数、类声明为某个类的友元<br/>
+友元包括友元函数和友元类<br/>
+友元具有一些特权，可以访问private的成员<br/>
+友元只能授予，不能索取，单向，不能传递(比如a是b的友元，b是c的友元，但a不是c的友元)</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>友元函数</h1>
+
+<p>在类体中使用friend关键字对友元函数进行声明：<br/>
+将非成员函数/一般函数声明为友元：<br/>
+friend void func();  //func为非成员函数，不属于任何类<br/>
+将其他类的成员函数声明为友元：<br/>
+friend void CTime::getNum();//getNum为CTime类的成员。</p>
+
+<h1>友元类</h1>
+
+<p>在类体中使用friend关键字将某类声明为自己的友元类。<br/>
+friend CTime;</p>
+
+<p>好处就是方便，可以在其他类或方法直接访问私有成员</p>
+
+<p>缺点：<br/>
+面向对象的基本原则包括封装性和信息隐藏，而由于友元可以访问其他类的私有成员，这是对封装原则的一个破坏。因此使用友元的时候要特别慎重。</p>
+
+<h1>实例</h1>
+
+<pre><code class="C++ Time.h">#ifndef TIME_H
+#define TIME_H 
+#include "Date.h"
+class CTime
+{
+public:
+    CTime();
+    CTime(int hour, int minute, int second = 0);
+    CTime(int value);
+    CTime(CTime&amp; time);
+    ~CTime();
+    void setHour(int hour);
+    void setMinute(int minute);
+    void setSecond(int second);
+
+    int getHour();
+    int getMinute();
+    int getSecond(); 
+
+    int getNum() const;
+
+    //friend CDate;//声明友元类,需要声明class CDate;    这样整个类都可以访问CTime的私有成员的了,由于我们只在disPlay函数中访问，所以可以用下面的方法
+    friend void CDate::disPlay(const CTime&amp; time);
+    friend void func();//告诉编译器，CTime这个类，已经将func()这个函数声明为自己的友元函数，这个声明可以放在本CTime类中任何地方
+private:
+    int m_nHour;
+    int m_nMinute;
+    int m_nSecond;
+    const int m_nNum;
+};
+
+#endif
+</code></pre>
+
+<pre><code class="C++ Date.h">#ifndef DATA_H
+#define DATA_H
+
+class CTime;//类的前置声明，一般情况下，是需要声明之后才可以使用的
+
+class CDate
+{
+public:
+    CDate(int year, int month, int day);
+
+    //friend CTime;//在这里声明友元没用，因为友元只能授予，不能索取！
+    void disPlay(const CTime&amp; time);//使用的是类的引用(引用也是使用指针来实现的),这里不声明是可以的
+
+private:
+    int m_nYear;
+    int m_nMonth;
+    int m_nDay;
+
+};
+#endif
+</code></pre>
+
+<p>main.cpp
+<figure class='code'><figcaption><span>main.cpp</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span><span class="o">&lt;</span><span class="n">iostream</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span><span class="s">&quot;Time.h&quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Date</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">func</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">const</span> <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="k">const</span> <span class="n">time2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time</span><span class="p">.</span><span class="n">getNum</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">func</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">CDate</span> <span class="n">date</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">26</span><span class="p">);</span>
+</span><span class='line'><span class="n">date</span><span class="p">.</span><span class="n">disPlay</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>演示结果</h2>
+
+<p><img src="http://i.imgur.com/3zb3loZ.png" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170620/code/friendFunction' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【C++】const对象和const成员]]></title>
@@ -72,7 +248,7 @@ e:\chenhaoxiang\20170603\test2\test2\mian.cpp   34  1   test2
 const int num;
 </code>
 必须初始化，而且不能在构造函数中初始化！<br/>
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>main.cpp</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -114,48 +290,49 @@ const int num;
 <span class='line-number'>40</span>
 <span class='line-number'>41</span>
 <span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime::CTime() : num(10){&lt;/p&gt;
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">CTime</span><span class="p">()</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="mi">10</span><span class="p">){</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;m_hour = 0;
-</span><span class='line'>m_minute = 0;
-</span><span class='line'>m_second = 0;
-</span><span class='line'>m_nNum++;
-</span><span class='line'>cout &lt;&lt; m_nNum &lt;&lt; endl;
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">m_hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="n">m_minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="n">m_second</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="n">m_nNum</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">m_nNum</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;}
-</span><span class='line'>CTime::CTime(int hour) : num(10){
-</span><span class='line'>    this-&gt;m_hour = hour;
-</span><span class='line'>    //(*this).m_hour = hour; //效果一样的
-</span><span class='line'>}&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">CTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">hour</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="mi">10</span><span class="p">){</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_hour</span> <span class="o">=</span> <span class="n">hour</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">//(*this).m_hour = hour; //效果一样的</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;//复制构造函数
-</span><span class='line'>CTime::CTime(CTime&amp; time) : num(10){
-</span><span class='line'>    m_hour = time.m_hour;
-</span><span class='line'>    m_minute = time.m_minute;
-</span><span class='line'>    m_second = time.m_second;
-</span><span class='line'>    //cout &lt;&lt; &ldquo;进入复制构造函数&rdquo; &lt;&lt; endl;
-</span><span class='line'>}&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//复制构造函数</span>
+</span><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">CTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="mi">10</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">m_hour</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_hour</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m_minute</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_minute</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m_second</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_second</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">//cout &amp;lt;&amp;lt; &amp;ldquo;进入复制构造函数&amp;rdquo; &amp;lt;&amp;lt; endl;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;每一个构造函数都需要初始化这个const成员，而且复制构造函数也需要初始化num，因为复制构造函数也是一种构造函数！  
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">每一个构造函数都需要初始化这个</span><span class="k">const</span><span class="err">成员，而且复制构造函数也需要初始化</span><span class="n">num</span><span class="err">，因为复制构造函数也是一种构造函数！</span>
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>##3.const成员函数
-</span><span class='line'>const成员函数只能被const对象引用。const成员函数内可以引用const数据成员，也可以引用非const数据成员，但不能修改非const数据成员的值。但不能调用非const成员函数。
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="cp">##3.const成员函数</span>
+</span><span class='line'><span class="k">const</span><span class="err">成员函数只能被</span><span class="k">const</span><span class="err">对象引用。</span><span class="k">const</span><span class="err">成员函数内可以引用</span><span class="k">const</span><span class="err">数据成员，也可以引用非</span><span class="k">const</span><span class="err">数据成员，但不能修改非</span><span class="k">const</span><span class="err">数据成员的值。但不能调用非</span><span class="k">const</span><span class="err">成员函数。</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;int getNum() const;
-</span><span class='line'>&lt;code&gt;
-</span><span class='line'>对于const函数的外部定义，也需要写const限定符  
-</span><span class='line'>&lt;/code&gt;c++ 实现
-</span><span class='line'>int CTime::getNum() const {
-</span><span class='line'>    return num;
-</span><span class='line'>}
-</span><span class='line'>&lt;code&gt;
-</span><span class='line'>const成员函数存在的意义在于它能被const常对象调用  
-</span><span class='line'>&lt;/code&gt;c++ 调用
-</span><span class='line'>CTime const time5;
-</span><span class='line'>    cout &lt;&lt; time5.getNum() &lt;&lt;endl;</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">getNum</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">对于</span><span class="k">const</span><span class="err">函数的外部定义，也需要写</span><span class="k">const</span><span class="err">限定符</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span> <span class="err">实现</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">CTime</span><span class="o">::</span><span class="n">getNum</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">num</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">const</span><span class="err">成员函数存在的意义在于它能被</span><span class="k">const</span><span class="err">常对象调用</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span> <span class="err">调用</span>
+</span><span class='line'><span class="n">CTime</span> <span class="k">const</span> <span class="n">time5</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time5</span><span class="p">.</span><span class="n">getNum</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">endl</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
  如果在const成员函数的定义中出现了任何修改对象成员数据的现象，都会在编译时被检查出来</p>
 
 <p>如果我们是真的想在const成员函数中修改值呢，比如我需要m_age++;<br/>
@@ -613,162 +790,6 @@ CTime::~CTime(){
 
 <blockquote cite='陈浩翔'>
 GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520/test3' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【C++】C++类和对象]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/20/class-and-object/"/>
-    <updated>2017-05-20T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/20/class-and-object</id>
-    <content type="html"><![CDATA[<p>最近在公司弄游戏开发，C++基础也不是特别好，所以就打算继续开始学习C++。</p>
-
-<p>既然从头学习C++，就打算写一个系列教程。C++学习之路。
-我是在边学习C++，边学习cocos2dx 3.X，白天时间不是很多，
-先把C++系列写完再写coco2dx的教程。
-希望对大家有帮助。
-（可能基础知识不是很详细，对没有其他语言基础的人来说不是很友好，请见谅）</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>每个实体都可以看成一个对象。在C++中，对象的类型被称为类。
-类代表了某一批对象的共性和特征。</p>
-
-<p>类是对象的抽象，而对象是类的具体实现。</p>
-
-<p>在C++中要使用一个类，首先要定义一个类。</p>
-
-<h1>定义类</h1>
-
-<p>定义类和声明结构体的结构是相似的。</p>
-
-<h2>定义结构体</h2>
-
-<pre><code class="C++ 定义结构体">
-struct Student{
-    char name[128];
-    int age;
-    char add[128];
-};
-</code></pre>
-
-<h2>类的定义格式</h2>
-
-<pre><code class="C++ 类的定义格式">
-class 类名{
-    private:
-        成员数据;
-        成员函数;
-    public:
-        成员数据;
-        成员函数;
-    protected:
-        成员数据;
-        成员函数;
-};
-</code></pre>
-
-<p>private,public,protected这3个限定符就不介绍了<br/>
-建议把：<br/>
-public放前面<br/>
-private放最后</p>
-
-<p>别忘了最后的分号哦。<br/>
-struct默认是public<br/>
-class默认是private</p>
-
-<h2>一个简单的例子</h2>
-
-<pre><code class="C++ ">// test.cpp : 定义控制台应用程序的入口点。
-//
-
-#include "stdafx.h"
-using namespace std;
-
-class Student
-{
-public:
-    void print()
-    {
-        cout &lt;&lt;  age  &lt;&lt; endl;
-    }
-    int getAge();
-private:
-    char name[128] ;
-    int age = 20;
-    char addr[128] ;
-};
-inline int Student::getAge(){
-    return age;
-}
-
-int _tmain(int argc, _TCHAR* argv[])
-{
-    Student stu;
-    stu.print();
-    stu.getAge();
-    getchar();
-    return 0;
-}
-</code></pre>
-
-<h1>类和对象的使用</h1>
-
-<h2>对象成员的引用</h2>
-
-<p>程序中访问对象成员有以下三种方法：<br/>
-1、通过对象名和成员访问运算符".&ldquo;来访问<br/>
-2、通过指向对象的指针来访问<br/>
-3、通过引用来访问</p>
-
-<pre><code class="C++">    Student stu;
-    //通过对象名和成员访问运算符"."来访问  
-    stu.print();
-    stu.getAge();
-    //通过指向对象的指针来访问  
-    Student *p = &amp;stu;
-    p-&gt;print();
-    p-&gt;getAge();
-
-    //通过引用来访问  
-    Student &amp;s = stu;//表明s是stu的别名
-    s.print();
-    s.getAge();
-</code></pre>
-
-<h2>类声明和成员函数实现的分离</h2>
-
-<p>类的定义和成员函数的实现一般不放在一起，而是放在不同的文件中。</p>
-
-<p>一般来说，在大型项目中，将类的声明放在单独的头文件中，一般以类名命名。
-成员函数的实现放在该类对应的cpp文件中。
-这样就将类的声明和实现进行了分离.</p>
-
-<p>如果需要使用某个对象，直接引用那个对象声明的头文件即可，而不需要再重复声明了！</p>
-
-<p>这样工程的结构就清晰很多了。</p>
-
-<p>这章很简单，没多少要写的，你有语言基础的话，这章用个5分钟就可以过了~~
-这里我写了2个例子</p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520' target='_blank'>点我进行下载</a>】</strong></p>
 </blockquote>
 
 
