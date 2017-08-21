@@ -35,10 +35,12 @@ git@github.com:your_username/your_username.github.io.git
 rake deploy  
 
 表示将这个目录下的所有文件添加到git的版本管理工具中
-git checkout source 检查
+检查
+git checkout source 
+
 git add .
 
-git commit -m '【小工具】CSDN博客导出工具-Java集成Maven开发 v1.1'
+git commit -m '【问题解决】SSM-@Transactional注解事务无效探讨'
 
 source 表示分支
 git push origin source
