@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "【问题解决】SSM-@Transactional注解事务无效探讨"
-date: 2017-07-10 13:38:54 +0800
+date: 2017-08-21 13:38:54 +0800
 comments: true
 categories: Java
 tags: [Java, Transactional]
