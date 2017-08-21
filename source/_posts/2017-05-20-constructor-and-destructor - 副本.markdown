@@ -6,7 +6,7 @@ comments: true
 categories: C++
 tags: [C++, basis]
 keyword: 陈浩翔, 谙忆, C++, C++构造函数和析构函数
-description: 
+description: C++提供构造函数来处理对象的初始化。  
 ---
 
 C++提供构造函数来处理对象的初始化。  

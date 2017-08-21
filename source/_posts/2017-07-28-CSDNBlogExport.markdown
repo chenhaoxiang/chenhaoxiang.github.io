@@ -3,10 +3,10 @@ layout: post
 title: "【小工具】CSDN博客导出工具-Java集成Maven开发"
 date: 2017-07-28 13:38:54 +0800
 comments: true
-categories: java
-tags: [java, maven]
-keyword: 陈浩翔, 谙忆, java, maven,CSDN博客导出工具
-description:  
+categories: Java
+tags: [Java, maven]
+keyword: 陈浩翔, 谙忆, Java, maven,CSDN博客导出工具
+description:  CSDN博客导出工具 
 ---
 
 CSDN博客导出工具  
@@ -80,6 +80,15 @@ Disclaimer: if the export blog infringement of rights and interests of others, c
 修复html编辑器写完博客后导出博客不全的bug  
 现在版本 v1.1  
 感谢CSDN博主<a href="http://blog.csdn.net/zuochao_2013" target='_blank'>[三名狂客]</a>提出的Bug  
+>
+2017.8.16：  
+进行版本升级，因为CSDN把一个分页的bug给堵上了，原来的版本不能使用，请下载最新版本2.0  
+现在版本 v2.0    
+感谢CSDN博主<a href="http://blog.csdn.net/u011637069" target='_blank'>[龙腾四海365]</a>提出的Bug   
+ 
+本次bug修复后，时间会延长一点，因为我在里面把分页的线程写死了，50个线程，有兴趣的可以自己扩展。  
+经过测试，在输入50线程时，668篇博客的爬取时间为92S。  
+![](http://i.imgur.com/XPP3svY.png)   
 
 #源代码下载地址：
 <blockquote cite='陈浩翔'>

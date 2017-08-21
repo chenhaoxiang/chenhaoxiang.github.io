@@ -38,7 +38,7 @@ rake deploy
 git checkout source 检查
 git add .
 
-git commit -m '【小工具】CSDN博客导出工具-Java集成Maven开发'
+git commit -m '【小工具】CSDN博客导出工具-Java集成Maven开发 v1.1'
 
 source 表示分支
 git push origin source

@@ -3,8 +3,8 @@ layout: post
 title: "【Redis】Java之Redis工具类"
 date: 2017-05-18 21:29:54 +0800
 comments: true
-categories: java
-tags: [Redis,java]
+categories: Java
+tags: [Redis,Java]
 keyword: 陈浩翔, 谙忆, Redis工具类, Redis
 description: Java之最全Redis工具类
 ---
