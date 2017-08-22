@@ -40,7 +40,7 @@ git checkout source
 
 git add .
 
-git commit -m 'C++友元'
+git commit -m '修改分类'
 
 source 表示分支
 git push origin source
