@@ -40,7 +40,7 @@ git checkout source
 
 git add .
 
-git commit -m '修改分类'
+git commit -m 'footer.html增加百度自动收录代码'
 
 source 表示分支
 git push origin source
