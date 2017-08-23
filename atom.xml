@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-22T23:51:28+08:00</updated>
+  <updated>2017-08-24T00:53:39+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -155,7 +155,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#117;&#x69;&#x66;&#117;&#116;&#117;&#114;&#x65;&#64;&#117;&#105;&#x66;&#x75;&#x74;&#x75;&#x72;&#101;&#x2e;&#x63;&#111;&#109;">&#x75;&#x69;&#102;&#x75;&#116;&#117;&#114;&#x65;&#64;&#x75;&#105;&#102;&#117;&#116;&#117;&#114;&#x65;&#46;&#99;&#111;&#109;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#117;&#105;&#102;&#x75;&#x74;&#117;&#x72;&#x65;&#64;&#x75;&#105;&#102;&#x75;&#116;&#117;&#114;&#101;&#46;&#99;&#x6f;&#109;">&#x75;&#105;&#x66;&#117;&#x74;&#x75;&#114;&#x65;&#64;&#x75;&#x69;&#102;&#117;&#116;&#117;&#114;&#x65;&#x2e;&#x63;&#111;&#x6d;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -173,7 +173,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#x3a;&#117;&#105;&#x66;&#x75;&#x74;&#117;&#114;&#x65;&#x40;&#117;&#x69;&#x66;&#117;&#116;&#117;&#x72;&#101;&#46;&#99;&#111;&#109;">&#x75;&#x69;&#x66;&#x75;&#x74;&#117;&#x72;&#101;&#64;&#x75;&#x69;&#102;&#117;&#116;&#x75;&#x72;&#101;&#x2e;&#x63;&#111;&#x6d;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#117;&#105;&#102;&#117;&#x74;&#117;&#x72;&#x65;&#64;&#117;&#x69;&#102;&#117;&#x74;&#117;&#x72;&#x65;&#x2e;&#x63;&#111;&#x6d;">&#x75;&#105;&#102;&#x75;&#x74;&#x75;&#x72;&#x65;&#64;&#117;&#x69;&#x66;&#117;&#116;&#x75;&#114;&#101;&#46;&#99;&#111;&#109;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -206,6 +206,537 @@ GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogE
 
 
 <p>如果无法访问，请翻墙哦</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】开发实战-Cocos中的字符串、标签和中文乱码]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/06/27/cocos2d-string-label-mojibake/"/>
+    <updated>2017-06-27T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/06/27/cocos2d-string-label-mojibake</id>
+    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
+1.Ccocos2d-x中的字符串
+2.使用标签
+3.中文乱码问题</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>[TOC]</p>
+
+<h1>Ccocos2d-x中的字符串</h1>
+
+<h2>使用const char*和std::string</h2>
+
+<p>const char<em>是C风格的字符串<br/>
+std::string是C++风格的字符串，它封装了const char</em><br/>
+初始化std::string对象:</p>
+
+<figure class='code'><figcaption><span>初始化std::string对象</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;jack&quot;</span><span class="p">;</span><span class="c1">//直接赋值</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;jack&quot;</span><span class="p">);</span><span class="c1">//通过构造函数初始化</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//创建对象通过静态方法创建，也就是在程序结束的时候，或者超过作用域的时候，自动释放，这就不需要我们来关心对象的释放</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>std::string 指针类型</p>
+
+<figure class='code'><figcaption><span>std::string 指针类型</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span> <span class="n">namep</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;jack&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//new 代表创建这个对象是动态创建的，是在程序运行过程中创建的，使用完成之后需要delete删除。</span>
+</span><span class='line'><span class="c1">//返回值不是对象本身，而是指向对象的指针</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="k">delete</span> <span class="n">namep</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>把std::string 转化为const char*类型</p>
+
+<figure class='code'><figcaption><span>把std::string 转化为const char*类型</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">cstring</span> <span class="o">=</span> <span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span><span class="c1">//静态方法创建</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">cstring</span> <span class="o">=</span> <span class="n">namep</span><span class="o">-&gt;</span><span class="n">c_str</span><span class="p">();</span><span class="c1">//namep为指针</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;jack&quot;</span><span class="p">;</span><span class="c1">//直接赋值</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;name = %s&quot;</span><span class="p">,</span><span class="n">name</span><span class="p">);</span><span class="c1">//直接这样会出现乱码问题，因为log用的不对</span>
+</span><span class='line'><span class="c1">//我们可以去看log函数:void CC_DLL log(const char * format, ...) CC_FORMAT_PRINTF(1, 2);类型是const char*</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;name = %s&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">*</span><span class="n">name1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;jack&quot;</span><span class="p">);</span><span class="c1">//直接赋值    </span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;name1 = %s&quot;</span><span class="p">,</span> <span class="n">name1</span><span class="o">-&gt;</span><span class="n">c_str</span><span class="p">());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>使用cocos2d::__String</h2>
+
+<p>(注意是两个英文下划线)
+源自于Objective-C的NSString<br/>
+在coco2d-x里面，凡是有两个下划线开头的，都是过渡Objective-C过来的(内存管理采用引用计数管理)<br/>
+现在Cocos2d-x在慢慢去除Objective-C化</p>
+
+<p><img src="http://i.imgur.com/3wvkHJl.png" alt="" /></p>
+
+<p>创建它的主要的静态create函数如下(工厂设计模式)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="n">__String</span> <span class="o">*</span><span class="n">create</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">str</span><span class="p">)</span>
+</span><span class='line'><span class="k">static</span> <span class="n">__String</span> <span class="o">*</span><span class="n">createWithFormat</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">format</span><span class="p">,...)</span>
+</span><span class='line'><span class="c1">//createWithFormat-通过创建模板来创建字符串，所以可以通过这个方法把其他类型的转换为字符串</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>数据类型之间的转换</h3>
+
+<p>cocos2d::__String 转换为const cahr*类型，这种转换还是用的比较多的</p>
+
+<figure class='code'><figcaption><span>cocos2d::__String 转换为const cahr*类型</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">__String</span> <span class="o">*</span><span class="n">name</span> <span class="o">=</span> <span class="n">__String</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;Hi,Tony&quot;</span><span class="p">);</span><span class="c1">//得到对象指针，因为是通过静态create函数获取的，不需要我们delete</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cstring</span> <span class="o">=</span> <span class="n">name</span><span class="o">-&gt;</span><span class="n">getCString</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>const cahr* 转换为cocos2d::__Stirng类型</p>
+
+<figure class='code'><figcaption><span>const cahr* 转换为cocos2d::__Stirng类型</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">cstring</span> <span class="o">=</span><span class="s">&quot;Hi,Tonny&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">__String</span> <span class="o">*</span><span class="n">ns</span> <span class="o">=</span> <span class="n">__String</span><span class="o">::</span><span class="n">createWithFormat</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="n">cstring</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>std::string转换为cocos2d::__String类型</p>
+
+<figure class='code'><figcaption><span>std::string转换为cocos2d::__String类型</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">string</span> <span class="o">=</span> <span class="s">&quot;Hi,Tonny&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">__String</span> <span class="o">*</span><span class="n">name4</span> <span class="o">=</span> <span class="n">__String</span><span class="o">::</span><span class="n">createWithFormat</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">string</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span><span class="c1">//将std::string转换为__String</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cocos2d::__String转换为int类型</p>
+
+<figure class='code'><figcaption><span>cocos2d::__String转换为int类型</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+</span><span class='line'><span class="n">__String</span> <span class="o">*</span><span class="n">ns</span> <span class="o">=</span> <span class="n">__String</span><span class="o">::</span><span class="n">createWithFormat</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="n">num</span><span class="p">);</span><span class="c1">//这种方式可以转换很多其他类型</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">num2</span> <span class="o">=</span> <span class="n">ns</span><span class="o">-&gt;</span><span class="n">intValue</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Win32平台下中文乱码问题</h2>
+
+<p>默认情况下Windows中文环境是采用GBK编码，源程序文件HelloWorldScene.cpp编码默认也是GBK，如果源程序代码中有中文，它的字符集是GBK，我们需要将中文符GBK编码转换为UTF-8编码。</p>
+
+<h3>解决方法一</h3>
+
+<p>源文件保存为UTF-8(不带签名的)<br/>
+文件->高级保存选项<br/>
+<img src="http://i.imgur.com/qS3JBYL.png" alt="" /></p>
+
+<p>存储完之后编译，会出现这样的问题<br/>
+<img src="http://i.imgur.com/D7akxGK.png" alt="" /><br/>
+这是由于Visual Studio对于Unicode(UTF-8无签名)识别有误，我们一般在后面添加一些英文字符，或者“啊”等特殊的中文字符。</p>
+
+<p>建议不要用这种解决方式</p>
+
+<h3>解决方法二</h3>
+
+<p>转码GBK->UTF-8</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">__String</span> <span class="o">*</span><span class="n">cns</span> <span class="o">=</span> <span class="n">__String</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;大家好啊&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">nsc</span><span class="p">;</span>
+</span><span class='line'><span class="cp">#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">sns</span> <span class="o">=</span> <span class="n">MyUtility</span><span class="o">::</span><span class="n">gbk_2_utf8</span><span class="p">(</span><span class="n">ns</span><span class="o">-&gt;</span><span class="n">getCString</span><span class="p">());</span>
+</span><span class='line'><span class="n">cns</span> <span class="o">=</span> <span class="n">sns</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span>
+</span><span class='line'><span class="cp">#else</span>
+</span><span class='line'><span class="n">cns</span> <span class="o">=</span> <span class="n">ns</span><span class="o">-&gt;</span><span class="n">getCString</span><span class="p">();</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">cns</span><span class="p">);</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label</span> <span class="o">=</span> <span class="n">LabelTTF</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">cns</span><span class="p">,</span> <span class="s">&quot;Arial&quot;</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//在Win32平台下，将GBK编码转换为UTF-8</span>
+</span><span class='line'><span class="n">string</span> <span class="n">MyUtility</span><span class="o">::</span><span class="n">gbk_2_utf8</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="n">text</span><span class="p">){</span>
+</span><span class='line'><span class="cp">#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) </span><span class="c1">//条件编译</span>
+</span><span class='line'>  <span class="c1">//这里面用的一些库只有win32平台才有的一些类库</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//采用Lambda表达式，将string转换成wstring</span>
+</span><span class='line'>  <span class="n">wstring</span> <span class="n">tes</span> <span class="o">=</span> <span class="p">[</span><span class="o">=</span><span class="p">](){</span>
+</span><span class='line'>      <span class="n">setlocale</span><span class="p">(</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="s">&quot;chs&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">_Source</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span>
+</span><span class='line'>      <span class="kt">size_t</span> <span class="n">_Dsize</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>      <span class="kt">wchar_t</span> <span class="o">*</span><span class="n">_Dest</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">wchar_t</span><span class="p">[</span><span class="n">_Dsize</span><span class="p">];</span>
+</span><span class='line'>      <span class="n">mbstowcs</span><span class="p">(</span><span class="n">_Dest</span><span class="p">,</span> <span class="n">_Source</span><span class="p">,</span> <span class="n">_Dsize</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">std</span><span class="o">::</span><span class="n">wstring</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_Dest</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">delete</span><span class="p">[]</span><span class="n">_Dest</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">setlocale</span><span class="p">(</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">asciSize</span> <span class="o">=</span> <span class="n">WideCharToMultiByte</span><span class="p">(</span><span class="n">CP_UTF8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tes</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">tes</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">asciSize</span> <span class="o">==</span> <span class="n">ERROR_NO_UNICODE_TRANSLATION</span> <span class="o">||</span> <span class="n">asciSize</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">string</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kt">char</span> <span class="o">*</span><span class="n">resultString</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">asciSize</span><span class="p">];</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">conveResult</span> <span class="o">=</span> <span class="n">WideCharToMultiByte</span><span class="p">(</span><span class="n">CP_UTF8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tes</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">tes</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">resultString</span><span class="p">,</span> <span class="n">asciSize</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">conveResult</span> <span class="o">!=</span> <span class="n">asciSize</span><span class="p">){</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">string</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">string</span> <span class="n">buffer</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">buffer</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">resultString</span><span class="p">,</span><span class="n">asciSize</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">delete</span><span class="p">[]</span> <span class="n">resultString</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">buffer</span><span class="p">;</span>
+</span><span class='line'><span class="cp">#else</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">text</span><span class="p">;</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>解决方法三</h3>
+
+<p>其实还可以用文本文件来解决中文乱码，就是字符串从xml文件或者json中读取(注意，文本需要是UTF-8编码)，然后传值，这样不会出现乱码问题</p>
+
+<h1>使用标签</h1>
+
+<p>可以把标签理解为一个控件</p>
+
+<p><img src="http://i.imgur.com/nDlGfb0.png" alt="" /></p>
+
+<p>此处的大家好和中间的COCOS2DX图片就是标签</p>
+
+<p>一种是COCOS2DX这样的，可以叫美工做张图片然后放上去就可以了，静态的<br/>
+另外一种是"大家好"这样的动态文字</p>
+
+<h2>LabelTTF</h2>
+
+<p>TTF基于系统字库</p>
+
+<p><img src="http://i.imgur.com/khRSKgT.png" alt="" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//静态create函数创建</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label</span> <span class="o">=</span> <span class="n">LabelTTF</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;大家好&quot;</span><span class="p">,</span> <span class="s">&quot;Arial&quot;</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span><span class="c1">//如乱码请参照前面的解决</span>
+</span><span class='line'><span class="c1">//在不同的平台中都是去找Arial这个系统库，然后去显示出来,24为字号</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//指定标签的位置</span>
+</span><span class='line'><span class="n">label</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">label</span><span class="o">-&gt;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'><span class="c1">//记住设置位置和锚点，锚点没写就是默认的0.5,0.5</span>
+</span><span class='line'><span class="c1">//把标签加入到层中</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">123</span><span class="p">);</span><span class="c1">//设置tag为123，方便后面获取</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>create函数的完整定义:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cm">/** creates a Label from a fontname, alignment, dimension in points and font size in points</span>
+</span><span class='line'><span class="cm">     @since v2.0.1</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'><span class="k">static</span> <span class="n">LabelTTF</span> <span class="o">*</span> <span class="nf">create</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">string</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">fontName</span><span class="p">,</span> <span class="kt">float</span> <span class="n">fontSize</span><span class="p">,</span>
+</span><span class='line'>                  <span class="k">const</span> <span class="n">Size</span><span class="o">&amp;</span> <span class="n">dimensions</span> <span class="o">=</span> <span class="n">Size</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span> <span class="n">TextHAlignment</span> <span class="n">hAlignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">CENTER</span><span class="p">,</span>
+</span><span class='line'>                  <span class="n">TextVAlignment</span> <span class="n">vAlignment</span> <span class="o">=</span> <span class="n">TextVAlignment</span><span class="o">::</span><span class="n">TOP</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>const std::string&amp; string   要显示的字符串<br/>
+const std::string&amp; fontName   字体的名字<br/>
+ float fontSize   字体的大小<br/>
+const Size&amp; dimensions = Size::ZERO  尺寸-放在这个所定义的矩形的大小里面
+TextHAlignment hAlignment = TextHAlignment::CENTER  水平方向的中心对齐<br/>
+TextVAlignment vAlignment = TextVAlignment::TOP  垂直方向的顶对齐<br/>
+后面三个参数可省略，都会有默认值</p>
+
+<p>在cocos2d X3.01时，认为create已经过时了，但是这种用法还是能用,可能以后会去掉</p>
+
+<h2>LabelAtlas</h2>
+
+<p>基于图集的标签<br/>
+<img src="http://i.imgur.com/3q7Fl2d.png" alt="" /></p>
+
+<p>继承了：LabelProtocol-纯虚函数，相当于Java中的接口</p>
+
+<p>显示的abcd的那些字母，放在一张图中了<br/>
+<img src="http://i.imgur.com/UVGSL4n.png" alt="" /></p>
+
+<figure class='code'><figcaption><span>创建并初始化标签</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">auto</span> <span class="n">label1</span> <span class="o">=</span> <span class="n">LabelAtlas</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;HelloWorld&quot;</span><span class="p">,</span> <span class="s">&quot;fonts/tuffy_bold_italic-charmap.png&quot;</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="sc">&#39; &#39;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//(字符串，字体文件图集，宽，高，) 路径是 Resources/下  宽高不能随便设置！需要和图片对应的</span>
+</span><span class='line'><span class="n">label1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">label1</span><span class="o">-&gt;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">label1</span><span class="o">-</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>LabelBMFont</h2>
+
+<p>位图字体标签，需要添加字体文件：包括一个图片集(.png)和一个字体坐标文件(.fnt)<br/>
+LabelBMFont比LabelTTF快很多。LabelBMFont中的每个字符的宽度是可变的</p>
+
+<p><img src="http://i.imgur.com/FHkqIqZ.png" alt="" /><br/>
+.png很容易，叫美工做好图片就行<br/>
+.fnt:<br/>
+<img src="http://i.imgur.com/XtY5Ixb.png" alt="" /><br/>
+这个就不是自己能手写出来的了~~ 那么我们就需要借助工具了<br/>
+(大家可以简单的学习一下工具)</p>
+
+<p>创建并初始化标签</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">auto</span> <span class="n">label2</span> <span class="o">=</span> <span class="n">LabelBMFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;HelloWord&quot;</span><span class="p">,</span><span class="s">&quot;fonts/BMFont.fnt&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">label2</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">label2</span><span class="o">-&gt;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果：<br/>
+<img src="http://i.imgur.com/Sf2epLr.png" alt="" /></p>
+
+<h2>Cocos2d-x 3.x标签类Label</h2>
+
+<p>Cocos2d-x 3.x后推出了新的标签类Label，这种标签通过使用FreeType(开源字体引擎)来使它在不同的平台上有相同的视觉效果。<br/>
+由于使用更快的缓存代理，它的渲染也将更加快速。Label还提供了描边和阴影等特效。<br/>
+<img src="http://i.imgur.com/HKQ3iDb.png" alt="" /></p>
+
+<p>前面三个标签在3.0或者说3.1之后已经过时了，但是还可以用(不推荐使用了)。<br/>
+推荐使用该标签类Label，该类替换了前面的三个标签类</p>
+
+<p>创建Label类静态create函数常用的有如下几个：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithSystemFont</span><span class="p">(</span><span class="n">conststd</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">text</span><span class="p">,</span>   <span class="c1">//是要显示的文字                             </span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">font</span><span class="p">,</span>                                     <span class="c1">//系统字体名  </span>
+</span><span class='line'><span class="kt">float</span> <span class="n">fontSize</span><span class="p">,</span>                                             <span class="c1">//字体的大小  </span>
+</span><span class='line'><span class="k">const</span> <span class="n">Size</span><span class="o">&amp;</span> <span class="n">dimensions</span> <span class="o">=</span> <span class="n">Size</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span>                        <span class="c1">//在屏幕上占用的区域大小,可省略  </span>
+</span><span class='line'><span class="n">TextHAlignment</span>  <span class="n">hAlignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>          <span class="c1">//文字横向对齐方式,可省略  </span>
+</span><span class='line'><span class="n">TextVAlignment</span>  <span class="n">vAlignment</span> <span class="o">=</span> <span class="n">TextVAlignment</span><span class="o">::</span><span class="n">TOP</span><span class="p">)</span>           <span class="c1">//文字纵向对齐方式,可省略  </span>
+</span><span class='line'><span class="err">显示的是系统字体，指的是运行环境下的系统，而不是编译系统，相当于原来的</span><span class="n">LabelTTF</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithTTF</span><span class="p">(</span><span class="n">conststd</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span> <span class="n">text</span><span class="p">,</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span>  <span class="n">fontFile</span><span class="p">,</span>                <span class="c1">//字体文件  </span>
+</span><span class='line'><span class="kt">float</span> <span class="n">fontSize</span><span class="p">,</span>                                  <span class="c1">//字体的大小  </span>
+</span><span class='line'><span class="k">const</span> <span class="n">Size</span> <span class="o">&amp;</span>  <span class="n">dimensions</span> <span class="o">=</span> <span class="n">Size</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span>                 <span class="c1">//可省略  </span>
+</span><span class='line'><span class="n">TextHAlignment</span>          <span class="n">hAlignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>    <span class="c1">//可省略  </span>
+</span><span class='line'><span class="n">TextVAlignment</span>           <span class="n">vAlignment</span> <span class="o">=</span> <span class="n">TextVAlignment</span><span class="o">::</span><span class="n">TOP</span><span class="p">)</span>      <span class="c1">//可省略  </span>
+</span><span class='line'><span class="n">createWithTTF</span><span class="err">和</span><span class="n">LabelTTF</span><span class="err">不一样了，也就是</span><span class="n">fontFile</span><span class="err">指定的不是系统字体，而是字体文件，也就是字体文件路径</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithTTF</span><span class="p">(</span><span class="n">constTTFConfig</span><span class="o">&amp;</span> <span class="n">ttfConfig</span><span class="p">,</span> <span class="c1">//配置参数 constTTFConfig-结构体</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">text</span><span class="p">,</span>
+</span><span class='line'><span class="n">TextHAlignment</span> <span class="n">alignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">maxLineWidth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithBMFont</span><span class="p">(</span><span class="n">conststd</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">bmfontFilePath</span><span class="p">,</span>      <span class="c1">//位图字体文件  </span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span>  <span class="n">text</span><span class="p">,</span>                                         <span class="c1">//是要显示的文字        </span>
+</span><span class='line'><span class="k">const</span> <span class="n">TextHAlignment</span><span class="o">&amp;</span> <span class="n">alignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>          <span class="c1">//可省略  </span>
+</span><span class='line'><span class="kt">int</span> <span class="n">maxLineWidth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>                                              <span class="c1">//可省略  </span>
+</span><span class='line'><span class="k">const</span> <span class="n">Point</span><span class="o">&amp;</span>  <span class="n">imageOffset</span> <span class="o">=</span> <span class="n">Point</span><span class="o">::</span><span class="n">ZERO</span> <span class="p">)</span>                               <span class="c1">//可省略  </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用实例</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">auto</span> <span class="n">label1</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithSystemFont</span><span class="p">(</span><span class="s">&quot;Hello World1&quot;</span><span class="p">,</span> <span class="s">&quot;Arial&quot;</span><span class="p">,</span> <span class="mi">36</span><span class="p">);</span>
+</span><span class='line'><span class="n">label1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">100</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="c1">//Win32的字体库可以在控制面板中找到</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">auto</span> <span class="n">label2</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="s">&quot;Hello World2&quot;</span><span class="p">,</span> <span class="s">&quot;fonts/Marker Felt.ttf&quot;</span><span class="p">,</span> <span class="mi">36</span><span class="p">);</span>
+</span><span class='line'><span class="n">label2</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">200</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">auto</span> <span class="n">label3</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithBMFont</span><span class="p">(</span><span class="s">&quot;fonts/BMFont.fnt&quot;</span><span class="p">,</span> <span class="s">&quot;Hello World3&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">label3</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">300</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">TTFConfig</span> <span class="nf">ttfConfig</span><span class="p">(</span><span class="s">&quot;fonts/Marker Felt.ttf&quot;</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="n">GlyphCollection</span><span class="o">::</span><span class="n">DYNAMIC</span><span class="p">);</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label4</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="n">ttfConfig</span><span class="p">,</span> <span class="s">&quot;Hello World4&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">label4</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">400</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label4</span> <span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ttfConfig</span><span class="p">.</span><span class="n">outlineSize</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label5</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="n">ttfConfig</span><span class="p">,</span> <span class="s">&quot;Hello World5&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//ttfConfig-结构体配置，能配置更多的特效，比如描边，阴影，闪烁的文字等</span>
+</span><span class='line'><span class="c1">//只能是TTF文件的，才能使用这些特效</span>
+</span><span class='line'><span class="n">label5</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">500</span><span class="p">));</span>
+</span><span class='line'><span class="n">label5</span><span class="o">-&gt;</span><span class="n">enableShadow</span><span class="p">(</span><span class="n">Color4B</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">128</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">));</span><span class="c1">//设置阴影，阴影的颜色，阴影的大小 </span>
+</span><span class='line'><span class="n">label5</span><span class="o">-&gt;</span><span class="n">setColor</span><span class="p">(</span><span class="n">Color3B</span><span class="o">::</span><span class="n">RED</span><span class="p">);</span><span class="c1">//设置颜色</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label5</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>标签中文乱码问题</h2>
+
+<p>解决方法一:保存文件为Unicode(UTF-8无签名)<br/>
+(不推荐使用)</p>
+
+<p>解决方法二:写工具类，将字符串编码转换为UTF-8<br/>
+参考前面的Win32平台下中文乱码问题 <br/>
+<img src="http://i.imgur.com/fGs4T2L.png" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170627/code' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
