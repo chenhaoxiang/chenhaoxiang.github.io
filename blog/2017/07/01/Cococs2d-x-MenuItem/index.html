@@ -1,0 +1,885 @@
+
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>【Cocos2d-x】开发实战-Cococs2d-x中的菜单 - 谙忆-人生之旅</title>
+
+  <meta name="author" content="陈浩翔">
+
+  
+  <meta name="description" content="Cococs2d-x中的菜单，menu,menuItem,1.使用菜单2.文本菜单3.精灵菜单和图片菜单 4.开关菜单 菜单分类实际上是按照菜单项分类的 文本菜单,精灵菜单，图片菜单和开关菜单其实准确来讲，应该是,文本菜单项,精灵菜单项，图片菜单项和开关菜单项">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/07/01/Cococs2d-x-MenuItem/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="jquery1.9.1.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="fonts.googleapis.com.css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="fonts.googleapis.com.css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">谙忆-人生之旅</a></h1>
+  
+    <h2>学不止步,梦不停歇-陈浩翔</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">﻿<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com.hk/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="chenhaoxiang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="请使用谷歌搜索"/>
+  </fieldset>
+</form>
+  
+﻿<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">博客列表</a></li>
+  <li><a href="/aboutme">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">【Cocos2d-x】开发实战-Cococs2d-x中的菜单</h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+2017年07月01日
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>本篇博客讲解:  <br/>
+1.使用菜单<br/>
+2.文本菜单<br/>
+3.精灵菜单和图片菜单<br/>
+4.开关菜单</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>使用菜单</h1>
+
+<p>Menu - 菜单<br/>
+MenuItem - 菜单项</p>
+
+<p>菜单分类实际上是按照菜单项分类的<br/>
+菜单和菜单项的继承关系图:<br/>
+<img src="http://i.imgur.com/OYKnEka.png" alt="" /></p>
+
+<p>文本菜单,精灵菜单，图片菜单和开关菜单其实准确来讲，应该是:<br/>
+文本菜单项,精灵菜单项，图片菜单项和开关菜单项</p>
+
+<p>继承MenuItemLabel的菜单其实都是文本菜单  <br/>
+精灵菜单:MenuItemSprite的子类是图片菜单MenuItemImage<br/>
+开关菜单:MenuItemToggle</p>
+
+<h1>文本菜单</h1>
+
+<p>文本菜单是菜单项只是显示文本<br/>
+文本菜单类包括了MenuItemLabel、MenuItemFont和MenuItemAtlasFont。MenuItemLabel是个抽象类，具体使用的时候是使用MenuItemFont和MenuItemAtlasFont两个类。
+文本菜单类MenuItemFont，它的其中一个创建函数create定义如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="n">MenuItemFont</span><span class="o">*</span> <span class="nf">create</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">,</span> <span class="c1">//要显示的文本</span>
+</span><span class='line'><span class="k">const</span> <span class="n">ccMenuCallback</span> <span class="o">&amp;</span> <span class="n">callback</span>  <span class="c1">//菜单操作的回调函数指针,菜单项被点击之后回调的函数</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>cocos2d帮我们做了一个宏来帮助我们传递回调函数的参数,CC_CALLBACK_n,n为回调的参数个数<br/>
+<img src="http://i.imgur.com/6JjL3zZ.png" alt="" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">// new callbacks based on C++11</span>
+</span><span class='line'><span class="cp">#define CC_CALLBACK_0(__selector__,__target__, ...) std::bind(&amp;__selector__,__target__, ##__VA_ARGS__)</span>
+</span><span class='line'><span class="cp">#define CC_CALLBACK_1(__selector__,__target__, ...) std::bind(&amp;__selector__,__target__, std::placeholders::_1, ##__VA_ARGS__)</span>
+</span><span class='line'><span class="cp">#define CC_CALLBACK_2(__selector__,__target__, ...) std::bind(&amp;__selector__,__target__, std::placeholders::_1, std::placeholders::_2, ##__VA_ARGS__)</span>
+</span><span class='line'><span class="cp">#define CC_CALLBACK_3(__selector__,__target__, ...) std::bind(&amp;__selector__,__target__, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, ##__VA_ARGS__)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>文本菜单类MenuItemAtlasFont是基于图片集的文本菜单项，它的其中一个创建函数create定义如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="n">MenuItemAtlasFont</span><span class="o">*</span> <span class="nf">create</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span><span class="c1">//要显示的文本</span>
+</span><span class='line'> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">charMapFile</span><span class="p">,</span> <span class="c1">//图片集文件</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">itemWidth</span><span class="p">,</span> <span class="c1">//要截取的文字在图片中的宽度</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">itemHeight</span><span class="p">,</span> <span class="c1">//要截取的文字在图片中的高度</span>
+</span><span class='line'><span class="kt">char</span> <span class="n">startCharMap</span><span class="p">,</span><span class="c1">//文字之间的间隔符</span>
+</span><span class='line'> <span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span> <span class="n">callback</span><span class="c1">//菜单操作的回调函数指针</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>实例:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">())</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleOrigin</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Sprite</span> <span class="o">*</span><span class="n">bg</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/background.png&quot;</span><span class="p">);</span> <span class="c1">//背景图片精灵</span>
+</span><span class='line'><span class="n">bg</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">bg</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">setFontName</span><span class="p">(</span><span class="s">&quot;Times New Roman&quot;</span><span class="p">);</span><span class="c1">//使用系统字体，设置系统字体的名字</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">setFontSize</span><span class="p">(</span><span class="mi">86</span><span class="p">);</span><span class="c1">//设置系统字体的大小</span>
+</span><span class='line'><span class="n">MenuItemFont</span> <span class="o">*</span><span class="n">item1</span> <span class="o">=</span> <span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;Start&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span> <span class="c1">//创建基于系统字体的MenuItemFont</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">MenuItemAtlasFont</span> <span class="o">*</span><span class="n">item2</span> <span class="o">=</span> <span class="n">MenuItemAtlasFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;Help&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="s">&quot;menu/tuffy_bold_italic-charmap.png&quot;</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="sc">&#39; &#39;</span><span class="p">,</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem2Callback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Menu</span><span class="o">*</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">item1</span><span class="p">,</span> <span class="n">item2</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span><span class="c1">//把MenuItem放到Menu里，不能直接把MenuItem放到层里</span>
+</span><span class='line'><span class="n">mn</span><span class="o">-&gt;</span><span class="n">alignItemsVertically</span><span class="p">();</span><span class="c1">//设置菜单位置，垂直对齐</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mn</span><span class="p">);</span><span class="c1">//把菜单放到层里</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="c1">//实际上这里传进来的参数是MenuItem类型，所以在这里可以强转，也可以直接把形参类型写成MenuItem，不写成Ref</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">*</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//一般情况下，我们不需要这个参数，只有在需要一些特定的信息的情况下，我们才需要进行转换拿值</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;Touch Start Menu Item %p&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">);</span> <span class="c1">//这个输出是输出指针的地址，没有意义,在这里只是掩饰回调函数起作用了！且对象传过来了</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem2Callback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">*</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;Touch Help Menu Item %p&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>显示效果:</h2>
+
+<p><img src="http://i.imgur.com/LyozJx3.gif" alt="" /></p>
+
+<h2>源代码下载地址：</h2>
+
+<p>GITHUB源码下载地址:<strong>【<a href="https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dTextMenu">点我进行下载</a>】</strong></p>
+
+<h1>精灵菜单和图片菜单</h1>
+
+<h2>精灵菜单项类MenuItemSprite</h2>
+
+<p>创建函数create定义:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="n">MenuItemSprite</span> <span class="o">*</span> <span class="nf">create</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">normalSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">selectedSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">disabledSprite</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span>
+</span><span class='line'><span class="k">static</span> <span class="n">MenuItemSprite</span><span class="o">*</span> <span class="nf">create</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">normalSprite</span><span class="p">,</span><span class="c1">//菜单项正常显示时候的精灵</span>
+</span><span class='line'><span class="n">Node</span><span class="o">*</span> <span class="n">selectedSprite</span><span class="p">,</span><span class="c1">//选择菜单项时候的精灵</span>
+</span><span class='line'><span class="n">Node</span><span class="o">*</span> <span class="n">disableSprite</span><span class="p">,</span><span class="c1">//菜单项禁用时候的精灵</span>
+</span><span class='line'><span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span> <span class="n">callback</span> <span class="c1">//菜单操作的回调函数指针</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'><span class="k">static</span> <span class="n">MenuItemSprite</span> <span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">normalSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">selectedSprite</span><span class="p">,</span> <span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span> <span class="n">callback</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>图片菜单项类MenuIemImage</h2>
+
+<p>创建函数create定义:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="n">MenuItemImage</span><span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">normallmage</span><span class="p">,</span><span class="c1">//菜单项正常显示时候的图片</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">selectedImage</span><span class="p">,</span><span class="c1">//选择菜单项时候的图片</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">disabledImage</span><span class="p">,</span><span class="c1">//菜单项禁用时候的图片</span>
+</span><span class='line'><span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span> <span class="n">callback</span><span class="c1">//菜单操作的回调函数指针</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>精灵菜单和图片菜单都有三种状态，也就是正常状态，选中状态，还有禁用状态。</p>
+
+<h2>实例</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleOrigin</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Sprite</span> <span class="o">*</span><span class="n">bg</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/background.png&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">bg</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>                         <span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">bg</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//开始精灵</span>
+</span><span class='line'><span class="n">Sprite</span> <span class="o">*</span><span class="n">startSpriteNormal</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/start-up.png&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">Sprite</span> <span class="o">*</span><span class="n">startSpriteSelected</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/start-down.png&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//创建精灵菜单  添加精灵以及回调函数</span>
+</span><span class='line'><span class="n">MenuItemSprite</span> <span class="o">*</span><span class="n">startMenuItem</span> <span class="o">=</span> <span class="n">MenuItemSprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">startSpriteNormal</span><span class="p">,</span>
+</span><span class='line'>                                              <span class="n">startSpriteSelected</span><span class="p">,</span>
+</span><span class='line'>                                             <span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItemStartCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
+</span><span class='line'><span class="n">startMenuItem</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">convertToGL</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">700</span><span class="p">,</span> <span class="mi">170</span><span class="p">)));</span>
+</span><span class='line'><span class="c1">//指定坐标    convertToGL转换-将左上角为原点的UI坐标转换为OpenGL坐标，cocos2d默认坐标为OpenGL坐标</span>
+</span><span class='line'><span class="c1">//700, 170为UI坐标</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 设置 图片菜单 图片菜单的好处就是直接使用图片就好了</span>
+</span><span class='line'><span class="n">MenuItemImage</span> <span class="o">*</span><span class="n">settingMenuItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
+</span><span class='line'>                         <span class="s">&quot;menu/setting-up.png&quot;</span><span class="p">,</span>
+</span><span class='line'>                         <span class="s">&quot;menu/setting-down.png&quot;</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItemSettingCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">settingMenuItem</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">convertToGL</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">480</span><span class="p">,</span> <span class="mi">400</span><span class="p">)));</span>    
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 帮助 图片菜单</span>
+</span><span class='line'><span class="n">MenuItemImage</span> <span class="o">*</span><span class="n">helpMenuItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
+</span><span class='line'>                         <span class="s">&quot;menu/help-up.png&quot;</span><span class="p">,</span>
+</span><span class='line'>                         <span class="s">&quot;menu/help-down.png&quot;</span><span class="p">,</span>
+</span><span class='line'>                       <span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItemHelpCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>    
+</span><span class='line'>
+</span><span class='line'><span class="n">helpMenuItem</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">convertToGL</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">860</span><span class="p">,</span> <span class="mi">480</span><span class="p">)));</span>
+</span><span class='line'><span class="c1">//在这里，精灵菜单和图片菜单没什么区别，视觉效果一样，也一样有回调函数</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Menu</span><span class="o">*</span> <span class="n">mu</span> <span class="o">=</span> <span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">startMenuItem</span><span class="p">,</span> <span class="n">settingMenuItem</span><span class="p">,</span> <span class="n">helpMenuItem</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span><span class="c1">//指定菜单  NULL指定菜单列表的结束</span>
+</span><span class='line'><span class="n">mu</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span><span class="c1">//菜单处于坐标原点 - 因为菜单项已经都指定位置了</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//回调函数</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItemHelpCallback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">*</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;Touch Help %p&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItemStartCallback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">*</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;Touch Start %p&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItemSettingCallback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">*</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;Touch Setting %p&quot;</span><span class="p">,</span> <span class="n">item</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>小提示:这里图片的UI坐标可以通过画图工具或者PhotoShop获得坐标</p>
+
+<h2>显示效果</h2>
+
+<p><img src="http://i.imgur.com/cAgqpC1.gif" alt="" /></p>
+
+<h2>源代码下载地址：</h2>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dSpiritMenu' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<h1>开关菜单MenulItemToggle</h1>
+
+<p>开关菜单有两种状态，这两种状态可以用任何的图片来替代(比如精灵-只要是菜单项就可以)<br/>
+函数创建:(也是菜单项)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="n">MenulItemToggle</span><span class="o">*</span> <span class="n">createWithCallback</span><span class="p">(</span>
+</span><span class='line'><span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span> <span class="n">callback</span><span class="p">,</span><span class="c1">//菜单操作的回调函数指针 - 状态切换时调用的函数,菜单的事件处理</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">*</span> <span class="n">item</span><span class="p">,</span><span class="c1">//进行切换的菜单项 MenuItem的集合，将其他菜单项放在开关菜单中</span>
+</span><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>简单形式的文本类型的开关菜单:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">auto</span> <span class="n">toggleMenuItem</span> <span class="o">=</span> <span class="n">MenuItemToggle</span><span class="o">::</span><span class="n">createWithCallback</span><span class="p">(</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">,</span><span class="k">this</span><span class="p">),</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;On&quot;</span><span class="p">),</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;Off&quot;</span><span class="p">),</span>
+</span><span class='line'><span class="nb">NULL</span><span class="p">);</span><span class="c1">//最后记得加NULL(Object-c中区分元素集合的结束)，在开关菜单中，其实只能放两个子菜单项，多菜单项没意义，因为只是两个状态的切换  </span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Menu</span><span class="o">*</span> <span class="n">mn</span><span class="o">=</span><span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">toggleMenuItem</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span><span class="c1">//把菜单项放入菜单中</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChhild</span><span class="p">(</span><span class="n">mn</span><span class="p">);</span><span class="c1">//把菜单放入层中</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+这里只是简单的文本菜单，当然也可以是精灵菜单，也可以是图片菜单&hellip;</p>
+
+<h2>实例</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()){</span>
+</span><span class='line'><span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleSize</span><span class="p">();</span><span class="c1">//大小</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleOrigin</span><span class="p">();</span><span class="c1">//锚点 默认为0.5  0.5</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Sprite* bg = Sprite::create(&quot;menu/setting-back.png&quot;);</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">bg</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/setting-back.png&quot;</span><span class="p">);</span><span class="c1">// auto-自动推断类型</span>
+</span><span class='line'><span class="n">bg</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="o">+</span><span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="o">+</span><span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">bg</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//音效菜单项</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">soundOnMenuItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/on.png&quot;</span><span class="p">,</span> <span class="s">&quot;menu/on.png&quot;</span><span class="p">);</span><span class="c1">//正常和按下是同一张图片 - 开</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">soundOffMenuItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/off.png&quot;</span><span class="p">,</span> <span class="s">&quot;menu/off.png&quot;</span><span class="p">);</span><span class="c1">//关</span>
+</span><span class='line'><span class="c1">//音效开关菜单项</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">soundToggleMenuItem</span> <span class="o">=</span> <span class="n">MenuItemToggle</span><span class="o">::</span><span class="n">createWithCallback</span><span class="p">(</span><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuSoundToggleCallback</span><span class="p">,</span><span class="k">this</span><span class="p">),</span><span class="c1">//函数指针</span>
+</span><span class='line'>  <span class="n">soundOnMenuItem</span><span class="p">,</span><span class="n">soundOffMenuItem</span><span class="p">,</span><span class="c1">//菜单项集合</span>
+</span><span class='line'>  <span class="nb">NULL</span><span class="c1">//集合结束</span>
+</span><span class='line'>  <span class="p">);</span>
+</span><span class='line'><span class="c1">//设置坐标 - UI坐标(原点为左上角)转换为OpenGL坐标(原点为左下角)</span>
+</span><span class='line'><span class="n">soundToggleMenuItem</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">convertToGL</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">818</span><span class="p">,</span> <span class="mi">220</span><span class="p">)));</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//音乐菜单项 </span>
+</span><span class='line'><span class="k">auto</span> <span class="n">musicOnMenuItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;menu/on.png&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s">&quot;menu/on.png&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">musicOffMenuItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
+</span><span class='line'>  <span class="s">&quot;menu/off.png&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s">&quot;menu/off.png&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//音乐开关菜单项</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">musicToggleMenuItem</span> <span class="o">=</span> <span class="n">MenuItemToggle</span><span class="o">::</span><span class="n">createWithCallback</span><span class="p">(</span><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuMusicToggleCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">),</span>
+</span><span class='line'>  <span class="n">musicOnMenuItem</span><span class="p">,</span>
+</span><span class='line'>  <span class="n">musicOffMenuItem</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="n">musicToggleMenuItem</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">convertToGL</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">818</span><span class="p">,</span> <span class="mi">362</span><span class="p">)));</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//OK按钮</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">okMenuItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;menu/ok-up.png&quot;</span><span class="p">,</span> <span class="s">&quot;menu/ok-down.png&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">okMenuItem</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">convertToGL</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">510</span><span class="p">)));</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Menu</span><span class="o">*</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">soundToggleMenuItem</span><span class="p">,</span> <span class="n">musicToggleMenuItem</span><span class="p">,</span> <span class="n">okMenuItem</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="n">mn</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mn</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuSoundToggleCallback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;menuSoundToggleCallback&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuMusicToggleCallback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="s">&quot;menuMusicToggleCallback&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>先是创建On和Off图片惨淡项->创建开关菜单->Menu<br/>
+Menu 放入 Layer</p>
+
+<h2>显示效果</h2>
+
+<p><img src="http://i.imgur.com/lWaN1iT.gif" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dToggleMenuItem' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">陈浩翔</span></span>
+
+      ﻿
+
+
+
+
+2017年07月01日
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cocos2d-x/'>cocos2d-x</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+
+	﻿
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/07/01/Cococs2d-x-MenuItem" style="margin-bottom: 10px; text-align: center;"></div>
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24" style="float: right;">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share?uid=2133017" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2133017" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+		﻿<!--PC版-->
+
+<div id="SOHUCS" sid="/blog/2017/07/01/Cococs2d-x-MenuItem"></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyt09iKYx',
+conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
+});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt09iKYx"></script>
+	
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/06/27/cocos2d-string-label-mojibake/" title="Previous Post: 【Cocos2d-x】开发实战-Cocos中的字符串、标签和中文乱码">&laquo; 【Cocos2d-x】开发实战-Cocos中的字符串、标签和中文乱码</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2017/07/28/CSDNBlogExport/" title="Next Post: 【小工具】CSDN博客导出工具-Java集成Maven开发">【小工具】CSDN博客导出工具-Java集成Maven开发 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    ﻿<section>
+  <h1>最新博客</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/21/Spring-SpringMVC-MyBatis-Transactional-Invalid/">【问题解决】SSM-@Transactional注解事务无效探讨</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/28/CSDNBlogExport/">【小工具】CSDN博客导出工具-Java集成Maven开发</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/01/Cococs2d-x-MenuItem/">【Cocos2d-x】开发实战-Cococs2d-x中的菜单</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/06/27/cocos2d-string-label-mojibake/">【Cocos2d-x】开发实战-Cocos中的字符串、标签和中文乱码</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/06/20/c-plus-plus-friendFunction/">【C++】C++友元</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=59ilglu8mky&amp;m=0&amp;c=00fff6&amp;cr1=ff0000&amp;f=ubuntu&amp;l=0" async="async">
+  </script>
+</section>
+﻿
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/c-plus-plus/'>c-plus-plus (6)</a></li>
+<li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (8)</a></li>
+<li class='category'><a href='/blog/categories/java/'>java (4)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/chenhaoxiang">@chenhaoxiang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'chenhaoxiang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+﻿
+	<section>
+<h1>友情链接</h1>
+	<ul>
+        <li>
+        <a href="http://blog.csdn.net/qq_26525215" target="_blank">大学之旅_谙忆(老陈)</a>
+		</li>
+		<li>
+        <a href="http://blog.csdn.net/marksinoberg" target="_blank">纯臻(老郭)</a>
+		</li>
+		<a href="http://blog.csdn.net/u013097262" target="_blank">Dream_M(老黄)</a>
+		</li>
+</ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 陈浩翔 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261875079'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261875079%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  ﻿<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow62.js"></script>
+<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+
+</body>
+</html>

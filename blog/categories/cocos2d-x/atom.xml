@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cocos2d-x | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/cocos2d-x/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-24T00:53:39+08:00</updated>
+  <updated>2017-08-24T02:05:01+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,456 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】开发实战-Cococs2d-x中的菜单]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/07/01/Cococs2d-x-MenuItem/"/>
+    <updated>2017-07-01T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/07/01/Cococs2d-x-MenuItem</id>
+    <content type="html"><![CDATA[<p>本篇博客讲解:  <br/>
+1.使用菜单<br/>
+2.文本菜单<br/>
+3.精灵菜单和图片菜单<br/>
+4.开关菜单</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>使用菜单</h1>
+
+<p>Menu - 菜单<br/>
+MenuItem - 菜单项</p>
+
+<p>菜单分类实际上是按照菜单项分类的<br/>
+菜单和菜单项的继承关系图:<br/>
+<img src="http://i.imgur.com/OYKnEka.png" alt="" /></p>
+
+<p>文本菜单,精灵菜单，图片菜单和开关菜单其实准确来讲，应该是:<br/>
+文本菜单项,精灵菜单项，图片菜单项和开关菜单项</p>
+
+<p>继承MenuItemLabel的菜单其实都是文本菜单  <br/>
+精灵菜单:MenuItemSprite的子类是图片菜单MenuItemImage<br/>
+开关菜单:MenuItemToggle</p>
+
+<h1>文本菜单</h1>
+
+<p>文本菜单是菜单项只是显示文本<br/>
+文本菜单类包括了MenuItemLabel、MenuItemFont和MenuItemAtlasFont。MenuItemLabel是个抽象类，具体使用的时候是使用MenuItemFont和MenuItemAtlasFont两个类。
+文本菜单类MenuItemFont，它的其中一个创建函数create定义如下:</p>
+
+<pre><code class="C++">static MenuItemFont* create(const std::string &amp;value, //要显示的文本
+const ccMenuCallback &amp; callback  //菜单操作的回调函数指针,菜单项被点击之后回调的函数
+);
+</code></pre>
+
+<p>cocos2d帮我们做了一个宏来帮助我们传递回调函数的参数,CC_CALLBACK_n,n为回调的参数个数<br/>
+<img src="http://i.imgur.com/6JjL3zZ.png" alt="" /><br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">// new callbacks based on C++11&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_0</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_1</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_2</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_3</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_3</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">文本菜单类</span><span class="n">MenuItemAtlasFont</span><span class="err">是基于图片集的文本菜单项，它的其中一个创建函数</span><span class="n">create</span><span class="err">定义如下</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">MenuItemAtlasFont</span><span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">value</span><span class="p">,</span><span class="c1">//要显示的文本</span>
+</span><span class='line'> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">charMapFile</span><span class="p">,</span> <span class="c1">//图片集文件</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">itemWidth</span><span class="p">,</span> <span class="c1">//要截取的文字在图片中的宽度</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">itemHeight</span><span class="p">,</span> <span class="c1">//要截取的文字在图片中的高度</span>
+</span><span class='line'><span class="kt">char</span> <span class="n">startCharMap</span><span class="p">,</span><span class="c1">//文字之间的间隔符</span>
+</span><span class='line'> <span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">callback</span><span class="c1">//菜单操作的回调函数指针</span>
+</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">实例</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">())</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleOrigin</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Sprite</span> <span class="o">*</span><span class="n">bg</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">menu</span><span class="o">/</span><span class="n">background</span><span class="p">.</span><span class="n">png</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span> <span class="c1">//背景图片精灵</span>
+</span><span class='line'><span class="n">bg</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">bg</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">setFontName</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Times</span> <span class="n">New</span> <span class="n">Roman</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="c1">//使用系统字体，设置系统字体的名字</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">setFontSize</span><span class="p">(</span><span class="mi">86</span><span class="p">);</span><span class="c1">//设置系统字体的大小</span>
+</span><span class='line'><span class="n">MenuItemFont</span> <span class="o">*</span><span class="n">item1</span> <span class="o">=</span> <span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Start</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span> <span class="c1">//创建基于系统字体的MenuItemFont&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">MenuItemAtlasFont</span> <span class="o">*</span><span class="n">item2</span> <span class="o">=</span> <span class="n">MenuItemAtlasFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Help</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">menu</span><span class="o">/</span><span class="n">tuffy_bold_italic</span><span class="o">-</span><span class="n">charmap</span><span class="p">.</span><span class="n">png</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem2Callback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Menu</span><span class="o">*</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">item1</span><span class="p">,</span> <span class="n">item2</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span><span class="c1">//把MenuItem放到Menu里，不能直接把MenuItem放到层里</span>
+</span><span class='line'><span class="n">mn</span><span class="o">-&gt;</span><span class="n">alignItemsVertically</span><span class="p">();</span><span class="c1">//设置菜单位置，垂直对齐</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mn</span><span class="p">);</span><span class="c1">//把菜单放到层里&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">(</span><span class="n">Ref</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="c1">//实际上这里传进来的参数是MenuItem类型，所以在这里可以强转，也可以直接把形参类型写成MenuItem，不写成Ref</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//一般情况下，我们不需要这个参数，只有在需要一些特定的信息的情况下，我们才需要进行转换拿值</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Touch</span> <span class="n">Start</span> <span class="n">Menu</span> <span class="n">Item</span> <span class="o">%</span><span class="n">p</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">item</span><span class="p">);</span> <span class="c1">//这个输出是输出指针的地址，没有意义,在这里只是掩饰回调函数起作用了！且对象传过来了</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem2Callback</span><span class="p">(</span><span class="n">Ref</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Touch</span> <span class="n">Help</span> <span class="n">Menu</span> <span class="n">Item</span> <span class="o">%</span><span class="n">p</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">item</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="cp">##显示效果:  </span>
+</span><span class='line'><span class="o">!</span><span class="p">[](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//i.imgur.com/LyozJx3.gif)   </span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">##源代码下载地址：</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">GITHUB</span><span class="err">源码下载地址</span><span class="o">:&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">strong</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="err">【</span><span class="p">[</span><span class="err">点我进行下载</span><span class="p">](</span><span class="nl">https</span><span class="p">:</span><span class="c1">//github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dTextMenu)】&amp;lt;/strong&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#精灵菜单和图片菜单</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">##精灵菜单项类MenuItemSprite</span>
+</span><span class='line'><span class="err">创建函数</span><span class="n">create</span><span class="err">定义</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">MenuItemSprite</span> <span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">normalSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">selectedSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">disabledSprite</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">static</span> <span class="n">MenuItemSprite</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">normalSprite</span><span class="p">,</span><span class="c1">//菜单项正常显示时候的精灵</span>
+</span><span class='line'><span class="n">Node</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">selectedSprite</span><span class="p">,</span><span class="c1">//选择菜单项时候的精灵</span>
+</span><span class='line'><span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">disableSprite</span><span class="p">,</span><span class="c1">//菜单项禁用时候的精灵</span>
+</span><span class='line'><span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">callback</span> <span class="c1">//菜单操作的回调函数指针</span>
+</span><span class='line'><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">static</span> <span class="n">MenuItemSprite</span> <span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">normalSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">selectedSprite</span><span class="p">,</span> <span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">callback</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>图片菜单项类MenuIemImage</h2>
+
+<p>创建函数create定义:
+<code>C++
+static MenuItemImage* create(const std::string&amp; normallmage,//菜单项正常显示时候的图片
+const std::string&amp; selectedImage,//选择菜单项时候的图片
+const std::string&amp; disabledImage,//菜单项禁用时候的图片
+const ccMenuCallback&amp; callback//菜单操作的回调函数指针
+)
+</code>
+精灵菜单和图片菜单都有三种状态，也就是正常状态，选中状态，还有禁用状态。</p>
+
+<h2>实例</h2>
+
+<pre><code class="C++">bool HelloWorld::init()
+{
+if ( !Layer::init() )
+{
+    return false;
+}
+
+Size visibleSize = Director::getInstance()-&gt;getVisibleSize();
+Vec2 origin = Director::getInstance()-&gt;getVisibleOrigin();
+
+Sprite *bg = Sprite::create("menu/background.png");
+
+bg-&gt;setPosition(Vec2(origin.x + visibleSize.width/2,
+                         origin.y + visibleSize.height /2));
+this-&gt;addChild(bg);
+
+//开始精灵
+Sprite *startSpriteNormal = Sprite::create("menu/start-up.png");
+Sprite *startSpriteSelected = Sprite::create("menu/start-down.png");
+//创建精灵菜单  添加精灵以及回调函数
+MenuItemSprite *startMenuItem = MenuItemSprite::create(startSpriteNormal, 
+                                                startSpriteSelected,
+                                               CC_CALLBACK_1(HelloWorld::menuItemStartCallback, this));
+startMenuItem-&gt;setPosition(Director::getInstance()-&gt;convertToGL(Vec2(700, 170)));
+//指定坐标    convertToGL转换-将左上角为原点的UI坐标转换为OpenGL坐标，cocos2d默认坐标为OpenGL坐标
+//700, 170为UI坐标
+
+// 设置 图片菜单 图片菜单的好处就是直接使用图片就好了
+MenuItemImage *settingMenuItem = MenuItemImage::create(
+                         "menu/setting-up.png",
+                         "menu/setting-down.png",
+                         CC_CALLBACK_1(HelloWorld::menuItemSettingCallback, this)); 
+
+settingMenuItem-&gt;setPosition(Director::getInstance()-&gt;convertToGL(Vec2(480, 400))); 
+
+// 帮助 图片菜单
+MenuItemImage *helpMenuItem = MenuItemImage::create(
+                         "menu/help-up.png",
+                         "menu/help-down.png",
+                         CC_CALLBACK_1(HelloWorld::menuItemHelpCallback, this));    
+
+helpMenuItem-&gt;setPosition(Director::getInstance()-&gt;convertToGL(Vec2(860, 480)));
+//在这里，精灵菜单和图片菜单没什么区别，视觉效果一样，也一样有回调函数
+
+Menu* mu = Menu::create(startMenuItem, settingMenuItem, helpMenuItem, NULL);//指定菜单  NULL指定菜单列表的结束
+mu-&gt;setPosition(Vec2::ZERO);//菜单处于坐标原点 - 因为菜单项已经都指定位置了
+this-&gt;addChild(mu);
+
+return true;
+}
+
+//回调函数
+void HelloWorld::menuItemHelpCallback(Ref* pSender)
+{
+MenuItem* item = (MenuItem*)pSender;
+log("Touch Help %p", item);
+}
+
+void HelloWorld::menuItemStartCallback(Ref* pSender)
+{
+MenuItem* item = (MenuItem*)pSender;
+log("Touch Start %p", item);
+}
+
+void HelloWorld::menuItemSettingCallback(Ref* pSender)
+{
+MenuItem* item = (MenuItem*)pSender;
+log("Touch Setting %p", item);
+}
+</code></pre>
+
+<p>小提示:这里图片的UI坐标可以通过画图工具或者PhotoShop获得坐标</p>
+
+<h2>显示效果</h2>
+
+<p><img src="http://i.imgur.com/cAgqpC1.gif" alt="" /></p>
+
+<h2>源代码下载地址：</h2>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dSpiritMenu' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<h1>开关菜单MenulItemToggle</h1>
+
+<p>开关菜单有两种状态，这两种状态可以用任何的图片来替代(比如精灵-只要是菜单项就可以)<br/>
+函数创建:(也是菜单项)
+<code>C++
+static MenulItemToggle* createWithCallback(
+const ccMenuCallback&amp; callback,//菜单操作的回调函数指针 - 状态切换时调用的函数,菜单的事件处理
+MenuItem* item,//进行切换的菜单项 MenuItem的集合，将其他菜单项放在开关菜单中
+...
+)
+</code></p>
+
+<p>简单形式的文本类型的开关菜单:<br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">auto</span> <span class="n">toggleMenuItem</span> <span class="o">=</span> <span class="n">MenuItemToggle</span><span class="o">::</span><span class="n">createWithCallback</span><span class="p">(</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">,</span><span class="k">this</span><span class="p">),</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">On</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;),</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Off</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;),</span>
+</span><span class='line'><span class="nb">NULL</span><span class="p">);</span><span class="c1">//最后记得加NULL(Object-c中区分元素集合的结束)，在开关菜单中，其实只能放两个子菜单项，多菜单项没意义，因为只是两个状态的切换&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Menu</span><span class="o">*</span> <span class="n">mn</span><span class="o">=</span><span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">toggleMenuItem</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span><span class="c1">//把菜单项放入菜单中</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChhild</span><span class="p">(</span><span class="n">mn</span><span class="p">);</span><span class="c1">//把菜单放入层中</span>
+</span></code></pre></td></tr></table></div></figure><br/>
+这里只是简单的文本菜单，当然也可以是精灵菜单，也可以是图片菜单&hellip;</p>
+
+<h2>实例</h2>
+
+<pre><code class="C++">bool HelloWorld::init()
+{
+
+if (!Layer::init()){
+return false;
+}
+
+Size visibleSize = Director::getInstance()-&gt;getVisibleSize();//大小
+Vec2 origin = Director::getInstance()-&gt;getVisibleOrigin();//锚点 默认为0.5  0.5
+
+//Sprite* bg = Sprite::create("menu/setting-back.png");
+auto bg = Sprite::create("menu/setting-back.png");// auto-自动推断类型
+bg-&gt;setPosition(Vec2(origin.x+visibleSize.width/2,origin.y+visibleSize.height/2));
+this-&gt;addChild(bg);
+
+//音效菜单项
+auto soundOnMenuItem = MenuItemImage::create("menu/on.png", "menu/on.png");//正常和按下是同一张图片 - 开
+auto soundOffMenuItem = MenuItemImage::create("menu/off.png", "menu/off.png");//关
+//音效开关菜单项
+auto soundToggleMenuItem = MenuItemToggle::createWithCallback(CC_CALLBACK_1(HelloWorld::menuSoundToggleCallback,this),//函数指针
+    soundOnMenuItem,soundOffMenuItem,//菜单项集合
+    NULL//集合结束
+    );
+//设置坐标 - UI坐标(原点为左上角)转换为OpenGL坐标(原点为左下角)
+soundToggleMenuItem-&gt;setPosition(Director::getInstance()-&gt;convertToGL(Vec2(818, 220)));
+
+//音乐菜单项 
+auto musicOnMenuItem = MenuItemImage::create(
+    "menu/on.png",
+    "menu/on.png");
+auto musicOffMenuItem = MenuItemImage::create(
+    "menu/off.png",
+    "menu/off.png");
+//音乐开关菜单项
+auto musicToggleMenuItem = MenuItemToggle::createWithCallback(CC_CALLBACK_1(HelloWorld::menuMusicToggleCallback, this),
+    musicOnMenuItem,
+    musicOffMenuItem,
+    NULL);
+musicToggleMenuItem-&gt;setPosition(Director::getInstance()-&gt;convertToGL(Vec2(818, 362)));
+
+//OK按钮
+auto okMenuItem = MenuItemImage::create("menu/ok-up.png", "menu/ok-down.png");
+okMenuItem-&gt;setPosition(Director::getInstance()-&gt;convertToGL(Vec2(600, 510)));
+
+Menu* mn = Menu::create(soundToggleMenuItem, musicToggleMenuItem, okMenuItem, NULL);
+mn-&gt;setPosition(Vec2::ZERO);
+this-&gt;addChild(mn);
+
+return true;
+}
+
+
+void HelloWorld::menuSoundToggleCallback(Ref* pSender)
+{
+log("menuSoundToggleCallback");
+}
+
+
+void HelloWorld::menuMusicToggleCallback(Ref* pSender)
+{
+log("menuMusicToggleCallback");
+}
+</code></pre>
+
+<p>先是创建On和Off图片惨淡项->创建开关菜单->Menu<br/>
+Menu 放入 Layer</p>
+
+<h2>显示效果</h2>
+
+<p><img src="http://i.imgur.com/lWaN1iT.gif" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dToggleMenuItem' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【Cocos2d-x】开发实战-Cocos中的字符串、标签和中文乱码]]></title>
@@ -1110,498 +1560,6 @@ MenuItemLabel、MenuItemSprite和MenuItemToggle</p>
 
 <p>之前的HelloWord中的关闭按钮其实就是一个菜单项<br/>
 我们也可以用精灵来实现，但是菜单项封装了一些触摸事件，你不需要关心它事件处理的细节问题</p>
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【Cocos2d-x】开发基础-第一个Cocos2d-x游戏]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/06/07/cocos2dx-hello/"/>
-    <updated>2017-06-07T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/06/07/cocos2dx-hello</id>
-    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
-1.第一个Cocos2d-x游戏</p>
-
-<!-- more -->
-
-
-<hr />
-
-<h1>第一个Cocos2d-x游戏</h1>
-
-<h2>创建工程</h2>
-
-<p>cocos工具：<br/>
-就是这个，看图
-<img src="http://i.imgur.com/WHlXrKy.png" alt="" />
-命令工具cocos实现，cocos工具其实是cocos2d团队自己开发的。是使用Python脚本编写的，cocos工具的运行需要安装Python环境<br/>
-(还会用到ant,eclipse等工具哦，后面介绍)<br/>
-Python下载地址
-<a href="https://www.python.org/">https://www.python.org/</a>
-需要注意的是它目前有Python3和Python2可以下载，我们选择Python 2，不要下载3，因为2和3语法有很大差别，cocos这个工具是使用2编写的，如果你使用了3，会在脚本编译就出问题  <br/>
-(我的源代码中有window的Python安装包)<br/>
-下载->安装->配置环境变量(Path中添加Python根目录)<br/>
-<img src="http://i.imgur.com/n5L6JbI.png" alt="" /></p>
-
-<p>点击确定设置好。</p>
-
-<p>因为你还没有设置其他环境变量，所以你需要到此目录下：<br/>
-cocos2d-x-3.13.1\tools\cocos2d-console\bin<br/>
-直接输入cmd回车
-<img src="http://i.imgur.com/pMcZqEi.png" alt="" />
-或者shift鼠标右键打开命令窗口，都行</p>
-
-<p>如果你不知道怎么用，直接输入cocos会有帮助
-<img src="http://i.imgur.com/r1BMr1e.png" alt="" /></p>
-
-<p>终端中执行如下指令：</p>
-
-<pre><code>cocos new -p com.uifuture -l cpp -d E://chxCocosWork HelloWord
-</code></pre>
-
-<p>com.uifuture是包名，最好是写上(可以不写)，因为在安卓发布打包需要<br/>
-cpp是语言，表示生成c++语言，还有lua,js<br/>
-E://chxCocosWork 为生成目录<br/>
-HelloWord为工程名<br/>
-<img src="http://i.imgur.com/atnBoCF.png" alt="" />
-如果你生成过程有问题，或者无法找到cocos命令，有可能是你的Path没有加进去，或者你使用的Python版本是3.X。</p>
-
-<p>也可以用这种写法
-<code>
-cocos new HelloWord -p
-com.uifuture -l cpp -d E://chxCocosWork
-</code></p>
-
-<h2>工程文件结构</h2>
-
-<p>生成的目录结构是这样的：
-<img src="http://i.imgur.com/iK0PwUP.png" alt="" /></p>
-
-<p>Resources文件夹是资源文件夹。<br/>
-图片，声音，字体，字库等都在这个目录</p>
-
-<p>Class目录是我们开发重点关注的文件夹，这里面都是cpp文件<br/>
-其他的文件夹，基本都是和平台有关的</p>
-
-<p>现在刚刚入门，我们不考虑平台移植的问题，现在只关心Class目录中文件的编写</p>
-
-<p>打开目录proj.win32，使用VS打开项目。 (使用VS打开HelloWorld.sln即可)<br/>
-<img src="http://i.imgur.com/8hfsLDh.png" alt="" /></p>
-
-<p>还有一些其他的工程：
-<img src="http://i.imgur.com/p4cogHU.png" alt="" /></p>
-
-<p>也就是说，HelloWord这个工程需要运行，需要依赖这些工程！<br/>
-libcocos2d就是所有cocos2d的源码都是放在这个工程里面的，这个是和项目根目录cocos2d这个文件夹对应的</p>
-
-<p>运行工程：(第一次编译可能需要较长时间)
-<img src="http://i.imgur.com/pmlDOeB.png" alt="" /></p>
-
-<p>左下角的一些数字，就是输出的帧;GL vwets就是绘制图形需要的顶点;GL calls 就是绘制的精灵的个数。右下角的按钮是菜单，你可以选择退出游戏</p>
-
-<h2>代码解释</h2>
-
-<p>我们看HelloWordScene.h<br/>
-<figure class='code'><figcaption><span>HelloWordScene.h</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-<span class='line-number'>115</span>
-<span class='line-number'>116</span>
-<span class='line-number'>117</span>
-<span class='line-number'>118</span>
-<span class='line-number'>119</span>
-<span class='line-number'>120</span>
-<span class='line-number'>121</span>
-<span class='line-number'>122</span>
-<span class='line-number'>123</span>
-<span class='line-number'>124</span>
-<span class='line-number'>125</span>
-<span class='line-number'>126</span>
-<span class='line-number'>127</span>
-<span class='line-number'>128</span>
-<span class='line-number'>129</span>
-<span class='line-number'>130</span>
-<span class='line-number'>131</span>
-<span class='line-number'>132</span>
-<span class='line-number'>133</span>
-<span class='line-number'>134</span>
-<span class='line-number'>135</span>
-<span class='line-number'>136</span>
-<span class='line-number'>137</span>
-<span class='line-number'>138</span>
-<span class='line-number'>139</span>
-<span class='line-number'>140</span>
-<span class='line-number'>141</span>
-<span class='line-number'>142</span>
-<span class='line-number'>143</span>
-<span class='line-number'>144</span>
-<span class='line-number'>145</span>
-<span class='line-number'>146</span>
-<span class='line-number'>147</span>
-<span class='line-number'>148</span>
-<span class='line-number'>149</span>
-<span class='line-number'>150</span>
-<span class='line-number'>151</span>
-<span class='line-number'>152</span>
-<span class='line-number'>153</span>
-<span class='line-number'>154</span>
-<span class='line-number'>155</span>
-<span class='line-number'>156</span>
-<span class='line-number'>157</span>
-<span class='line-number'>158</span>
-<span class='line-number'>159</span>
-<span class='line-number'>160</span>
-<span class='line-number'>161</span>
-<span class='line-number'>162</span>
-<span class='line-number'>163</span>
-<span class='line-number'>164</span>
-<span class='line-number'>165</span>
-<span class='line-number'>166</span>
-<span class='line-number'>167</span>
-<span class='line-number'>168</span>
-<span class='line-number'>169</span>
-<span class='line-number'>170</span>
-<span class='line-number'>171</span>
-<span class='line-number'>172</span>
-<span class='line-number'>173</span>
-<span class='line-number'>174</span>
-<span class='line-number'>175</span>
-<span class='line-number'>176</span>
-<span class='line-number'>177</span>
-<span class='line-number'>178</span>
-<span class='line-number'>179</span>
-<span class='line-number'>180</span>
-<span class='line-number'>181</span>
-<span class='line-number'>182</span>
-<span class='line-number'>183</span>
-<span class='line-number'>184</span>
-<span class='line-number'>185</span>
-<span class='line-number'>186</span>
-<span class='line-number'>187</span>
-<span class='line-number'>188</span>
-<span class='line-number'>189</span>
-<span class='line-number'>190</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">ifndef</span> <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">HELLOWORLD_SCENE_H</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">HELLOWORLD_SCENE_H</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">cocos2d</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">HelloWorld</span> <span class="o">:</span> <span class="k">public</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">Layer</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="k">public</span><span class="o">:</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">Scene</span><span class="o">*</span> <span class="n">createScene</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">virtual</span> <span class="kt">bool</span> <span class="n">init</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// a selector callback</span>
-</span><span class='line'><span class="kt">void</span> <span class="nf">menuCloseCallback</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// implement the &quot;static create()&quot; method manually</span>
-</span><span class='line'><span class="n">CREATE_FUNC</span><span class="p">(</span><span class="n">HelloWorld</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span> <span class="c1">// &lt;strong&gt;HELLOWORLD_SCENE_H&lt;/strong&gt;&lt;/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">里面定义了一个类</span><span class="n">HelloWorld</span><span class="p">,</span><span class="err">继承了</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">Layer</span><span class="p">(</span><span class="err">层</span><span class="p">)</span>
-</span><span class='line'><span class="err">虽然文件名叫</span><span class="n">HelloWordScene</span><span class="p">,</span><span class="n">Scene</span><span class="err">是场景，但是实际上里面的类是</span><span class="n">HelloWorld</span><span class="err">，实际上是层</span>
-</span><span class='line'><span class="err">创建层的同时会先创建层所在的场景，层是要放在场景里面的。</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AppDelegate</span><span class="err">是一个应用程序委托对象，如果懂</span><span class="n">ios</span><span class="err">开发的，应该会对这个比较熟悉。</span>
-</span><span class='line'><span class="err">它的作用就是，应用程序启动的时候会调用它。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">ifndef</span>  <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">APP_DELEGATE_H</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span>  <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">APP_DELEGATE_H</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">cocos2d</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief    The cocos2d Application.&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">&lt;p&gt;Private inheritance here hides part of interface from Director.</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">class</span>  <span class="nc">AppDelegate</span> <span class="o">:</span> <span class="k">private</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">Application</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="k">public</span><span class="o">:</span>
-</span><span class='line'>    <span class="n">AppDelegate</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">virtual</span> <span class="o">~</span><span class="n">AppDelegate</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">virtual</span> <span class="kt">void</span> <span class="n">initGLContextAttrs</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief    Implement Director and Scene init code here.</span>
-</span><span class='line'><span class="cm">@return true    Initialize success, app continue.</span>
-</span><span class='line'><span class="cm">@return false   Initialize failed, app terminate.</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">applicationDidFinishLaunching</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief  Called when the application moves to the background</span>
-</span><span class='line'><span class="cm">@param  the pointer of the application</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="nf">applicationDidEnterBackground</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief  Called when the application reenters the foreground</span>
-</span><span class='line'><span class="cm">@param  the pointer of the application</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="nf">applicationWillEnterForeground</span><span class="p">();</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span> <span class="c1">// &lt;em&gt;APP_DELEGATE_H&lt;/em&gt;&lt;/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">applicationDidFinishLaunching</span> <span class="err">这个函数是在程序启动的时候会调用它，也就是在游戏启动的时候调用，一般进行游戏的初始化，比如游戏的导演啊，场景啊等在这里进行初始化。</span>
-</span><span class='line'><span class="n">applicationDidEnterBackground</span> <span class="err">是退到后台，就是点击</span><span class="n">home</span><span class="err">键，回到桌面。接电话或者跳到另一个应用程序去，都会调用这个函数。</span>
-</span><span class='line'><span class="n">applicationWillEnterForeground</span> <span class="err">是从后台重新回到前台，也就是从手机任务栏重新回到游戏，会调用这个函数</span>
-</span><span class='line'><span class="err">以上三个函数是和游戏的生命周期有关系的。</span>
-</span><span class='line'><span class="n">HelloWorldScene</span><span class="p">.</span><span class="n">cpp</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">HelloWorldScene</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">SimpleAudioEngine</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">USING_NS_CC</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Scene</span><span class="o">*</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">createScene</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 创建场景对象</span>
-</span><span class='line'>    <span class="k">auto</span> <span class="n">scene</span> <span class="o">=</span> <span class="n">Scene</span><span class="o">::</span><span class="n">create</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// 创建层对象</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 把层放到场景里</span>
-</span><span class='line'><span class="n">scene</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">layer</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 返回这个场景</span>
-</span><span class='line'><span class="k">return</span> <span class="n">scene</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">// on &amp;ldquo;init&amp;rdquo; you need to initialize your instance</span>
-</span><span class='line'><span class="c1">// 初始化当前这个层</span>
-</span><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">//////////////////////////////</span>
-</span><span class='line'>    <span class="c1">// 1. super init first</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">auto</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleSize</span><span class="p">();</span><span class="c1">//得到屏幕的大小(可见区域大小)</span>
-</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleOrigin</span><span class="p">();</span><span class="c1">//得到可见区域大小的左下角坐标</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">/////////////////////////////</span>
-</span><span class='line'><span class="c1">// 2. add a menu item with &quot;X&quot; image, which is clicked to quit the program</span>
-</span><span class='line'><span class="c1">//    you may modify it.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a &quot;close&quot; icon to exit the progress. it&#39;s an autorelease object</span>
-</span><span class='line'><span class="c1">// 得到图片菜单 以及设置回调函数</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">closeItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
-</span><span class='line'>                                       <span class="s">&quot;CloseNormal.png&quot;</span><span class="p">,</span>
-</span><span class='line'>                                       <span class="s">&quot;CloseSelected.png&quot;</span><span class="p">,</span>
-</span><span class='line'>                                       <span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuCloseCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
-</span><span class='line'><span class="c1">//关闭的按钮 </span>
-</span><span class='line'><span class="n">closeItem</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">closeItem</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span> <span class="p">,</span>
-</span><span class='line'>                            <span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">closeItem</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// create menu, it&#39;s an autorelease object</span>
-</span><span class='line'><span class="c1">//把菜单项放到菜单里</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">menu</span> <span class="o">=</span> <span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">closeItem</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'><span class="c1">//指定菜单的位置 设置显示的坐标位置</span>
-</span><span class='line'><span class="n">menu</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span>
-</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">menu</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="c1">//把菜单放到当前层</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">/////////////////////////////</span>
-</span><span class='line'><span class="c1">// 3. add your codes below...</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//标签 也就是中间显示的那个文字  以及加载字体</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">label</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span> <span class="s">&quot;fonts/Marker Felt.ttf&quot;</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//指定标签的位置</span>
-</span><span class='line'><span class="n">label</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
-</span><span class='line'>                        <span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">label</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//把标签加入到层中</span>
-</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//指定一个图片的精灵</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">sprite</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;HelloWorld.png&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 设置图片精灵的位置</span>
-</span><span class='line'><span class="n">sprite</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//把图片精灵加入到层中</span>
-</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//点击close菜单项来回调的</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuCloseCallback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">//Close the cocos2d-x game scene and quit the application</span>
-</span><span class='line'>    <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">//条件编译 ，也就是满足条件就编译过去，如果不满足，就相当于注释了</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="n">CC_TARGET_PLATFORM</span> <span class="o">==</span> <span class="n">CC_PLATFORM_IOS</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="cm">/*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()-&amp;gt;end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//EventCustom customEndEvent(&quot;game_scene_close_event&quot;);</span>
-</span><span class='line'><span class="c1">//_eventDispatcher-&amp;gt;dispatchEvent(&amp;amp;customEndEvent);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>这样我们就得到一个能执行的HelloWord程序啦</p>
-
-<p>因为cocos2dx项目工程太大，只上传Classes一些cpp文件啦，你可以手动把代码加入到你的cocos2dx项目工程中。</p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170607/HelloWorld' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
