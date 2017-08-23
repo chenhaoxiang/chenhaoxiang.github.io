@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C-plus-plus | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-22T23:51:28+08:00</updated>
+  <updated>2017-08-24T00:36:05+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -105,67 +105,39 @@ private:
 </code></pre>
 
 <p>main.cpp
-<figure class='code'><figcaption><span>main.cpp</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span><span class="o">&lt;</span><span class="n">iostream</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span><span class="s">&quot;Time.h&quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Date</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">func</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">const</span> <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">CTime</span> <span class="k">const</span> <span class="n">time2</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time</span><span class="p">.</span><span class="n">getNum</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">func</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">CDate</span> <span class="n">date</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">26</span><span class="p">);</span>
-</span><span class='line'><span class="n">date</span><span class="p">.</span><span class="n">disPlay</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">getchar</span><span class="p">();</span>
-</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```C++ main.cpp</p>
+
+<h1>include<iostream></h1>
+
+<h1>include"Time.h"</h1>
+
+<h1>include &ldquo;Date.h&rdquo;</h1>
+
+<p>using namespace std;</p>
+
+<p>void func()
+{
+    CTime time(1,1,1);
+    time.m_nHour = 3;
+    cout &lt;&lt; time.m_nHour &lt;&lt; endl;
+}</p>
+
+<p>int main()
+{
+    const CTime time(10,50,20);
+    CTime const time2;
+    std::cout &lt;&lt; time.getNum() &lt;&lt; std::endl;
+    func();</p>
+
+<pre><code>CDate date(2015, 1, 26);
+date.disPlay(time);
+
+getchar();
+return 0;
+</code></pre>
+
+<p>}
+```</p>
 
 <h2>演示结果</h2>
 
@@ -248,91 +220,50 @@ e:\chenhaoxiang\20170603\test2\test2\mian.cpp   34  1   test2
 const int num;
 </code>
 必须初始化，而且不能在构造函数中初始化！<br/>
-<figure class='code'><figcaption><span>main.cpp</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">CTime</span><span class="p">()</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="mi">10</span><span class="p">){</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">m_hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="n">m_minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="n">m_second</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="n">m_nNum</span><span class="o">++</span><span class="p">;</span>
-</span><span class='line'><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">m_nNum</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">CTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">hour</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="mi">10</span><span class="p">){</span>
-</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_hour</span> <span class="o">=</span> <span class="n">hour</span><span class="p">;</span>
-</span><span class='line'>    <span class="c1">//(*this).m_hour = hour; //效果一样的</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//复制构造函数</span>
-</span><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">CTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time</span><span class="p">)</span> <span class="o">:</span> <span class="n">num</span><span class="p">(</span><span class="mi">10</span><span class="p">){</span>
-</span><span class='line'>    <span class="n">m_hour</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_hour</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">m_minute</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_minute</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">m_second</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_second</span><span class="p">;</span>
-</span><span class='line'>    <span class="c1">//cout &amp;lt;&amp;lt; &amp;ldquo;进入复制构造函数&amp;rdquo; &amp;lt;&amp;lt; endl;</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">每一个构造函数都需要初始化这个</span><span class="k">const</span><span class="err">成员，而且复制构造函数也需要初始化</span><span class="n">num</span><span class="err">，因为复制构造函数也是一种构造函数！</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="cp">##3.const成员函数</span>
-</span><span class='line'><span class="k">const</span><span class="err">成员函数只能被</span><span class="k">const</span><span class="err">对象引用。</span><span class="k">const</span><span class="err">成员函数内可以引用</span><span class="k">const</span><span class="err">数据成员，也可以引用非</span><span class="k">const</span><span class="err">数据成员，但不能修改非</span><span class="k">const</span><span class="err">数据成员的值。但不能调用非</span><span class="k">const</span><span class="err">成员函数。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">getNum</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">对于</span><span class="k">const</span><span class="err">函数的外部定义，也需要写</span><span class="k">const</span><span class="err">限定符</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span> <span class="err">实现</span>
-</span><span class='line'><span class="kt">int</span> <span class="n">CTime</span><span class="o">::</span><span class="n">getNum</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">num</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="k">const</span><span class="err">成员函数存在的意义在于它能被</span><span class="k">const</span><span class="err">常对象调用</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span> <span class="err">调用</span>
-</span><span class='line'><span class="n">CTime</span> <span class="k">const</span> <span class="n">time5</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time5</span><span class="p">.</span><span class="n">getNum</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">endl</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
+```
+CTime::CTime() : num(10){</p>
+
+<pre><code>m_hour = 0;
+m_minute = 0;
+m_second = 0;
+m_nNum++;
+cout &lt;&lt; m_nNum &lt;&lt; endl;
+</code></pre>
+
+<p>}
+CTime::CTime(int hour) : num(10){
+    this->m_hour = hour;
+    //(*this).m_hour = hour; //效果一样的
+}</p>
+
+<p>//复制构造函数
+CTime::CTime(CTime&amp; time) : num(10){
+    m_hour = time.m_hour;
+    m_minute = time.m_minute;
+    m_second = time.m_second;
+    //cout &lt;&lt; &ldquo;进入复制构造函数&rdquo; &lt;&lt; endl;
+}</p>
+
+<pre><code>每一个构造函数都需要初始化这个const成员，而且复制构造函数也需要初始化num，因为复制构造函数也是一种构造函数！  
+
+
+##3.const成员函数
+const成员函数只能被const对象引用。const成员函数内可以引用const数据成员，也可以引用非const数据成员，但不能修改非const数据成员的值。但不能调用非const成员函数。
+</code></pre>
+
+<p>int getNum() const;
+<code>
+对于const函数的外部定义，也需要写const限定符  
+</code>c++ 实现
+int CTime::getNum() const {
+    return num;
+}
+<code>
+const成员函数存在的意义在于它能被const常对象调用  
+</code>c++ 调用
+CTime const time5;
+    cout &lt;&lt; time5.getNum() &lt;&lt;endl;
+```
  如果在const成员函数的定义中出现了任何修改对象成员数据的现象，都会在编译时被检查出来</p>
 
 <p>如果我们是真的想在const成员函数中修改值呢，比如我需要m_age++;<br/>

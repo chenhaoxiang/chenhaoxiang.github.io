@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cocos2d-x | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/cocos2d-x/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-22T23:51:28+08:00</updated>
+  <updated>2017-08-24T00:36:05+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,386 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】开发实战-Cocos中的字符串、标签和中文乱码]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/06/27/cocos2d-string-label-mojibake/"/>
+    <updated>2017-06-27T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/06/27/cocos2d-string-label-mojibake</id>
+    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
+1.Ccocos2d-x中的字符串
+2.使用标签
+3.中文乱码问题</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>[TOC]</p>
+
+<h1>Ccocos2d-x中的字符串</h1>
+
+<h2>使用const char*和std::string</h2>
+
+<p>const char<em>是C风格的字符串<br/>
+std::string是C++风格的字符串，它封装了const char</em><br/>
+初始化std::string对象:
+```C++ 初始化std::string对象
+std::string name = &ldquo;jack&rdquo;;//直接赋值
+std::string name = std::string(&ldquo;jack&rdquo;);//通过构造函数初始化</p>
+
+<p>//创建对象通过静态方法创建，也就是在程序结束的时候，或者超过作用域的时候，自动释放，这就不需要我们来关心对象的释放
+<code>
+std::string 指针类型
+</code>C++ std::string 指针类型
+std::string<em> namep = new std::string(&ldquo;jack&rdquo;);
+//new 代表创建这个对象是动态创建的，是在程序运行过程中创建的，使用完成之后需要delete删除。
+//返回值不是对象本身，而是指向对象的指针
+&hellip;
+delete namep;
+<code>
+把std::string 转化为const char*类型
+</code>C++ 把std::string 转化为const char</em>类型
+const char<em> cstring = name.c_str();//静态方法创建
+const char</em> cstring = namep->c_str();//namep为指针
+```</p>
+
+<pre><code>std::string name = "jack";//直接赋值
+
+log("name = %s",name);//直接这样会出现乱码问题，因为log用的不对
+//我们可以去看log函数:void CC_DLL log(const char * format, ...) CC_FORMAT_PRINTF(1, 2);类型是const char*
+
+log("name = %s", name.c_str());
+
+std::string *name1 = new std::string("jack");//直接赋值    
+log("name1 = %s", name1-&gt;c_str());
+</code></pre>
+
+<h2>使用cocos2d::__String</h2>
+
+<p>(注意是两个英文下划线)
+源自于Objective-C的NSString<br/>
+在coco2d-x里面，凡是有两个下划线开头的，都是过渡Objective-C过来的(内存管理采用引用计数管理)<br/>
+现在Cocos2d-x在慢慢去除Objective-C化</p>
+
+<p><img src="http://i.imgur.com/3wvkHJl.png" alt="" /></p>
+
+<p>创建它的主要的静态create函数如下(工厂设计模式)
+<code>
+static __String *create(const std::string &amp;str)
+static __String *createWithFormat(const char *format,...)
+//createWithFormat-通过创建模板来创建字符串，所以可以通过这个方法把其他类型的转换为字符串
+</code></p>
+
+<h3>数据类型之间的转换</h3>
+
+<p>cocos2d::__String 转换为const cahr*类型，这种转换还是用的比较多的<br/>
+<code>C++ cocos2d::__String 转换为const cahr*类型
+__String *name = __String::create("Hi,Tony");//得到对象指针，因为是通过静态create函数获取的，不需要我们delete
+const char *cstring = name-&gt;getCString();
+</code></p>
+
+<p>const cahr* 转换为cocos2d::__Stirng类型
+<code>C++ const cahr* 转换为cocos2d::__Stirng类型
+const char* cstring ="Hi,Tonny";
+__String *ns = __String::createWithFormat("%s",cstring);
+</code></p>
+
+<p>std::string转换为cocos2d::__String类型
+<code>C++ std::string转换为cocos2d::__String类型
+std::string string = "Hi,Tonny";
+__String *name4 = __String::createWithFormat("%s", string.c_str());//将std::string转换为__String
+</code></p>
+
+<p>cocos2d::__String转换为int类型
+<code>C++ cocos2d::__String转换为int类型
+int num = 123;
+__String *ns = __String::createWithFormat("%d",num);//这种方式可以转换很多其他类型
+int num2 = ns-&gt;intValue();
+</code></p>
+
+<h2>Win32平台下中文乱码问题</h2>
+
+<p>默认情况下Windows中文环境是采用GBK编码，源程序文件HelloWorldScene.cpp编码默认也是GBK，如果源程序代码中有中文，它的字符集是GBK，我们需要将中文符GBK编码转换为UTF-8编码。</p>
+
+<h3>解决方法一</h3>
+
+<p>源文件保存为UTF-8(不带签名的)<br/>
+文件->高级保存选项<br/>
+<img src="http://i.imgur.com/qS3JBYL.png" alt="" /></p>
+
+<p>存储完之后编译，会出现这样的问题<br/>
+<img src="http://i.imgur.com/D7akxGK.png" alt="" /><br/>
+这是由于Visual Studio对于Unicode(UTF-8无签名)识别有误，我们一般在后面添加一些英文字符，或者“啊”等特殊的中文字符。</p>
+
+<p>建议不要用这种解决方式</p>
+
+<h3>解决方法二</h3>
+
+<p>转码GBK->UTF-8<br/>
+```
+    <strong>String *cns = </strong>String::create(&ldquo;大家好啊&rdquo;);
+    const char* nsc;</p>
+
+<h1>if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)</h1>
+
+<pre><code>std::string sns = MyUtility::gbk_2_utf8(ns-&gt;getCString());
+cns = sns.c_str();
+</code></pre>
+
+<h1>else</h1>
+
+<pre><code>cns = ns-&gt;getCString();
+</code></pre>
+
+<h1>endif</h1>
+
+<pre><code>log("%s", cns);
+auto label = LabelTTF::create(cns, "Arial", 24);
+</code></pre>
+
+<pre><code></code></pre>
+
+<p>//在Win32平台下，将GBK编码转换为UTF-8
+string MyUtility::gbk_2_utf8(const string text){</p>
+
+<h1>if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) //条件编译</h1>
+
+<pre><code>//这里面用的一些库只有win32平台才有的一些类库
+
+//采用Lambda表达式，将string转换成wstring
+wstring tes = [=](){
+    setlocale(LC_ALL, "chs");
+    const char* _Source = text.c_str();
+    size_t _Dsize = text.size() + 1;
+    wchar_t *_Dest = new wchar_t[_Dsize];
+    mbstowcs(_Dest, _Source, _Dsize);
+    std::wstring result = _Dest;
+    delete[]_Dest;
+    setlocale(LC_ALL, "C");
+    return result;
+}();
+
+int asciSize = WideCharToMultiByte(CP_UTF8, 0, tes.c_str(), tes.size(), NULL, 0, NULL, NULL);
+if(asciSize == ERROR_NO_UNICODE_TRANSLATION || asciSize==0){
+    return string();
+}
+
+char *resultString = new char[asciSize];
+int conveResult = WideCharToMultiByte(CP_UTF8, 0, tes.c_str(), tes.size(), resultString, asciSize, NULL, NULL);
+if (conveResult != asciSize){
+    return string();
+}
+string buffer = "";
+buffer.append(resultString,asciSize);
+delete[] resultString;
+return buffer;
+</code></pre>
+
+<h1>else</h1>
+
+<pre><code>return text;
+</code></pre>
+
+<h1>endif</h1>
+
+<p>}</p>
+
+<pre><code>
+###解决方法三
+其实还可以用文本文件来解决中文乱码，就是字符串从xml文件或者json中读取(注意，文本需要是UTF-8编码)，然后传值，这样不会出现乱码问题    
+
+
+#使用标签
+可以把标签理解为一个控件  
+
+![](http://i.imgur.com/nDlGfb0.png)  
+
+此处的大家好和中间的COCOS2DX图片就是标签  
+
+一种是COCOS2DX这样的，可以叫美工做张图片然后放上去就可以了，静态的  
+另外一种是"大家好"这样的动态文字  
+
+##LabelTTF
+TTF基于系统字库  
+
+![](http://i.imgur.com/khRSKgT.png)  
+</code></pre>
+
+<p>//静态create函数创建
+auto label = LabelTTF::create(&ldquo;大家好&rdquo;, &ldquo;Arial&rdquo;, 24);//如乱码请参照前面的解决
+//在不同的平台中都是去找Arial这个系统库，然后去显示出来,24为字号</p>
+
+<p>//指定标签的位置
+label->setPosition(Vec2(origin.x + visibleSize.width/2,origin.y + visibleSize.height - label->getContentSize().height));
+//记住设置位置和锚点，锚点没写就是默认的0.5,0.5
+//把标签加入到层中
+this->addChild(label, 1,123);//设置tag为123，方便后面获取
+```</p>
+
+<p>create函数的完整定义:
+<code>   
+/** creates a Label from a fontname, alignment, dimension in points and font size in points
+     @since v2.0.1
+*/
+static LabelTTF * create(const std::string&amp; string, const std::string&amp; fontName, float fontSize,
+                    const Size&amp; dimensions = Size::ZERO, TextHAlignment hAlignment = TextHAlignment::CENTER,
+                    TextVAlignment vAlignment = TextVAlignment::TOP);
+</code>
+const std::string&amp; string   要显示的字符串<br/>
+const std::string&amp; fontName   字体的名字<br/>
+ float fontSize   字体的大小<br/>
+const Size&amp; dimensions = Size::ZERO  尺寸-放在这个所定义的矩形的大小里面
+TextHAlignment hAlignment = TextHAlignment::CENTER  水平方向的中心对齐<br/>
+TextVAlignment vAlignment = TextVAlignment::TOP  垂直方向的顶对齐<br/>
+后面三个参数可省略，都会有默认值</p>
+
+<p>在cocos2d X3.01时，认为create已经过时了，但是这种用法还是能用,可能以后会去掉</p>
+
+<h2>LabelAtlas</h2>
+
+<p>基于图集的标签<br/>
+<img src="http://i.imgur.com/3q7Fl2d.png" alt="" /></p>
+
+<p>继承了：LabelProtocol-纯虚函数，相当于Java中的接口</p>
+
+<p>显示的abcd的那些字母，放在一张图中了<br/>
+<img src="http://i.imgur.com/UVGSL4n.png" alt="" /></p>
+
+<pre><code class="C++ 创建并初始化标签">auto label1 = LabelAtlas::create("HelloWorld", "fonts/tuffy_bold_italic-charmap.png", 48, 66, ' ');
+//(字符串，字体文件图集，宽，高，) 路径是 Resources/下  宽高不能随便设置！需要和图片对应的
+label1-&gt;setPosition(Vec2(visibleSize.width / 2 - label1-&gt;getContentSize().width / 2, visibleSize.height - label1-getContentSize().height));
+this-&gt;addChild(label1, 1);
+</code></pre>
+
+<h2>LabelBMFont</h2>
+
+<p>位图字体标签，需要添加字体文件：包括一个图片集(.png)和一个字体坐标文件(.fnt)<br/>
+LabelBMFont比LabelTTF快很多。LabelBMFont中的每个字符的宽度是可变的</p>
+
+<p><img src="http://i.imgur.com/FHkqIqZ.png" alt="" /><br/>
+.png很容易，叫美工做好图片就行<br/>
+.fnt:<br/>
+<img src="http://i.imgur.com/XtY5Ixb.png" alt="" /><br/>
+这个就不是自己能手写出来的了~~ 那么我们就需要借助工具了<br/>
+(大家可以简单的学习一下工具)</p>
+
+<p>创建并初始化标签
+```
+    auto label2 = LabelBMFont::create(&ldquo;HelloWord&rdquo;,&ldquo;fonts/BMFont.fnt&rdquo;);
+    label2->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - label2->getContentSize().height));
+    this->addChild(label2,1);</p>
+
+<pre><code>效果：  
+![](http://i.imgur.com/Sf2epLr.png)  
+
+##Cocos2d-x 3.x标签类Label
+Cocos2d-x 3.x后推出了新的标签类Label，这种标签通过使用FreeType(开源字体引擎)来使它在不同的平台上有相同的视觉效果。  
+由于使用更快的缓存代理，它的渲染也将更加快速。Label还提供了描边和阴影等特效。  
+![](http://i.imgur.com/HKQ3iDb.png)  
+
+前面三个标签在3.0或者说3.1之后已经过时了，但是还可以用(不推荐使用了)。  
+推荐使用该标签类Label，该类替换了前面的三个标签类  
+
+创建Label类静态create函数常用的有如下几个：
+</code></pre>
+
+<p>static Label* createWithSystemFont(conststd::string &amp;text,   //是要显示的文字                           <br/>
+const std::string&amp; font,                                     //系统字体名<br/>
+float fontSize,                                             //字体的大小<br/>
+const Size&amp; dimensions = Size::ZERO,                        //在屏幕上占用的区域大小,可省略<br/>
+TextHAlignment  hAlignment = TextHAlignment::LEFT,          //文字横向对齐方式,可省略<br/>
+TextVAlignment  vAlignment = TextVAlignment::TOP)           //文字纵向对齐方式,可省略<br/>
+显示的是系统字体，指的是运行环境下的系统，而不是编译系统，相当于原来的LabelTTF</p>
+
+<p>static Label* createWithTTF(conststd::string &amp; text,
+const std::string &amp;  fontFile,                //字体文件<br/>
+float fontSize,                                  //字体的大小<br/>
+const Size &amp;  dimensions = Size::ZERO,                 //可省略<br/>
+TextHAlignment          hAlignment = TextHAlignment::LEFT,    //可省略<br/>
+TextVAlignment           vAlignment = TextVAlignment::TOP)      //可省略<br/>
+createWithTTF和LabelTTF不一样了，也就是fontFile指定的不是系统字体，而是字体文件，也就是字体文件路径</p>
+
+<p>static Label* createWithTTF(constTTFConfig&amp; ttfConfig, //配置参数 constTTFConfig-结构体
+const std::string&amp; text,
+TextHAlignment alignment = TextHAlignment::LEFT,
+int maxLineWidth = 0)</p>
+
+<p>static Label* createWithBMFont(conststd::string&amp; bmfontFilePath,      //位图字体文件<br/>
+const std::string&amp;  text,                                         //是要显示的文字      <br/>
+const TextHAlignment&amp; alignment = TextHAlignment::LEFT,          //可省略<br/>
+int maxLineWidth = 0,                                              //可省略<br/>
+const Point&amp;  imageOffset = Point::ZERO )                               //可省略</p>
+
+<pre><code>
+使用实例
+</code></pre>
+
+<pre><code>auto label1 = Label::createWithSystemFont("Hello World1", "Arial", 36);
+label1-&gt;setPosition(Vec2(origin.x + visibleSize.width/2,
+    origin.y + visibleSize.height - 100));
+this-&gt;addChild(label1, 1);//Win32的字体库可以在控制面板中找到
+
+auto label2 = Label::createWithTTF("Hello World2", "fonts/Marker Felt.ttf", 36);
+label2-&gt;setPosition(Vec2(origin.x + visibleSize.width/2,
+    origin.y + visibleSize.height - 200));
+this-&gt;addChild(label2, 1);
+
+auto label3 = Label::createWithBMFont("fonts/BMFont.fnt", "Hello World3");
+label3-&gt;setPosition(Vec2(origin.x + visibleSize.width/2,
+    origin.y + visibleSize.height - 300));
+this-&gt;addChild(label3, 1);
+
+
+TTFConfig ttfConfig("fonts/Marker Felt.ttf",
+    36,
+    GlyphCollection::DYNAMIC);
+auto label4 = Label::createWithTTF(ttfConfig, "Hello World4");
+label4-&gt;setPosition(Vec2(origin.x + visibleSize.width/2,
+    origin.y + visibleSize.height - 400));
+this-&gt;addChild(label4 , 1);
+
+ttfConfig.outlineSize = 4;
+auto label5 = Label::createWithTTF(ttfConfig, "Hello World5");
+//ttfConfig-结构体配置，能配置更多的特效，比如描边，阴影，闪烁的文字等
+//只能是TTF文件的，才能使用这些特效
+label5-&gt;setPosition(Vec2(origin.x + visibleSize.width/2,
+    origin.y + visibleSize.height - 500));
+label5-&gt;enableShadow(Color4B(255,255,255,128), Size(4, -4));//设置阴影，阴影的颜色，阴影的大小 
+label5-&gt;setColor(Color3B::RED);//设置颜色
+
+this-&gt;addChild(label5, 1);
+</code></pre>
+
+<p>```</p>
+
+<h2>标签中文乱码问题</h2>
+
+<p>解决方法一:保存文件为Unicode(UTF-8无签名)<br/>
+(不推荐使用)</p>
+
+<p>解决方法二:写工具类，将字符串编码转换为UTF-8<br/>
+参考前面的Win32平台下中文乱码问题 <br/>
+<img src="http://i.imgur.com/fGs4T2L.png" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170627/code' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【Cocos2d-x】开发基础-Cocos2d-x坐标系]]></title>
@@ -98,27 +478,18 @@ OpenGL属于右手坐标！<br/>
 <h2>世界坐标与模型坐标互相转换</h2>
 
 <p>通过Node对象如下函数实现：<br/>
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">Vec2</span> <span class="n">convertToNodeSpace</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">worldPoint</span> <span class="p">)</span> <span class="c1">//将世界坐标转换为模型坐标。坐标原点看成模型(对象，精灵)的左下角所在</span>
-</span><span class='line'><span class="n">Vec2</span> <span class="n">convertToNodeSpaceAR</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">worldPoint</span> <span class="p">)</span> <span class="c1">//将世界坐标转换为模型坐标。AR表示相对于锚点。&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Vec2</span> <span class="n">convertTouchToNodeSpace</span> <span class="p">(</span> <span class="n">Touch</span> <span class="o">*</span> <span class="n">touch</span> <span class="p">)</span> <span class="c1">//将世界坐标中触摸点转换为模型坐标。</span>
-</span><span class='line'><span class="n">Vec2</span> <span class="n">convertTouchToNodeSpaceAR</span> <span class="p">(</span> <span class="n">Touch</span> <span class="o">*</span> <span class="n">touch</span> <span class="p">)</span> <span class="c1">//将世界坐标中触摸点转换为模型坐标。AR表示相对于锚点。</span>
-</span><span class='line'><span class="c1">//凡是后面是ToNodeSpace的这个函数，是从世界坐标到模型坐标的转换  Node就是节点，也就是我们说的模型</span>
-</span><span class='line'><span class="c1">//所有带有AR的，表示相对于锚点，也就是坐标原点看成模型(对象，精灵)的锚点所在&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Vec2</span> <span class="n">convertToWorldSpace</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">nodePoint</span> <span class="p">)</span> <span class="c1">//将模型坐标中触摸点转换为世界坐标。</span>
-</span><span class='line'><span class="n">Vec2</span> <span class="n">convertToWorldSpaceAR</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">nodePoint</span> <span class="p">)</span> <span class="c1">//将模型坐标中触摸点转换为世界坐标。AR表示相对于锚点。</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```C++ 世界坐标与模型坐标互相转换
+Vec2 convertToNodeSpace ( const Vec2 &amp; worldPoint ) //将世界坐标转换为模型坐标。坐标原点看成模型(对象，精灵)的左下角所在
+Vec2 convertToNodeSpaceAR ( const Vec2 &amp; worldPoint ) //将世界坐标转换为模型坐标。AR表示相对于锚点。</p>
+
+<p>Vec2 convertTouchToNodeSpace ( Touch * touch ) //将世界坐标中触摸点转换为模型坐标。
+Vec2 convertTouchToNodeSpaceAR ( Touch * touch ) //将世界坐标中触摸点转换为模型坐标。AR表示相对于锚点。
+//凡是后面是ToNodeSpace的这个函数，是从世界坐标到模型坐标的转换  Node就是节点，也就是我们说的模型
+//所有带有AR的，表示相对于锚点，也就是坐标原点看成模型(对象，精灵)的锚点所在</p>
+
+<p>Vec2 convertToWorldSpace ( const Vec2 &amp; nodePoint ) //将模型坐标中触摸点转换为世界坐标。
+Vec2 convertToWorldSpaceAR ( const Vec2 &amp; nodePoint ) //将模型坐标中触摸点转换为世界坐标。AR表示相对于锚点。
+```</p>
 
 <h1>实例：世界坐标转换为模型坐标</h1>
 
@@ -133,30 +504,22 @@ C相对于A:(100,-100)</p>
 C相对于B:(-200,-200)</p>
 
 <p>Node2的世界坐标转换为相对于Node1的模型坐标:
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的坐标原点,也就是A点</span>
-</span><span class='line'><span class="n">Vec2</span> <span class="n">point1</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToNodeSpace</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的锚点,也就是B点</span>
-</span><span class='line'><span class="n">Vec2</span> <span class="n">point2</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToNodeSpaceAR</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```
+//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的坐标原点,也就是A点
+Vec2 point1 = node1->convertToNodeSpace(node2->getPosition());</p>
+
+<p>//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的锚点,也就是B点
+Vec2 point2 = node1->convertToNodeSpaceAR(node2->getPosition());
+```</p>
 
 <p>所以得出的结果就是:
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Node2</span> <span class="n">NodeSpace</span> <span class="o">=</span> <span class="p">(</span><span class="o">%</span><span class="n">f</span><span class="p">,</span><span class="o">%</span><span class="n">f</span><span class="p">)</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="n">point1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">point1</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-</span><span class='line'><span class="c1">//Node2 NodeSpace = (100.000000,-100.000000)&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Node2</span> <span class="n">NodeSpaceAR</span> <span class="o">=</span> <span class="p">(</span><span class="o">%</span><span class="n">f</span><span class="p">,</span><span class="o">%</span><span class="n">f</span><span class="p">)</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">point2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point2</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-</span><span class='line'><span class="c1">//Node2 NodeSpaceAR = (-200.000000,-200.000000)</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```
+log(&ldquo;Node2 NodeSpace = (%f,%f)&rdquo;,point1.x,point1.y);
+//Node2 NodeSpace = (100.000000,-100.000000)</p>
+
+<p>log(&ldquo;Node2 NodeSpaceAR = (%f,%f)&rdquo;, point2.x, point2.y);
+//Node2 NodeSpaceAR = (-200.000000,-200.000000)
+```</p>
 
 <pre><code>bool HelloWorld::init()
 {
@@ -205,13 +568,11 @@ GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/coc
 Node2是放置在Node1中的，它对于Node1的模型坐标是(0,0),大小是150</em>150像素</p>
 
 <p>Node2相对于Node1的模型坐标转换的世界坐标:<br/>
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">Vec2</span> <span class="n">point1</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToWorldSpace</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">blockquote</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//node2-&gt;getPosition()为Node2在Node1中的模型坐标(相对于Node1的坐标原点得到的坐标) -&gt;(convertToWorldSpace)-&gt;转换为世界坐标，Node2在Node1中的坐标实际上是(0,0),在世界坐标中，Node2的坐标其实就是A点的坐标</span>
-</span></code></pre></td></tr></table></div></figure>
+```
+Vec2 point1 = node1->convertToWorldSpace(node2->getPosition());</p>
+
+<blockquote><p>//node2->getPosition()为Node2在Node1中的模型坐标(相对于Node1的坐标原点得到的坐标) ->(convertToWorldSpace)->转换为世界坐标，Node2在Node1中的坐标实际上是(0,0),在世界坐标中，Node2的坐标其实就是A点的坐标
+```
 (150,50)为Node2的宽高<br/>
 A点的坐标 = (400,500) - (150,50) = (250,450)</p></blockquote>
 
@@ -367,31 +728,20 @@ this-&gt;addChild(sprite, 0);
 <p>第一个参数是添加的节点；第二个参数是添加的Node的z轴的顺序(添加节点的时候会有顺序的，相当于绘制的时候的先后顺序)；第三个参数是Tag/标签，可以理解成id，通过这个tag来操作node对象    <br/>
 <img src="http://i.imgur.com/eae63yS.png" alt="" /><br/>
 附带第二个参数的英文介绍：<br/>
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">LocalZOrder</span> <span class="n">is</span> <span class="n">the</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">key</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="n">used</span> <span class="n">to</span> <span class="n">sort</span> <span class="n">the</span> <span class="n">node</span> <span class="n">relative</span> <span class="n">to</span> <span class="n">its</span> <span class="n">siblings</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Node</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span> <span class="n">parent</span> <span class="n">will</span> <span class="n">sort</span> <span class="n">all</span> <span class="n">its</span> <span class="n">children</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">LocalZOrder</span> <span class="n">value</span><span class="p">.</span> <span class="n">If</span> <span class="n">two</span> <span class="n">nodes</span> <span class="n">have</span> <span class="n">the</span> <span class="n">same</span> <span class="n">LocalZOrder</span><span class="p">,</span> <span class="n">then</span> <span class="n">the</span> <span class="n">node</span> <span class="n">that</span> <span class="n">was</span> <span class="n">added</span> <span class="n">first</span> <span class="n">to</span> <span class="n">the</span> <span class="n">children</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span> <span class="n">array</span> <span class="n">will</span> <span class="n">be</span> <span class="n">in</span> <span class="n">front</span> <span class="n">of</span> <span class="n">the</span> <span class="n">other</span> <span class="n">node</span> <span class="n">in</span> <span class="n">the</span> <span class="n">array</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Also</span><span class="p">,</span> <span class="n">the</span> <span class="n">Scene</span> <span class="n">Graph</span> <span class="n">is</span> <span class="n">traversed</span> <span class="k">using</span> <span class="n">the</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">In</span><span class="o">-</span><span class="n">Order</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="n">tree</span> <span class="n">traversal</span> <span class="n">algorithm</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://en.wikipedia.org/wiki/Tree_traversal#In-order&quot;</span><span class="o">&gt;</span><span class="nl">http</span><span class="p">:</span><span class="c1">//en.wikipedia.org/wiki/Tree_traversal#In-order&lt;/a&gt; ) And Nodes that have LocalZOrder values &amp;lt; 0 are the &amp;ldquo;left&amp;rdquo; subtree While Nodes with LocalZOrder &gt;=0 are the &amp;ldquo;right&amp;rdquo; subtree.</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">addChild</span><span class="err">有</span><span class="mi">4</span><span class="err">个方法</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">)</span>   <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">)</span>   <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">,</span><span class="kt">int</span> <span class="n">tag</span><span class="p">)</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">,</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">name</span><span class="p">)</span>  <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```
+LocalZOrder is the &lsquo;key&rsquo; used to sort the node relative to its siblings.</p>
+
+<p>The Node&rsquo;s parent will sort all its children based on the LocalZOrder value. If two nodes have the same LocalZOrder, then the node that was added first to the children&rsquo;s array will be in front of the other node in the array.</p>
+
+<p>Also, the Scene Graph is traversed using the &ldquo;In-Order&rdquo; tree traversal algorithm ( <a href="http://en.wikipedia.org/wiki/Tree_traversal#In-order">http://en.wikipedia.org/wiki/Tree_traversal#In-order</a> ) And Nodes that have LocalZOrder values &lt; 0 are the &ldquo;left&rdquo; subtree While Nodes with LocalZOrder >=0 are the &ldquo;right&rdquo; subtree.
+<code>
+addChild有4个方法
+</code>c++
+virtual void addChild   ( Node * child)   <br/>
+virtual void addChild   ( Node * child,int localZOrder)   <br/>
+virtual void addChild   ( Node * child,int localZOrder,int tag)
+virtual void addChild   ( Node * child,int localZOrder,const std::string &amp; name)  <br/>
+```</p>
 
 <h2>查找子节点</h2>
 
@@ -439,25 +789,17 @@ position是指的位置，anchorPoint是指的锚点<br/>
 如果需要场景中的精灵运动起来，我们可以在游戏循环中使用定时器（Scheduler）对精灵等对象的运行进行调度。<br/>
 因为Node类封装了Scheduler类，所以我们也可以直接使用Node中调用函数。<br/>
 Node中调用函数主要有：<br/>
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">void</span> <span class="n">scheduleUpdate</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//开始游戏调度，每个Node对象只要调用该函数，那么这个Node对象就会定时地每帧回调用一次自己的update(float dt)函数，每帧调用一次update函数！这是固定的时间和函数&lt;br/&gt;</span>
-</span><span class='line'><span class="c1">//下面这个函数更加个性化，可以自定义回调函数和时间</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">schedule</span> <span class="p">(</span> <span class="n">SEL_SCHEDULE</span> <span class="n">selector</span><span class="p">,</span>  <span class="kt">float</span>  <span class="n">interval</span> <span class="p">)</span><span class="c1">//与scheduleUpdate函数功能一样，不同的是我们可以指定回调函数（通过selector指定），也可以根据需要指定回调时间间隔</span>
-</span><span class='line'><span class="c1">//一旦调度开始，就会不断循环&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">unscheduleUpdate</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//停止update(float dt)函数调度  和scheduleUpdate对应</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">unschedule</span> <span class="p">(</span> <span class="n">SEL_SCHEDULE</span> <span class="n">selector</span> <span class="p">)</span><span class="c1">//可以指定具体函数停止调度  和schedule对应&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">unscheduleAllSelectors</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//可以停止所有调度</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```
+void scheduleUpdate ( void )//开始游戏调度，每个Node对象只要调用该函数，那么这个Node对象就会定时地每帧回调用一次自己的update(float dt)函数，每帧调用一次update函数！这是固定的时间和函数<br/>
+//下面这个函数更加个性化，可以自定义回调函数和时间
+void schedule ( SEL_SCHEDULE selector,  float  interval )//与scheduleUpdate函数功能一样，不同的是我们可以指定回调函数（通过selector指定），也可以根据需要指定回调时间间隔
+//一旦调度开始，就会不断循环</p>
+
+<p>void unscheduleUpdate ( void )//停止update(float dt)函数调度  和scheduleUpdate对应
+void unschedule ( SEL_SCHEDULE selector )//可以指定具体函数停止调度  和schedule对应</p>
+
+<p>void unscheduleAllSelectors ( void )//可以停止所有调度
+```</p>
 
 <h1>源代码下载地址：</h1>
 
@@ -656,387 +998,199 @@ libcocos2d就是所有cocos2d的源码都是放在这个工程里面的，这个
 <h2>代码解释</h2>
 
 <p>我们看HelloWordScene.h<br/>
-<figure class='code'><figcaption><span>HelloWordScene.h</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-<span class='line-number'>115</span>
-<span class='line-number'>116</span>
-<span class='line-number'>117</span>
-<span class='line-number'>118</span>
-<span class='line-number'>119</span>
-<span class='line-number'>120</span>
-<span class='line-number'>121</span>
-<span class='line-number'>122</span>
-<span class='line-number'>123</span>
-<span class='line-number'>124</span>
-<span class='line-number'>125</span>
-<span class='line-number'>126</span>
-<span class='line-number'>127</span>
-<span class='line-number'>128</span>
-<span class='line-number'>129</span>
-<span class='line-number'>130</span>
-<span class='line-number'>131</span>
-<span class='line-number'>132</span>
-<span class='line-number'>133</span>
-<span class='line-number'>134</span>
-<span class='line-number'>135</span>
-<span class='line-number'>136</span>
-<span class='line-number'>137</span>
-<span class='line-number'>138</span>
-<span class='line-number'>139</span>
-<span class='line-number'>140</span>
-<span class='line-number'>141</span>
-<span class='line-number'>142</span>
-<span class='line-number'>143</span>
-<span class='line-number'>144</span>
-<span class='line-number'>145</span>
-<span class='line-number'>146</span>
-<span class='line-number'>147</span>
-<span class='line-number'>148</span>
-<span class='line-number'>149</span>
-<span class='line-number'>150</span>
-<span class='line-number'>151</span>
-<span class='line-number'>152</span>
-<span class='line-number'>153</span>
-<span class='line-number'>154</span>
-<span class='line-number'>155</span>
-<span class='line-number'>156</span>
-<span class='line-number'>157</span>
-<span class='line-number'>158</span>
-<span class='line-number'>159</span>
-<span class='line-number'>160</span>
-<span class='line-number'>161</span>
-<span class='line-number'>162</span>
-<span class='line-number'>163</span>
-<span class='line-number'>164</span>
-<span class='line-number'>165</span>
-<span class='line-number'>166</span>
-<span class='line-number'>167</span>
-<span class='line-number'>168</span>
-<span class='line-number'>169</span>
-<span class='line-number'>170</span>
-<span class='line-number'>171</span>
-<span class='line-number'>172</span>
-<span class='line-number'>173</span>
-<span class='line-number'>174</span>
-<span class='line-number'>175</span>
-<span class='line-number'>176</span>
-<span class='line-number'>177</span>
-<span class='line-number'>178</span>
-<span class='line-number'>179</span>
-<span class='line-number'>180</span>
-<span class='line-number'>181</span>
-<span class='line-number'>182</span>
-<span class='line-number'>183</span>
-<span class='line-number'>184</span>
-<span class='line-number'>185</span>
-<span class='line-number'>186</span>
-<span class='line-number'>187</span>
-<span class='line-number'>188</span>
-<span class='line-number'>189</span>
-<span class='line-number'>190</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">ifndef</span> <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">HELLOWORLD_SCENE_H</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">HELLOWORLD_SCENE_H</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">cocos2d</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">HelloWorld</span> <span class="o">:</span> <span class="k">public</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">Layer</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="k">public</span><span class="o">:</span>
-</span><span class='line'>    <span class="k">static</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">Scene</span><span class="o">*</span> <span class="n">createScene</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">virtual</span> <span class="kt">bool</span> <span class="n">init</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// a selector callback</span>
-</span><span class='line'><span class="kt">void</span> <span class="nf">menuCloseCallback</span><span class="p">(</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// implement the &quot;static create()&quot; method manually</span>
-</span><span class='line'><span class="n">CREATE_FUNC</span><span class="p">(</span><span class="n">HelloWorld</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span> <span class="c1">// &lt;strong&gt;HELLOWORLD_SCENE_H&lt;/strong&gt;&lt;/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">里面定义了一个类</span><span class="n">HelloWorld</span><span class="p">,</span><span class="err">继承了</span><span class="n">cocos2d</span><span class="o">::</span><span class="n">Layer</span><span class="p">(</span><span class="err">层</span><span class="p">)</span>
-</span><span class='line'><span class="err">虽然文件名叫</span><span class="n">HelloWordScene</span><span class="p">,</span><span class="n">Scene</span><span class="err">是场景，但是实际上里面的类是</span><span class="n">HelloWorld</span><span class="err">，实际上是层</span>
-</span><span class='line'><span class="err">创建层的同时会先创建层所在的场景，层是要放在场景里面的。</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">AppDelegate</span><span class="err">是一个应用程序委托对象，如果懂</span><span class="n">ios</span><span class="err">开发的，应该会对这个比较熟悉。</span>
-</span><span class='line'><span class="err">它的作用就是，应用程序启动的时候会调用它。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">ifndef</span>  <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">APP_DELEGATE_H</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span>  <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">APP_DELEGATE_H</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">cocos2d</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief    The cocos2d Application.&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">&lt;p&gt;Private inheritance here hides part of interface from Director.</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">class</span>  <span class="nc">AppDelegate</span> <span class="o">:</span> <span class="k">private</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">Application</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="k">public</span><span class="o">:</span>
-</span><span class='line'>    <span class="n">AppDelegate</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">virtual</span> <span class="o">~</span><span class="n">AppDelegate</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">virtual</span> <span class="kt">void</span> <span class="n">initGLContextAttrs</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief    Implement Director and Scene init code here.</span>
-</span><span class='line'><span class="cm">@return true    Initialize success, app continue.</span>
-</span><span class='line'><span class="cm">@return false   Initialize failed, app terminate.</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">bool</span> <span class="nf">applicationDidFinishLaunching</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief  Called when the application moves to the background</span>
-</span><span class='line'><span class="cm">@param  the pointer of the application</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="nf">applicationDidEnterBackground</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm">@brief  Called when the application reenters the foreground</span>
-</span><span class='line'><span class="cm">@param  the pointer of the application</span>
-</span><span class='line'><span class="cm">*/</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="nf">applicationWillEnterForeground</span><span class="p">();</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span> <span class="c1">// &lt;em&gt;APP_DELEGATE_H&lt;/em&gt;&lt;/h1&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">applicationDidFinishLaunching</span> <span class="err">这个函数是在程序启动的时候会调用它，也就是在游戏启动的时候调用，一般进行游戏的初始化，比如游戏的导演啊，场景啊等在这里进行初始化。</span>
-</span><span class='line'><span class="n">applicationDidEnterBackground</span> <span class="err">是退到后台，就是点击</span><span class="n">home</span><span class="err">键，回到桌面。接电话或者跳到另一个应用程序去，都会调用这个函数。</span>
-</span><span class='line'><span class="n">applicationWillEnterForeground</span> <span class="err">是从后台重新回到前台，也就是从手机任务栏重新回到游戏，会调用这个函数</span>
-</span><span class='line'><span class="err">以上三个函数是和游戏的生命周期有关系的。</span>
-</span><span class='line'><span class="n">HelloWorldScene</span><span class="p">.</span><span class="n">cpp</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">HelloWorldScene</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">SimpleAudioEngine</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">USING_NS_CC</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Scene</span><span class="o">*</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">createScene</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 创建场景对象</span>
-</span><span class='line'>    <span class="k">auto</span> <span class="n">scene</span> <span class="o">=</span> <span class="n">Scene</span><span class="o">::</span><span class="n">create</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">// 创建层对象</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 把层放到场景里</span>
-</span><span class='line'><span class="n">scene</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">layer</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 返回这个场景</span>
-</span><span class='line'><span class="k">return</span> <span class="n">scene</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">// on &amp;ldquo;init&amp;rdquo; you need to initialize your instance</span>
-</span><span class='line'><span class="c1">// 初始化当前这个层</span>
-</span><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">//////////////////////////////</span>
-</span><span class='line'>    <span class="c1">// 1. super init first</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">auto</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleSize</span><span class="p">();</span><span class="c1">//得到屏幕的大小(可见区域大小)</span>
-</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleOrigin</span><span class="p">();</span><span class="c1">//得到可见区域大小的左下角坐标</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">/////////////////////////////</span>
-</span><span class='line'><span class="c1">// 2. add a menu item with &quot;X&quot; image, which is clicked to quit the program</span>
-</span><span class='line'><span class="c1">//    you may modify it.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// add a &quot;close&quot; icon to exit the progress. it&#39;s an autorelease object</span>
-</span><span class='line'><span class="c1">// 得到图片菜单 以及设置回调函数</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">closeItem</span> <span class="o">=</span> <span class="n">MenuItemImage</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
-</span><span class='line'>                                       <span class="s">&quot;CloseNormal.png&quot;</span><span class="p">,</span>
-</span><span class='line'>                                       <span class="s">&quot;CloseSelected.png&quot;</span><span class="p">,</span>
-</span><span class='line'>                                       <span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuCloseCallback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span>
-</span><span class='line'><span class="c1">//关闭的按钮 </span>
-</span><span class='line'><span class="n">closeItem</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">closeItem</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span> <span class="p">,</span>
-</span><span class='line'>                            <span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">closeItem</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// create menu, it&#39;s an autorelease object</span>
-</span><span class='line'><span class="c1">//把菜单项放到菜单里</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">menu</span> <span class="o">=</span> <span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">closeItem</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'><span class="c1">//指定菜单的位置 设置显示的坐标位置</span>
-</span><span class='line'><span class="n">menu</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span>
-</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">menu</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="c1">//把菜单放到当前层</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">/////////////////////////////</span>
-</span><span class='line'><span class="c1">// 3. add your codes below...</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//标签 也就是中间显示的那个文字  以及加载字体</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">label</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">,</span> <span class="s">&quot;fonts/Marker Felt.ttf&quot;</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//指定标签的位置</span>
-</span><span class='line'><span class="n">label</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
-</span><span class='line'>                        <span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">label</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//把标签加入到层中</span>
-</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//指定一个图片的精灵</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">sprite</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;HelloWorld.png&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 设置图片精灵的位置</span>
-</span><span class='line'><span class="n">sprite</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">origin</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">origin</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//把图片精灵加入到层中</span>
-</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//点击close菜单项来回调的</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuCloseCallback</span><span class="p">(</span><span class="n">Ref</span><span class="o">*</span> <span class="n">pSender</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="c1">//Close the cocos2d-x game scene and quit the application</span>
-</span><span class='line'>    <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">//条件编译 ，也就是满足条件就编译过去，如果不满足，就相当于注释了</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="n">CC_TARGET_PLATFORM</span> <span class="o">==</span> <span class="n">CC_PLATFORM_IOS</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="cm">/*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()-&amp;gt;end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//EventCustom customEndEvent(&quot;game_scene_close_event&quot;);</span>
-</span><span class='line'><span class="c1">//_eventDispatcher-&amp;gt;dispatchEvent(&amp;amp;customEndEvent);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```c++ HelloWordScene.h</p>
+
+<h1>ifndef <strong>HELLOWORLD_SCENE_H</strong></h1>
+
+<h1>define <strong>HELLOWORLD_SCENE_H</strong></h1>
+
+<h1>include &ldquo;cocos2d.h&rdquo;</h1>
+
+<p>class HelloWorld : public cocos2d::Layer
+{
+public:
+    static cocos2d::Scene* createScene();</p>
+
+<pre><code>virtual bool init();
+
+// a selector callback
+void menuCloseCallback(cocos2d::Ref* pSender);
+
+// implement the "static create()" method manually
+CREATE_FUNC(HelloWorld);
+</code></pre>
+
+<p>};</p>
+
+<h1>endif // <strong>HELLOWORLD_SCENE_H</strong></h1>
+
+<pre><code>里面定义了一个类HelloWorld,继承了cocos2d::Layer(层)  
+虽然文件名叫HelloWordScene,Scene是场景，但是实际上里面的类是HelloWorld，实际上是层  
+创建层的同时会先创建层所在的场景，层是要放在场景里面的。  
+
+AppDelegate是一个应用程序委托对象，如果懂ios开发的，应该会对这个比较熟悉。  
+它的作用就是，应用程序启动的时候会调用它。
+</code></pre>
+
+<h1>ifndef  <em>APP_DELEGATE_H</em></h1>
+
+<h1>define  <em>APP_DELEGATE_H</em></h1>
+
+<h1>include &ldquo;cocos2d.h&rdquo;</h1>
+
+<p>/**
+@brief    The cocos2d Application.</p>
+
+<p>Private inheritance here hides part of interface from Director.
+*/
+class  AppDelegate : private cocos2d::Application
+{
+public:
+    AppDelegate();
+    virtual ~AppDelegate();</p>
+
+<pre><code>virtual void initGLContextAttrs();
+
+/**
+@brief    Implement Director and Scene init code here.
+@return true    Initialize success, app continue.
+@return false   Initialize failed, app terminate.
+*/
+virtual bool applicationDidFinishLaunching();
+
+/**
+@brief  Called when the application moves to the background
+@param  the pointer of the application
+*/
+virtual void applicationDidEnterBackground();
+
+/**
+@brief  Called when the application reenters the foreground
+@param  the pointer of the application
+*/
+virtual void applicationWillEnterForeground();
+</code></pre>
+
+<p>};</p>
+
+<h1>endif // <em>APP_DELEGATE_H</em></h1>
+
+<pre><code>applicationDidFinishLaunching 这个函数是在程序启动的时候会调用它，也就是在游戏启动的时候调用，一般进行游戏的初始化，比如游戏的导演啊，场景啊等在这里进行初始化。  
+applicationDidEnterBackground 是退到后台，就是点击home键，回到桌面。接电话或者跳到另一个应用程序去，都会调用这个函数。  
+applicationWillEnterForeground 是从后台重新回到前台，也就是从手机任务栏重新回到游戏，会调用这个函数   
+以上三个函数是和游戏的生命周期有关系的。  
+HelloWorldScene.cpp
+</code></pre>
+
+<h1>include &ldquo;HelloWorldScene.h&rdquo;</h1>
+
+<h1>include &ldquo;SimpleAudioEngine.h&rdquo;</h1>
+
+<p>USING_NS_CC;</p>
+
+<p>Scene* HelloWorld::createScene()
+{
+    // 创建场景对象
+    auto scene = Scene::create();</p>
+
+<pre><code>// 创建层对象
+auto layer = HelloWorld::create();
+
+// 把层放到场景里
+scene-&gt;addChild(layer);
+
+// 返回这个场景
+return scene;
+</code></pre>
+
+<p>}</p>
+
+<p>// on &ldquo;init&rdquo; you need to initialize your instance
+// 初始化当前这个层
+bool HelloWorld::init()
+{
+    //////////////////////////////
+    // 1. super init first
+    if ( !Layer::init() )
+    {
+        return false;
+    }</p>
+
+<pre><code>auto visibleSize = Director::getInstance()-&gt;getVisibleSize();//得到屏幕的大小(可见区域大小)
+Vec2 origin = Director::getInstance()-&gt;getVisibleOrigin();//得到可见区域大小的左下角坐标
+
+/////////////////////////////
+// 2. add a menu item with "X" image, which is clicked to quit the program
+//    you may modify it.
+
+// add a "close" icon to exit the progress. it's an autorelease object
+// 得到图片菜单 以及设置回调函数
+auto closeItem = MenuItemImage::create(
+                                       "CloseNormal.png",
+                                       "CloseSelected.png",
+                                       CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+//关闭的按钮 
+closeItem-&gt;setPosition(Vec2(origin.x + visibleSize.width - closeItem-&gt;getContentSize().width/2 ,
+                            origin.y + closeItem-&gt;getContentSize().height/2));
+
+// create menu, it's an autorelease object
+//把菜单项放到菜单里
+auto menu = Menu::create(closeItem, NULL);
+//指定菜单的位置 设置显示的坐标位置
+menu-&gt;setPosition(Vec2::ZERO);
+this-&gt;addChild(menu, 1);//把菜单放到当前层
+
+/////////////////////////////
+// 3. add your codes below...
+
+//标签 也就是中间显示的那个文字  以及加载字体
+auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+
+//指定标签的位置
+label-&gt;setPosition(Vec2(origin.x + visibleSize.width/2,
+                        origin.y + visibleSize.height - label-&gt;getContentSize().height));
+
+//把标签加入到层中
+this-&gt;addChild(label, 1);
+
+//指定一个图片的精灵
+auto sprite = Sprite::create("HelloWorld.png");
+
+// 设置图片精灵的位置
+sprite-&gt;setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+
+//把图片精灵加入到层中
+this-&gt;addChild(sprite, 0);
+
+return true;
+</code></pre>
+
+<p>}</p>
+
+<p>//点击close菜单项来回调的
+void HelloWorld::menuCloseCallback(Ref* pSender)
+{
+    //Close the cocos2d-x game scene and quit the application
+    Director::getInstance()->end();</p>
+
+<pre><code>//条件编译 ，也就是满足条件就编译过去，如果不满足，就相当于注释了
+</code></pre>
+
+<h1>if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)</h1>
+
+<pre><code>exit(0);
+</code></pre>
+
+<h1>endif</h1>
+
+<pre><code>/*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()-&gt;end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/
+
+//EventCustom customEndEvent("game_scene_close_event");
+//_eventDispatcher-&gt;dispatchEvent(&amp;customEndEvent);
+</code></pre>
+
+<p>}
+```</p>
 
 <p>这样我们就得到一个能执行的HelloWord程序啦</p>
 
@@ -1048,216 +1202,6 @@ libcocos2d就是所有cocos2d的源码都是放在这个工程里面的，这个
 GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170607/HelloWorld' target='_blank'>点我进行下载</a>】</strong></p>
 </blockquote>
 
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【Cocos2d-x】开发基础-Cocos简介与环境搭建]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/06/05/cocos2dx-about/"/>
-    <updated>2017-06-05T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/06/05/cocos2dx-about</id>
-    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
-Cocos2d-x介绍与环境搭建<br/>
-1.移动平台游戏引擎介绍<br/>
-2.Cocos2d家谱介绍<br/>
-3.Cocos2d-x设计目标<br/>
-4.在Windows平台下开始开发Cocos2d-x游戏</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>[TOC]</p>
-
-<h1>1.移动平台游戏引擎介绍</h1>
-
-<h2>游戏引擎的定义</h2>
-
-<p>游戏引擎是指一些已编写好的可编辑游戏系统或者一些互交式图像应用程序的核心组件，游戏软件的主程序。<br/>
-通俗一点理解就是：<br/>
-游戏引擎其实就是一个半成品，它能帮你做什么，就是开发游戏。就是说，一些基础的工作帮你做好了。<br/>
-你拿过来之后，根据你的需求，根据你要开发的游戏的特点加上一些你自己的东西，那么这就是游戏引擎。<br/>
-如果没有游戏引擎，你完全可以自己做那些事情，有了游戏引擎之后，很多东西就不用自己去做了。<br/>
-游戏引擎你也可以理解成框架或者库！</p>
-
-<h2>游戏引擎包含以下子系统</h2>
-
-<p>渲染引擎:<br/>
-把从计算机中0101的代码变成我们能够识别的图像的过程！<br/>
-这样理解更好：相当与你拿一个染料桶在墙上刷染料，把染料刷到墙上的过程，这个就是渲染的过程。</p>
-
-<p>物理引擎:<br/>
-其实就是模拟现实的物理环境，比如重力等</p>
-
-<p>碰撞检测系统、音效、脚本引擎、电脑动画、人工智能、网络引擎以及场景管理。</p>
-
-<h2>移动平台游戏引擎中主要可以分为</h2>
-
-<p>2D引擎和3D引擎</p>
-
-<h3>2D引擎主要有</h3>
-
-<p>Coco2d-iphone,Cocos2d-x,Corona SDK,Construct 2,WiEngine和Cyclone 2D</p>
-
-<p>Coco2d-iphone和Cocos2d-x看名字就知道有些联系了，Cocos2d-x很多类似管理的东西，比如对象，类的设计就是从Coco2d-iphone过度过来的。<br/>
-Corona SDK是用Lua脚本编写的</p>
-
-<h3>3D引擎主要有</h3>
-
-<p>Unity3D,Unreal Development Kit,ShiVa 3D 和Marmalade</p>
-
-<p>现在很火的就是Unity3D</p>
-
-<h2>HTML 5的游戏引擎</h2>
-
-<p>Cocos2d-js,X-Canvas和Sphinx等</p>
-
-<h1>2.Cocos2d家谱介绍</h1>
-
-<p><img src="http://i.imgur.com/yeghXaA.png" alt="" /></p>
-
-<p>其实这个家谱已经过时了，不过可以看到Cocos2d的发展路线<br/>
-有兴趣的大家可以自行搜索了解</p>
-
-<h1>3.Cocos2d-x设计目标</h1>
-
-<h2>Cocos2d-x目标</h2>
-
-<p><img src="http://i.imgur.com/ORpTwbq.png" alt="" /></p>
-
-<p>为什么Cocos2d这么优秀，为什么这么多人接受和推广它。<br/>
-我们看上面的图，首先，从横向来讲，cocos2d可以用很多平台开发，基于不同平台开发，很方便！<br/>
-还有发布平台，写一个程序，发布到多个平台！(节省大量时间和成本)</p>
-
-<p>从纵向往上来看，可以绑定Javascript和Lua脚本<br/>
-从纵向往下来看，就是和硬件有关了</p>
-
-<h2>Cocos2d-x绑定Javascript和Lua脚本</h2>
-
-<p>解释性的语言，结构非常严谨，编译速度很快！</p>
-
-<p>也就是在开发过程中，我们不止能使用c++开发，也能使用javascript和lua脚本开发！</p>
-
-<p><img src="http://i.imgur.com/40Xt1bX.png" alt="" /></p>
-
-<p>可以看到，我们有4条线路来开发游戏<br/>
-1、C线路：通过c++<br/>
-2、D线路：通过Lua(我们不需要管和c++的绑定)<br/>
-3、B线路：JS绑定的引擎 cocos2d-js如果想开发本地游戏，需要调用cocos2d-x(我们不需要管怎么绑定的，只要会JS，就能开发本地游戏)<br/>
-4、A线路：开发网页游戏</p>
-
-<h1>4.在Windows平台下开始开发Cocos2d-x游戏</h1>
-
-<p>为什么选择在Window下开发游戏，因为对硬件设备要求没那么高<br/>
-而且先从window先学习cocos2dx是最容易学习的</p>
-
-<h2>使用Visual Studio开发工具</h2>
-
-<p>在这里我使用的是Visual Studio 2013<br/>
-操作系统是使用的Windows 7</p>
-
-<h2>下载和使用Cocos2d-x案例</h2>
-
-<p>网址：<a href="http://www.cocos2d-x.org/">http://www.cocos2d-x.org/</a>
-<img src="http://i.imgur.com/2GQ3y9p.png" alt="" />
-下载:
-<img src="http://i.imgur.com/vnnItnl.png" alt="" /></p>
-
-<p>下载解压之后：
-<img src="http://i.imgur.com/aZAgVPh.png" alt="" /></p>
-
-<h3>build目录</h3>
-
-<p>我们要学习的话，先进入build目录里面，这个里面很多是工程文件
-.sln是基于微软的VS工具的解决方案<br/>
- cocos2d_tests.xcodeproj和cocos2d_libs.xcodeproj在window下看起来是文件夹<br/>
-但是如果拿到mac系统里，但是其实就是mac xcode的工程文件，在xcode就可以运行cocos2d_tests.xcodeproj这个文件，运行之后，就会启动相关的案例代码<br/>
-在window就是启动cocos2d-win32.sln这个启动相关的案例代码<br/>
-<img src="http://i.imgur.com/kxLbiVg.png" alt="" /></p>
-
-<p>我们主要运行的就cpp-tests，cpp-tests就是我们看到的大部分帮助例子在这里！<br/>
-要想运行的，需要把这个设置为启动项目！然后就会看到这个是加粗的字体<br/>
-<img src="http://i.imgur.com/vHP1ovd.png" alt="" />
-然后运行它，第一次编译时间会比较长<br/>
-<img src="http://i.imgur.com/N6iotba.png" alt="" />
-运行之后，里面都是一些演示实例，大家可以看看<br/>
-看源代码的话，就搜索数字后面的名字，找源代码进行学习</p>
-
-<p>在window下开发选择win32，因为实际上在window下用VS开发出来，需要有模拟器来运行游戏场景，但是由于我们没有真机，所以把游戏场景在window的一个小窗口显示出来的，所以叫win32程序。
-win32程序在最后发布的时候其实是没有用的，win32其实只是开发，模拟测试，还有学习的环境</p>
-
-<p>install-deps-linux.sh就是基于Linux的安装开发的文件</p>
-
-<h3>cocos目录</h3>
-
-<p>cocos2d引擎的源代码，全部放在这里</p>
-
-<h3>docs目录</h3>
-
-<p><img src="http://i.imgur.com/Wsl7Xmr.png" alt="" />
-文档目录，一开始是空的，只有上面的文件</p>
-
-<h3>extensions目录</h3>
-
-<p>扩展的内库 - 一般也都是cocos2d团队开发的，但是它是扩展的</p>
-
-<h3>external目录</h3>
-
-<p>第三方的扩展库，比如使用其他的物理引擎等</p>
-
-<h3>plugin目录</h3>
-
-<p>插件什么的</p>
-
-<h3>templates目录</h3>
-
-<p>这是模板，我们使用指令生成cocos2dx的模板，都是从这个模板里面生成的工程代码的</p>
-
-<h3>tests目录</h3>
-
-<p>就是刚刚的项目的cpp-tests的源码</p>
-
-<h3>tools目录</h3>
-
-<p>工具目录
-<img src="http://i.imgur.com/0gjch9N.png" alt="" />
-通过cocos的工具，python脚本编写的，可以帮助我们创建一个工程出来</p>
-
-<h2>生成API文档</h2>
-
-<p>看文件夹docs，里面没有帮助文档
-<img src="http://i.imgur.com/kGgdSMr.png" alt="" />
-现在里面的内容是帮助我们生成帮助API文档的<br/>
-类似Java的网页式的帮助文档<br/>
-使用Doxygen(无法生成图片)和Graphviz工具，结合使用<br/>
-Doxygen:<br/>
-<a href="http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc">http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc</a><br/>
-Graphviz:<br/>
-<a href="http://www.graphviz.org/Download_windows.php">http://www.graphviz.org/Download_windows.php</a><br/>
-下载然后都安装就好了。<br/>
-启动Doxygen
-<img src="http://i.imgur.com/4DEtFRw.png" alt="" />
-然后File->open<br/>
-打开cocos2d-x-3.13.1\docs下的doxygen.config文件<br/>
-我们不需要做其他事情，然后直接Run
-<img src="http://i.imgur.com/Kdr1MRs.png" alt="" />
-会在docs目录下生成html目录，找到index.html文件
-<img src="http://i.imgur.com/NmTwVH6.png" alt="" />
-然后直接用浏览器打开就行了<br/>
-<img src="http://i.imgur.com/8m5aul3.png" alt="" />
-这就是我们刚刚生成的cocos2dx的文档</p>
-
-<p>在此感谢CSDN学院关东升老师的教学视频！</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
