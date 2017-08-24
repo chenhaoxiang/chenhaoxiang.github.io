@@ -17,8 +17,10 @@ rake new_post['英文名']
 rake new_post['chx']
 
 生成单页面 - 首页面没有跳转地址
-
 rake new_page['目录名-英文']
+增加跳转:octopress\source\_includes\custom\navigation.html
+
+rake new_page['reward']
 
 部署到github
 
@@ -75,3 +77,9 @@ echo 'www.chenhaoxiang.cn' >> source/CNAME
 友情链接:
 blog_link.html
 
+
+
+新电脑上使用:
+git clone -b source https://github.com/chenhaoxiang/chenhaoxiang.github.io.git octopress
+cd octopress
+git clone https://github.com/chenhaoxiang/chenhaoxiang.github.io.git _deploy
