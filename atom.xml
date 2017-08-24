@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-24T02:05:01+08:00</updated>
+  <updated>2017-08-24T10:36:10+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -155,7 +155,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#117;&#x69;&#102;&#x75;&#116;&#x75;&#114;&#x65;&#x40;&#x75;&#x69;&#102;&#x75;&#x74;&#x75;&#114;&#x65;&#46;&#x63;&#111;&#x6d;">&#117;&#105;&#102;&#117;&#x74;&#117;&#114;&#x65;&#x40;&#117;&#x69;&#x66;&#117;&#x74;&#x75;&#114;&#101;&#46;&#99;&#111;&#109;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x75;&#x69;&#x66;&#x75;&#x74;&#x75;&#x72;&#101;&#x40;&#117;&#x69;&#102;&#x75;&#x74;&#117;&#114;&#101;&#x2e;&#x63;&#111;&#109;">&#x75;&#x69;&#x66;&#x75;&#116;&#117;&#114;&#x65;&#x40;&#117;&#105;&#102;&#x75;&#x74;&#117;&#x72;&#101;&#x2e;&#x63;&#111;&#x6d;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -173,7 +173,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#x75;&#x69;&#x66;&#117;&#116;&#x75;&#114;&#101;&#x40;&#117;&#105;&#x66;&#117;&#116;&#117;&#114;&#x65;&#x2e;&#x63;&#111;&#x6d;">&#117;&#x69;&#x66;&#x75;&#116;&#x75;&#x72;&#x65;&#x40;&#x75;&#x69;&#x66;&#117;&#116;&#x75;&#114;&#x65;&#46;&#99;&#x6f;&#109;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#58;&#x75;&#x69;&#x66;&#117;&#x74;&#x75;&#x72;&#x65;&#64;&#117;&#x69;&#x66;&#x75;&#116;&#117;&#x72;&#101;&#x2e;&#99;&#111;&#x6d;">&#x75;&#105;&#102;&#117;&#x74;&#117;&#x72;&#101;&#x40;&#x75;&#x69;&#x66;&#x75;&#116;&#x75;&#114;&#101;&#46;&#99;&#111;&#109;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -206,6 +206,109 @@ GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogE
 
 
 <p>如果无法访问，请翻墙哦</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【问题解决】MyBatis分页查询SQL Server2008时出现'@P0' 附近有语法错误]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/07/04/MyBatis-SQL-Server2008-show-p0-error/"/>
+    <updated>2017-07-04T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/07/04/MyBatis-SQL-Server2008-show-p0-error</id>
+    <content type="html"><![CDATA[<p>MyBatis分页查询SQL Server2008时出现'@P0' 附近有语法错误"<br/>
+Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>错误如下:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>org.springframework.jdbc.UncategorizedSQLException: 
+</span><span class='line'>### Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: '@P0' 附近有语法错误。
+</span><span class='line'>### The error may exist in file [E:\Client\KaiXinHuYu\target\classes\cn\kx59\user\mapping\AccountsInfoMapper.xml]
+</span><span class='line'>### The error may involve cn.kx59.user.dao.AccountsInfoMapper.selectPageData-Inline
+</span><span class='line'>### The error occurred while setting parameters
+</span><span class='line'>### SQL: select top ?       UserID, GameID, ProtectID, PasswordID, SpreaderID, Accounts, NickName, RegAccounts,      UnderWrite, PassPortID, Compellation, LogonPass, InsurePass, FaceID, CustomID, Present,      UserMedal, Experience, LoveLiness, UserRight, MasterRight, ServiceRight, MasterOrder,      MemberOrder, MemberOverDate, MemberSwitchDate, CustomFaceVer, Gender, Nullity, NullityOverDate,      StunDown, MoorMachine, IsAndroid, WebLogonTimes, GameLogonTimes, PlayTimeCount, OnLineTimeCount,      LastLogonIP, LastLogonDate, LastLogonMobile, LastLogonMachine, RegisterIP, RegisterDate,      RegisterMobile, RegisterMachine     from AccountsInfo where UserID not in(select top ? UserID from AccountsInfo)
+</span><span class='line'>### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: '@P0' 附近有语法错误。
+</span><span class='line'>; uncategorized SQLException for SQL []; SQL state [S0001]; error code [102]; '@P0' 附近有语法错误。; nested exception is com.microsoft.sqlserver.jdbc.SQLServerException: '@P0' 附近有语法错误。
+</span><span class='line'>
+</span><span class='line'>  at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:84)
+</span><span class='line'>  at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
+</span><span class='line'>  at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
+</span><span class='line'>  at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+</span><span class='line'>  at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:371)
+</span><span class='line'>  at $Proxy24.selectList(Unknown Source)
+</span><span class='line'>  at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:198)
+</span><span class='line'>  at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:122)
+</span><span class='line'>  at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:64)
+</span><span class='line'>  at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:53)
+</span><span class='line'>  at $Proxy25.selectPageData(Unknown Source)
+</span><span class='line'>  at cn.kx59.user.service.imp.AccountsInfoServiceImp.selectPageData(AccountsInfoServiceImp.java:33)
+</span><span class='line'>  at cn.kx59.user.service.imp.AccountsInfoServiceImp$$FastClassBySpringCGLIB$$f0736e8f.invoke(&lt;generated&gt;)
+</span><span class='line'>  at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+</span><span class='line'>  at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:718)
+</span><span class='line'>  at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+</span><span class='line'>  at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:52)
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
+
+
+<p>出错代码的MyBatis中查询语句为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  &lt;!--分页查询--&gt;
+</span><span class='line'>  &lt;select id="selectPageData" resultMap="BaseResultMap" parameterType="java.lang.Integer"&gt;
+</span><span class='line'>    select top #{pageSize} &lt;include refid="Base_Column_List" /&gt; from AccountsInfo where UserID not in(select top #{startN} UserID from AccountsInfo)
+</span><span class='line'>  &lt;/select&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其实这是因为top后面不能跟占位符'？'号的原因，可以看调试的sql语句，mybatis为了防止注入，会先使用?号占位符。</p>
+
+<p>错误解释如下(此句参考网上<a href="http://blog.csdn.net/SUN_song520/article/details/50482178%E8%A7%A3%E9%87%8A">http://blog.csdn.net/SUN_song520/article/details/50482178%E8%A7%A3%E9%87%8A</a>)：<br/>
+在Java中对数据库查询时经常使用“Select Top ？ * From 表名 Where 列名 = ？”的SQL语句，此时的问号是PreparedStatement预编译对象的参数占位符，需要使用setXX()系列方法对其赋值后再执行。但是，Top后面是不允许使用问号占位符的，此处的错误就是由此引起的。</p>
+
+<p>解决方法:<br/>
+使用$代替#，使用#传入参数是，sql语句解析是会加上"&ldquo;,当成字符串来解析，会加入占位符?，再使用setXX()方法后赋值再执行，#{}传参能防止sql注入。<br/>
+而${}这种方式 是直接传值！在这里无法使用占位符的情况下，可以使用$，但是自己写好防范哦，以免被注入了</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>

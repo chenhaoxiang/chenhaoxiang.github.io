@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>【Cocos2d-x】开发基础-Cocos2d-x核心概念 - 谙忆-人生之旅</title>
+  <title>【问题解决】MyBatis分页查询SQL Server2008时出现'@P0' 附近有语法错误 - 谙忆-人生之旅</title>
 
   <meta name="author" content="陈浩翔">
 
   
-  <meta name="description" content="Cocos2d-x的核心概念 导演 场景 层 精灵 菜单">
+  <meta name="description" content="MyBatis分页查询SQL Server2008时出现'@P0' 附近有语法错误"">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/06/10/core-concept/">
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/07/04/MyBatis-SQL-Server2008-show-p0-error/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">【Cocos2d-x】开发基础-Cocos2d-x核心概念</h1>
+      <h1 class="entry-title">【问题解决】MyBatis分页查询SQL Server2008时出现'@P0' 附近有语法错误</h1>
     
     
       <p class="meta">
@@ -79,89 +79,99 @@
 
 
 
-2017年06月10日
+2017年07月04日
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>本篇博客讲解:<br/>
-1.Cocos2d-x的核心概念</p>
+<div class="entry-content"><p>MyBatis分页查询SQL Server2008时出现'@P0' 附近有语法错误"<br/>
+Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。</p>
 
 <!-- more -->
 
 
 <hr />
 
-<h1>导演</h1>
+<p>错误如下:</p>
 
-<p>导演类Director(v3.0之前是CCDirector)用于管理场景对象。<br/>
-(所以3.0版本和以前的最大区别(我们看到的最大区别)就是类前面的CC，3.0版本是把所以的类前缀CC都去掉了)</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>org.springframework.jdbc.UncategorizedSQLException: 
+</span><span class='line'>### Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: '@P0' 附近有语法错误。
+</span><span class='line'>### The error may exist in file [E:\Client\KaiXinHuYu\target\classes\cn\kx59\user\mapping\AccountsInfoMapper.xml]
+</span><span class='line'>### The error may involve cn.kx59.user.dao.AccountsInfoMapper.selectPageData-Inline
+</span><span class='line'>### The error occurred while setting parameters
+</span><span class='line'>### SQL: select top ?       UserID, GameID, ProtectID, PasswordID, SpreaderID, Accounts, NickName, RegAccounts,      UnderWrite, PassPortID, Compellation, LogonPass, InsurePass, FaceID, CustomID, Present,      UserMedal, Experience, LoveLiness, UserRight, MasterRight, ServiceRight, MasterOrder,      MemberOrder, MemberOverDate, MemberSwitchDate, CustomFaceVer, Gender, Nullity, NullityOverDate,      StunDown, MoorMachine, IsAndroid, WebLogonTimes, GameLogonTimes, PlayTimeCount, OnLineTimeCount,      LastLogonIP, LastLogonDate, LastLogonMobile, LastLogonMachine, RegisterIP, RegisterDate,      RegisterMobile, RegisterMachine     from AccountsInfo where UserID not in(select top ? UserID from AccountsInfo)
+</span><span class='line'>### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: '@P0' 附近有语法错误。
+</span><span class='line'>; uncategorized SQLException for SQL []; SQL state [S0001]; error code [102]; '@P0' 附近有语法错误。; nested exception is com.microsoft.sqlserver.jdbc.SQLServerException: '@P0' 附近有语法错误。
+</span><span class='line'>
+</span><span class='line'>  at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:84)
+</span><span class='line'>  at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
+</span><span class='line'>  at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
+</span><span class='line'>  at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+</span><span class='line'>  at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:371)
+</span><span class='line'>  at $Proxy24.selectList(Unknown Source)
+</span><span class='line'>  at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:198)
+</span><span class='line'>  at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:122)
+</span><span class='line'>  at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:64)
+</span><span class='line'>  at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:53)
+</span><span class='line'>  at $Proxy25.selectPageData(Unknown Source)
+</span><span class='line'>  at cn.kx59.user.service.imp.AccountsInfoServiceImp.selectPageData(AccountsInfoServiceImp.java:33)
+</span><span class='line'>  at cn.kx59.user.service.imp.AccountsInfoServiceImp$$FastClassBySpringCGLIB$$f0736e8f.invoke(&lt;generated&gt;)
+</span><span class='line'>  at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+</span><span class='line'>  at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:718)
+</span><span class='line'>  at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+</span><span class='line'>  at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:52)
+</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
 
-<p>采用单例设计模式！(不多解释啦，不知道的朋友请搜索)</p>
 
-<figure class='code'><figcaption><span>获得导演类Director实例语句</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">auto</span> <span class="n">director</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span><span class="c1">//获取唯一的导演  单例模式</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>出错代码的MyBatis中查询语句为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  &lt;!--分页查询--&gt;
+</span><span class='line'>  &lt;select id="selectPageData" resultMap="BaseResultMap" parameterType="java.lang.Integer"&gt;
+</span><span class='line'>    select top #{pageSize} &lt;include refid="Base_Column_List" /&gt; from AccountsInfo where UserID not in(select top #{startN} UserID from AccountsInfo)
+</span><span class='line'>  &lt;/select&gt;</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>导演对象的职责/作用</h2>
+<p>其实这是因为top后面不能跟占位符'？'号的原因，可以看调试的sql语句，mybatis为了防止注入，会先使用?号占位符。</p>
 
-<p>访问和改变场景<br/>
-访问Cocos2d-x的配置信息<br/>
-暂停、继续和停止游戏<br/>
-转换坐标</p>
+<p>错误解释如下(此句参考网上<a href="http://blog.csdn.net/SUN_song520/article/details/50482178%E8%A7%A3%E9%87%8A">http://blog.csdn.net/SUN_song520/article/details/50482178%E8%A7%A3%E9%87%8A</a>)：<br/>
+在Java中对数据库查询时经常使用“Select Top ？ * From 表名 Where 列名 = ？”的SQL语句，此时的问号是PreparedStatement预编译对象的参数占位符，需要使用setXX()系列方法对其赋值后再执行。但是，Top后面是不允许使用问号占位符的，此处的错误就是由此引起的。</p>
 
-<p>上面只是导演对象的职责其中一部分，还有其他很多，但我们不需要让导演做很多事情(其他的事被隐藏了)，我们用的最多的应该就是访问和改变场景、暂停、继续和停止游戏和转换坐标</p>
-
-<h1>场景</h1>
-
-<p>场景类Scene(v3.0之前是CCScene)是构成游戏的界面，类似于电影中的场景。</p>
-
-<p>像导演、场景、包括层，精灵等这些游戏的概念，其实都是从电影行业中过渡过来的。<br/>
-那么，电影行业，我们知道有场景，有导演。<br/>
-场景就是我们拍这场戏，我们布置的景  比如打斗的场景等<br/>
-场景中会有男主角，女主角，那么男女主角就相当于我们这里的精灵了，包括道具什么的(精灵)，这些东西在一起，就构成了层</p>
-
-<p>所以场景里面也会放一些层</p>
-
-<h2>场景大致可以分为以下几类</h2>
-
-<p>展示类场景。播放视频或简单的在图像上输出文字，来实现游戏的开场介绍、胜利和失败提示、帮助介绍<br/>
-选项类场景。主菜单，设置游戏参数等(比如开始，暂停，继续菜单)<br/>
-游戏场景。这是游戏的主要内容</p>
-
-<p>Scene类图:继承图
-<img src="http://i.imgur.com/2S6h9PZ.png" alt="" /></p>
-
-<h1>层</h1>
-
-<p>层是我们写游戏的重点，我们大约99%以上的时间是在层上实现我们游戏内容。<br/>
-层的管理类似于Photoshop中的图层，它也是一层一层叠在一起</p>
-
-<p>我们一般写的很多类都是层，然后在层上面添加精灵等.然后把层放到场景里<br/>
-场景包含层，层包含精灵,菜单等对象</p>
-
-<p>理论上来说，层的层数越多(层与层之间有覆盖的问题，后面的层会覆盖先绘制的层)，需要绘制的深度越深，越耗CPU<br/>
-大家可以打开Photoshop，用里面的图层来理解，这样更加直观<br/>
-<img src="http://i.imgur.com/4XUGFsE.png" alt="" /></p>
-
-<h1>精灵</h1>
-
-<p>精灵类Sprite(v3.0之前是CCSprite)是游戏中非常重要的概念，它包括了敌人、玩家控制的对象、静态物体、地图和背景等<br/>
-通常情况它会进行运动，运动方式包括了：移动、旋转、放大、缩小和动画等</p>
-
-<h1>菜单</h1>
-
-<p>菜单在游戏中时非常重要的概念，它提供操作的集合，在Cococ2d-x中菜单类是Menu</p>
-
-<p>Menu中包含菜单项<br/>
-MenuItem，它有三个子类：<br/>
-MenuItemLabel、MenuItemSprite和MenuItemToggle</p>
-
-<p>之前的HelloWord中的关闭按钮其实就是一个菜单项<br/>
-我们也可以用精灵来实现，但是菜单项封装了一些触摸事件，你不需要关心它事件处理的细节问题</p>
+<p>解决方法:<br/>
+使用$代替#，使用#传入参数是，sql语句解析是会加上"&ldquo;,当成字符串来解析，会加入占位符?，再使用setXX()方法后赋值再执行，#{}传参能防止sql注入。<br/>
+而${}这种方式 是直接传值！在这里无法使用占位符的情况下，可以使用$，但是自己写好防范哦，以免被注入了</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
@@ -186,12 +196,12 @@ MenuItemLabel、MenuItemSprite和MenuItemToggle</p>
 
 
 
-2017年06月10日
+2017年07月04日
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/cocos2d-x/'>cocos2d-x</a>
+    <a class='category' href='/blog/categories/java/'>java</a>
   
 </span>
 
@@ -204,7 +214,7 @@ MenuItemLabel、MenuItemSprite和MenuItemToggle</p>
   
 
 	﻿
-<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/06/10/core-concept" style="margin-bottom: 10px; text-align: center;"></div>
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/07/04/MyBatis-SQL-Server2008-show-p0-error" style="margin-bottom: 10px; text-align: center;"></div>
 
 <!-- JiaThis Button BEGIN -->
 <div class="jiathis_style_24x24" style="float: right;">
@@ -226,7 +236,7 @@ var jiathis_config = {data_track_clickback:'true'};
 	
 		﻿<!--PC版-->
 
-<div id="SOHUCS" sid="/blog/2017/06/10/core-concept"></div>
+<div id="SOHUCS" sid="/blog/2017/07/04/MyBatis-SQL-Server2008-show-p0-error"></div>
 <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
 <script type="text/javascript">
 window.changyan.api.config({
@@ -244,10 +254,10 @@ conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2017/06/07/cocos2dx-hello/" title="Previous Post: 【Cocos2d-x】开发基础-第一个Cocos2d-x游戏">&laquo; 【Cocos2d-x】开发基础-第一个Cocos2d-x游戏</a>
+        <a class="basic-alignment left" href="/blog/2017/07/01/Cococs2d-x-MenuItem/" title="Previous Post: 【Cocos2d-x】开发实战-Cococs2d-x中的菜单">&laquo; 【Cocos2d-x】开发实战-Cococs2d-x中的菜单</a>
       
       
-        <a class="basic-alignment right" href="/blog/2017/06/11/node-hierarchical-structure/" title="Next Post: 【Cocos2d-x】开发基础-Node与Node层级架构">【Cocos2d-x】开发基础-Node与Node层级架构 &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2017/07/28/CSDNBlogExport/" title="Next Post: 【小工具】CSDN博客导出工具-Java集成Maven开发">【小工具】CSDN博客导出工具-Java集成Maven开发 &raquo;</a>
       
     </p>
   </footer>
