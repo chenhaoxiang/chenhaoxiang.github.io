@@ -75,7 +75,7 @@ echo 'www.chenhaoxiang.cn' >> source/CNAME
 侧边栏:
 \source\_includes\asides
 友情链接:
-blog_link.html
+octopress\source\_includes\asides\blog_link.html
 
 
 
