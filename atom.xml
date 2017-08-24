@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-24T10:53:41+08:00</updated>
+  <updated>2017-08-24T13:29:13+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -104,6 +104,159 @@ Spring团队的建议是你在具体的类（或类的方法）上使用 @Transa
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[【问题解决】Mybatis一对多/多对多查询时只查出了一条数据]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/08/08/mybatis-multilevel-query-question/"/>
+    <updated>2017-08-08T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/08/08/mybatis-multilevel-query-question</id>
+    <content type="html"><![CDATA[<p>问题描述:
+如果三表(包括了关系表)级联查询，主表和明细表的主键都是id的话，明细表的多条数据只能查询出来第一条/最后一条数据。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>三个表，权限表(Permission)，权限组表(PermissionGroup)，权限组与权限的关系表(PermissionPermissionGroupKey)</p>
+
+<p>实体类就不写上来了。</p>
+
+<p>原出错映射文件:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;cn.kx59.admin.entity.PermissionGroup&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- 一个权限组 对应多个权限--&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&quot;permissionArrayList&quot;</span> <span class="na">ofType=</span><span class="s">&quot;cn.kx59.admin.entity.Permission&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;url&quot;</span> <span class="na">property=</span><span class="s">&quot;url&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;explain&quot;</span> <span class="na">property=</span><span class="s">&quot;explain&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/collection&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/resultMap&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c">&lt;!--查询所有的权限组以及权限组包含的权限--&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAllPermissionGroupAndPermission&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>        SELECT *
+</span><span class='line'>  FROM [QPWebDB].[dbo].[permission_group] pg
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission] p on p.permission_id=ppg.permission_id
+</span><span class='line'>  <span class="nt">&lt;/select&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这是因为主表和明细表的id字段名相同造成的。<br/>
+问题的关键在于resultMap中如果不定义类似主键之类的能够区分每一条结果集的字段的话，会引起后面一条数据覆盖前面一条数据的现象。</p>
+
+<p>解决方法一：<br/>
+修改主表或者明细表的id名，保证不一致就行</p>
+
+<p>解决方法二：<br/>
+查询结果起别名 <br/>
+修改映射文件如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;cn.kx59.admin.entity.PermissionGroup&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- 一个权限组 对应多个权限--&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&quot;permissionArrayList&quot;</span> <span class="na">ofType=</span><span class="s">&quot;cn.kx59.admin.entity.Permission&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;p_id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;url&quot;</span> <span class="na">property=</span><span class="s">&quot;url&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;explain&quot;</span> <span class="na">property=</span><span class="s">&quot;explain&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/collection&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/resultMap&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c">&lt;!--查询所有的权限组以及权限组包含的权限--&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAllPermissionGroupAndPermission&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>        SELECT pg.*,
+</span><span class='line'>  p.id p_id,
+</span><span class='line'>  p.url,
+</span><span class='line'>  p.name,
+</span><span class='line'>  p.explain,
+</span><span class='line'>  p.decipher,
+</span><span class='line'>  p.create_time
+</span><span class='line'>  FROM [QPWebDB].[dbo].[permission_group] pg
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission] p on p.id=ppg.permission_id
+</span><span class='line'>  <span class="nt">&lt;/select&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如上两种方法均能解决这个问题，希望对你有帮助 <br/>
+有知道出现这个问题的原理的大佬欢迎在评论区解释下，O(∩_∩)O谢谢</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[【小工具】CSDN博客导出工具-Java集成Maven开发]]></title>
     <link href="http://chenhaoxiang.github.io/blog/2017/07/28/CSDNBlogExport/"/>
     <updated>2017-07-28T13:38:54+08:00</updated>
@@ -155,7 +308,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x75;&#105;&#x66;&#x75;&#116;&#117;&#114;&#x65;&#64;&#117;&#105;&#102;&#x75;&#116;&#117;&#114;&#101;&#x2e;&#99;&#111;&#x6d;">&#x75;&#x69;&#102;&#x75;&#116;&#x75;&#x72;&#101;&#64;&#117;&#105;&#x66;&#x75;&#x74;&#117;&#x72;&#101;&#46;&#x63;&#x6f;&#x6d;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x75;&#105;&#102;&#117;&#x74;&#x75;&#x72;&#101;&#64;&#x75;&#105;&#x66;&#x75;&#x74;&#117;&#x72;&#101;&#x2e;&#99;&#x6f;&#109;">&#117;&#x69;&#x66;&#117;&#x74;&#x75;&#114;&#x65;&#64;&#117;&#x69;&#x66;&#117;&#116;&#x75;&#114;&#x65;&#x2e;&#99;&#111;&#x6d;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -173,7 +326,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#117;&#x69;&#102;&#117;&#116;&#x75;&#x72;&#101;&#x40;&#x75;&#x69;&#102;&#117;&#116;&#117;&#114;&#101;&#46;&#x63;&#111;&#x6d;">&#117;&#105;&#102;&#x75;&#116;&#x75;&#x72;&#x65;&#x40;&#x75;&#105;&#102;&#117;&#116;&#x75;&#114;&#x65;&#x2e;&#99;&#111;&#x6d;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x75;&#105;&#102;&#x75;&#x74;&#117;&#114;&#101;&#x40;&#117;&#105;&#102;&#x75;&#116;&#x75;&#x72;&#x65;&#46;&#x63;&#x6f;&#109;">&#117;&#x69;&#x66;&#x75;&#x74;&#x75;&#114;&#x65;&#x40;&#x75;&#105;&#x66;&#x75;&#x74;&#x75;&#114;&#x65;&#46;&#99;&#111;&#x6d;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -7229,25 +7382,6 @@ Java是单继承语言，也就是一个类只能有一个父类！<br/>
 本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
 </blockquote>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hello]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/08/hello/"/>
-    <updated>2017-05-08T13:17:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/08/hello</id>
-    <content type="html"><![CDATA[<h1>浏览博客请移步我的CSDN</h1>
-
-<p>现在因事情比较多，博客还在CSDN尚未搬过来。
-今天有点时间，花费了一下午弄了下这个博客。
-等哪天有时间了，受朋友的启发(他用Python写了个CSDN的博客导出工具)
-，打算用Java写个CSDN的博客导出工具。</p>
-
-<!--more-->
-
-
-<p>CSDN网址在友情链接！</p>
 ]]></content>
   </entry>
   

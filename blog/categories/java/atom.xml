@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-24T10:53:41+08:00</updated>
+  <updated>2017-08-24T13:29:13+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -87,6 +87,155 @@ Spring团队的建议是你在具体的类（或类的方法）上使用 @Transa
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[【问题解决】Mybatis一对多/多对多查询时只查出了一条数据]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/08/08/mybatis-multilevel-query-question/"/>
+    <updated>2017-08-08T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/08/08/mybatis-multilevel-query-question</id>
+    <content type="html"><![CDATA[<p>问题描述:
+如果三表(包括了关系表)级联查询，主表和明细表的主键都是id的话，明细表的多条数据只能查询出来第一条/最后一条数据。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>三个表，权限表(Permission)，权限组表(PermissionGroup)，权限组与权限的关系表(PermissionPermissionGroupKey)</p>
+
+<p>实体类就不写上来了。</p>
+
+<p>原出错映射文件:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;cn.kx59.admin.entity.PermissionGroup&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- 一个权限组 对应多个权限--&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&quot;permissionArrayList&quot;</span> <span class="na">ofType=</span><span class="s">&quot;cn.kx59.admin.entity.Permission&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;url&quot;</span> <span class="na">property=</span><span class="s">&quot;url&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;explain&quot;</span> <span class="na">property=</span><span class="s">&quot;explain&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/collection&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/resultMap&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>  <span class="c">&lt;!--查询所有的权限组以及权限组包含的权限--&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAllPermissionGroupAndPermission&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>        SELECT *
+</span><span class='line'>  FROM [QPWebDB].[dbo].[permission_group] pg
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission] p on p.permission_id=ppg.permission_id
+</span><span class='line'>  <span class="nt">&lt;/select&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>这是因为主表和明细表的id字段名相同造成的。<br/>
+问题的关键在于resultMap中如果不定义类似主键之类的能够区分每一条结果集的字段的话，会引起后面一条数据覆盖前面一条数据的现象。</p>
+
+<p>解决方法一：<br/>
+修改主表或者明细表的id名，保证不一致就行</p>
+
+<p>解决方法二：<br/>
+查询结果起别名 <br/>
+修改映射文件如下：<br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;cn.kx59.admin.entity.PermissionGroup&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- 一个权限组 对应多个权限--&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&quot;permissionArrayList&quot;</span> <span class="na">ofType=</span><span class="s">&quot;cn.kx59.admin.entity.Permission&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;p_id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;url&quot;</span> <span class="na">property=</span><span class="s">&quot;url&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;explain&quot;</span> <span class="na">property=</span><span class="s">&quot;explain&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/collection&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/resultMap&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>  <span class="c">&lt;!--查询所有的权限组以及权限组包含的权限--&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAllPermissionGroupAndPermission&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="nt">&gt;</span>
+</span><span class='line'>        SELECT pg.*,
+</span><span class='line'>  p.id p_id,
+</span><span class='line'>  p.url,
+</span><span class='line'>  p.name,
+</span><span class='line'>  p.explain,
+</span><span class='line'>  p.decipher,
+</span><span class='line'>  p.create_time
+</span><span class='line'>  FROM [QPWebDB].[dbo].[permission_group] pg
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
+</span><span class='line'>  left join [QPWebDB].[dbo].[permission] p on p.id=ppg.permission_id
+</span><span class='line'>  <span class="nt">&lt;/select&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>如上两种方法均能解决这个问题，希望对你有帮助 <br/>
+有知道出现这个问题的原理的大佬欢迎在评论区解释下，O(∩_∩)O谢谢</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[【小工具】CSDN博客导出工具-Java集成Maven开发]]></title>
     <link href="http://chenhaoxiang.github.io/blog/2017/07/28/CSDNBlogExport/"/>
     <updated>2017-07-28T13:38:54+08:00</updated>
@@ -138,7 +287,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#x3a;&#x75;&#105;&#x66;&#x75;&#x74;&#117;&#x72;&#101;&#64;&#117;&#x69;&#102;&#117;&#116;&#x75;&#114;&#101;&#46;&#x63;&#x6f;&#109;">&#117;&#105;&#102;&#117;&#116;&#117;&#114;&#101;&#64;&#x75;&#x69;&#102;&#117;&#x74;&#117;&#114;&#x65;&#46;&#99;&#111;&#x6d;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x75;&#105;&#x66;&#x75;&#x74;&#x75;&#114;&#101;&#64;&#117;&#x69;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#x2e;&#x63;&#x6f;&#109;">&#117;&#x69;&#x66;&#x75;&#x74;&#x75;&#114;&#x65;&#64;&#x75;&#105;&#x66;&#117;&#x74;&#x75;&#114;&#101;&#46;&#x63;&#x6f;&#109;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -156,7 +305,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x75;&#x69;&#102;&#x75;&#x74;&#117;&#x72;&#101;&#x40;&#117;&#105;&#102;&#x75;&#x74;&#117;&#x72;&#x65;&#46;&#99;&#111;&#109;">&#x75;&#105;&#102;&#117;&#x74;&#x75;&#x72;&#101;&#64;&#x75;&#x69;&#102;&#x75;&#116;&#117;&#x72;&#101;&#x2e;&#x63;&#x6f;&#109;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#117;&#x69;&#102;&#117;&#116;&#x75;&#x72;&#x65;&#x40;&#x75;&#x69;&#102;&#117;&#116;&#117;&#x72;&#101;&#x2e;&#x63;&#x6f;&#x6d;">&#117;&#105;&#102;&#117;&#116;&#x75;&#x72;&#101;&#64;&#117;&#105;&#102;&#117;&#x74;&#117;&#x72;&#101;&#46;&#99;&#111;&#x6d;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -215,7 +364,7 @@ Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException
 <hr />
 
 <p>错误如下:
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -251,23 +400,23 @@ Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException
 <span class='line-number'>34</span>
 <span class='line-number'>35</span>
 <span class='line-number'>36</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>org.springframework.jdbc.UncategorizedSQLException:&lt;/p&gt;
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>org.springframework.jdbc.UncategorizedSQLException:<span class="nt">&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。&lt;/h3&gt;
+</span><span class='line'><span class="nt">&lt;h3&gt;</span>Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。<span class="nt">&lt;/h3&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;The error may exist in file [E:\Client\KaiXinHuYu\target\classes\cn\kx59\user\mapping\AccountsInfoMapper.xml]&lt;/h3&gt;
+</span><span class='line'><span class="nt">&lt;h3&gt;</span>The error may exist in file [E:\Client\KaiXinHuYu\target\classes\cn\kx59\user\mapping\AccountsInfoMapper.xml]<span class="nt">&lt;/h3&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;The error may involve cn.kx59.user.dao.AccountsInfoMapper.selectPageData-Inline&lt;/h3&gt;
+</span><span class='line'><span class="nt">&lt;h3&gt;</span>The error may involve cn.kx59.user.dao.AccountsInfoMapper.selectPageData-Inline<span class="nt">&lt;/h3&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;The error occurred while setting parameters&lt;/h3&gt;
+</span><span class='line'><span class="nt">&lt;h3&gt;</span>The error occurred while setting parameters<span class="nt">&lt;/h3&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;SQL: select top ?       UserID, GameID, ProtectID, PasswordID, SpreaderID, Accounts, NickName, RegAccounts,      UnderWrite, PassPortID, Compellation, LogonPass, InsurePass, FaceID, CustomID, Present,      UserMedal, Experience, LoveLiness, UserRight, MasterRight, ServiceRight, MasterOrder,      MemberOrder, MemberOverDate, MemberSwitchDate, CustomFaceVer, Gender, Nullity, NullityOverDate,      StunDown, MoorMachine, IsAndroid, WebLogonTimes, GameLogonTimes, PlayTimeCount, OnLineTimeCount,      LastLogonIP, LastLogonDate, LastLogonMobile, LastLogonMachine, RegisterIP, RegisterDate,      RegisterMobile, RegisterMachine     from AccountsInfo where UserID not in(select top ? UserID from AccountsInfo)&lt;/h3&gt;
+</span><span class='line'><span class="nt">&lt;h3&gt;</span>SQL: select top ?       UserID, GameID, ProtectID, PasswordID, SpreaderID, Accounts, NickName, RegAccounts,      UnderWrite, PassPortID, Compellation, LogonPass, InsurePass, FaceID, CustomID, Present,      UserMedal, Experience, LoveLiness, UserRight, MasterRight, ServiceRight, MasterOrder,      MemberOrder, MemberOverDate, MemberSwitchDate, CustomFaceVer, Gender, Nullity, NullityOverDate,      StunDown, MoorMachine, IsAndroid, WebLogonTimes, GameLogonTimes, PlayTimeCount, OnLineTimeCount,      LastLogonIP, LastLogonDate, LastLogonMobile, LastLogonMachine, RegisterIP, RegisterDate,      RegisterMobile, RegisterMachine     from AccountsInfo where UserID not in(select top ? UserID from AccountsInfo)<span class="nt">&lt;/h3&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;Cause: com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。&lt;/h3&gt;
+</span><span class='line'><span class="nt">&lt;h3&gt;</span>Cause: com.microsoft.sqlserver.jdbc.SQLServerException: <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。<span class="nt">&lt;/h3&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;; uncategorized SQLException for SQL []; SQL state [S0001]; error code [102]; &lsquo;@P0&rsquo; 附近有语法错误。; nested exception is com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。&lt;/p&gt;
+</span><span class='line'><span class="nt">&lt;p&gt;</span>; uncategorized SQLException for SQL []; SQL state [S0001]; error code [102]; <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。; nested exception is com.microsoft.sqlserver.jdbc.SQLServerException: <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。<span class="nt">&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:84)
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span>at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:84)
 </span><span class='line'>at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
 </span><span class='line'>at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
 </span><span class='line'>at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
@@ -279,14 +428,15 @@ Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException
 </span><span class='line'>at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:53)
 </span><span class='line'>at $Proxy25.selectPageData(Unknown Source)
 </span><span class='line'>at cn.kx59.user.service.imp.AccountsInfoServiceImp.selectPageData(AccountsInfoServiceImp.java:33)
-</span><span class='line'>at cn.kx59.user.service.imp.AccountsInfoServiceImp$$FastClassBySpringCGLIB$$f0736e8f.invoke(&lt;generated&gt;)
+</span><span class='line'>at cn.kx59.user.service.imp.AccountsInfoServiceImp$$FastClassBySpringCGLIB$$f0736e8f.invoke(<span class="ni">&amp;lt;</span>generated<span class="ni">&amp;gt;</span>)
 </span><span class='line'>at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
 </span><span class='line'>at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:718)
 </span><span class='line'>at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
 </span><span class='line'>at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:52)
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;&hellip;</span></code></pre></td></tr></table></div></figure></p>
+</span><span class='line'><span class="nt">&lt;p&gt;</span><span class="ni">&amp;hellip;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>出错代码的MyBatis中查询语句为：
 <code>
@@ -1576,353 +1726,6 @@ public class RedisHandle implements RedisCommand&lt;String, Object&gt; {
 <p>这个是我当时写一个Web项目的时候，慢慢整合而成的，比较完整的Redis操作工具类，基本上可以满足你操纵Redis的绝大多数需要了。</p>
 
 <p>因为不是个什么完整的项目，就没有上传到github上为大家提供这几个代码的下载了，只能麻烦需要的朋友直接拷贝下了。</p>
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【设计模式】Java设计模式之模板方法模式]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/14/study-in-imooc/"/>
-    <updated>2017-05-14T22:18:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/14/study-in-imooc</id>
-    <content type="html"><![CDATA[<p>我们先这样来想象一个生活中的场景，<br/>
-就是我们在银行柜台进行办理业务的时候，会进行这几步:<br/>
-Step1:进门取号<br/>
-Step2:填写单据<br/>
-Step3:等待叫号<br/>
-Step4:窗口办理</p>
-
-<p>在这里，无论是你我还是他/她，都会遵循这个模板进行业务的办理！
-我们具体看Step2，银行是无法知道我们的信息的，所以无法由银行具体实现了，所以留下接口，需要我们自己去实现。<br/>
-现在我们再继续看下去</p>
-
-<!-- more -->
-
-
-<hr />
-
-<h2>什么是模板方法</h2>
-
-<p>模板方法模式是类的行为模式。准备一个抽象类，将部分逻辑以具体方法以及具体构造函数的形式实现，然后声明一些抽象方法来迫使子类实现剩余的逻辑。不同的子类可以以不同的方式实现这些抽象方法，从而对剩余的逻辑有不同的实现。这就是模板方法模式的用意。
-比如定义一个操作中的算法的骨架，将步骤延迟到子类中。模板方法使得子类能够不去改变一个算法的结构即可重定义算法的某些特定步骤。</p>
-
-<p>前面那个例子可以这样用图来描述：</p>
-
-<p><img src="/images/20170514/222935.png"></p>
-
-<p>简单明了，就是Step2自己去具体实现。</p>
-
-<hr />
-
-<h1>模板方法模式的代码实现</h1>
-
-<h2>具体子类实现延迟步骤</h2>
-
-<pre><code class="java 抽象基类 为所有子类提供一个算法框架">
-package com.chenhaoxiang.template;
-
-/**
- * 抽象基类 为所有子类提供一个算法框架
- * 
- * 提神饮料
- * 
- * @author chenhaoxiang
- *
- */
-public abstract class RefreshBeverage {
-    /**
-     * final阻止子类对方法的复写 制备饮料的模板方法 封装了所有子类共同遵循的算法框架
-     */
-    public final void prepareBeverageTemplate() {
-        // 步骤1:将水煮沸
-        boilWater();
-        // 步骤2:泡制饮料
-        brew();
-        // 步骤3:将饮料倒入杯中
-        pourInCup();
-        // 步骤4: 加入调味料
-        addCondiments();
-    }
-
-    /**
-     * 基本方法:将水煮沸
-     */
-    private void boilWater() {
-        System.out.println("将水煮沸");
-    }
-
-
-    /**
-     * 抽象的基本方法
-     * 泡制饮料
-     * 注意访问权限为protected
-     */
-    protected abstract void brew();
-
-    /**
-     * 通用方法
-     * 将饮料倒入杯中
-     */
-    private void pourInCup() {
-        System.out.println("将饮料倒入杯子中");
-    }
-    /**
-     * 抽象的基本方法
-     * 加入调味料
-     */
-    protected abstract void addCondiments();
-
-}
-</code></pre>
-
-<pre><code class="java 具体子类,提供了咖啡制备的具体实现">
-package com.chenhaoxiang.template;
-
-/**
- * 具体子类
- * 提供了咖啡制备的具体实现
- * 
- * @author chenhaoxiang
- *
- */
-public class Coffee extends RefreshBeverage{
-
-    @Override
-    protected void brew() {
-        System.out.println("冲泡咖啡...");
-    }
-
-    @Override
-    protected void addCondiments() {
-        System.out.println("加入咖啡调料...");
-    }
-
-}
-</code></pre>
-
-<pre><code class="java 具体子类,提供了制备茶的具体实现">package com.chenhaoxiang.template;
-
-/**
- * 具体子类
- * 提供了制备茶的具体实现
- * @author chenhaoxiang
- *
- */
-public class Tea extends RefreshBeverage{
-
-    @Override
-    protected void brew() {
-        System.out.println("用80度的热水浸泡茶叶5分钟...");
-    }
-
-    @Override
-    protected void addCondiments() {
-        System.out.println("茶也要调味品？反正我不加.");
-    }
-
-}
-</code></pre>
-
-<pre><code class="java 测试类">
-package com.chenhaoxiang.template;
-
-public class RefreshBeverageTest {
-
-    public static void main(String[] args) {
-
-        System.out.println("制备咖啡...");
-
-        RefreshBeverage beverage = new Coffee();
-        beverage.prepareBeverageTemplate();
-        System.out.println("咖啡制作好了.");
-
-        System.out.println("---------------------");
-
-        System.out.println("开始制备茶.");
-        RefreshBeverage beverage2 = new Tea();
-        beverage2.prepareBeverageTemplate();
-        System.out.println("茶制作成功.");
-
-
-
-    }
-}
-</code></pre>
-
-<p>结果:</p>
-
-<p><img src="/images/20170514/223014.png"></p>
-
-<h2>钩子使子类更灵活</h2>
-
-<p>看上面代码实现的步骤:
-1、把水煮沸
-2、泡饮料
-3、把饮料倒入杯子
-4、加调味品</p>
-
-<p>上面的代码中，我们的子类是必须进行上面的4步的，因为那是在我们的模板方法中定义的。
-如果我们不需要加调味品呢，这个时候就需要引入钩子方法的概念了。</p>
-
-<p>对上面的代码进行变化</p>
-
-<p>未写的是未进行修改的类</p>
-
-<pre><code class="java 抽象基类 为所有子类提供一个算法框架">
-package com.chenhaoxiang.template;
-
-/**
- * 抽象基类 为所有子类提供一个算法框架
- * 
- * 提神饮料
- * 
- * @author chenhaoxiang
- *
- */
-public abstract class RefreshBeverage {
-    /**
-     * final阻止子类对方法的复写 制备饮料的模板方法 封装了所有子类共同遵循的算法框架
-     */
-    public final void prepareBeverageTemplate() {
-        // 步骤1:将水煮沸
-        boilWater();
-        // 步骤2:泡制饮料
-        brew();
-        // 步骤3:将饮料倒入杯中
-        pourInCup();
-        if( isCustomerWantsCondiments() ){
-            // 步骤4: 加入调味料
-            addCondiments();
-        }
-    }
-
-    /**
-     * 钩子(Hook)函数
-     * 提供一个默认或空的实现
-     * 具体的子类可以自行决定是否挂钩以及如何挂钩
-     * (让子类选择性的可以钩或者不钩中实现)
-     * 询问用户是否需要加入调料
-     * @return
-     */
-    protected boolean isCustomerWantsCondiments() {
-        return true;
-    }
-
-    /**
-     * 基本方法:将水煮沸
-     */
-    private void boilWater() {
-        System.out.println("将水煮沸");
-    }
-
-
-    /**
-     * 抽象的基本方法
-     * 泡制饮料
-     * 注意访问权限为protected
-     */
-    protected abstract void brew();
-
-    /**
-     * 通用方法
-     * 将饮料倒入杯中
-     */
-    private void pourInCup() {
-        System.out.println("将饮料倒入杯子中");
-    }
-    /**
-     * 抽象的基本方法
-     * 加入调味料
-     */
-    protected abstract void addCondiments();
-
-}
-</code></pre>
-
-<pre><code class="java 提供了制备茶的具体实现">
-package com.chenhaoxiang.template;
-
-/**
- * 具体子类
- * 提供了制备茶的具体实现
- * @author chenhaoxiang
- *
- */
-public class Tea extends RefreshBeverage{
-
-    @Override
-    protected void brew() {
-        System.out.println("用80度的热水浸泡茶叶5分钟...");
-    }
-
-    @Override
-    protected void addCondiments() {
-        System.out.println("茶也要调味品？反正我不加.");
-    }
-
-    /**
-     * 子类通过覆盖的形式选择挂载钩子函数并且提供了一个符合自己需求的实现
-     */
-    @Override
-    protected boolean isCustomerWantsCondiments() {
-        return false;//返回false ，addCondiments方法不会执行
-    }
-
-}
-</code></pre>
-
-<p>演示结果:</p>
-
-<p><img src="/images/20170514/225603.png"></p>
-
-<h1>总结</h1>
-
-<p>抽象基类：<br/>
-1、基本方法<br/>
-我们知道所有的子类的实现细节都是一样的，具有共性的<br/>
-可以直接在基类中定义实现<br/>
-2、抽象方法<br/>
-对于只知道原则而不知道细节的方法<br/>
-3、可选钩子函数<br/>
-只在基类中提供默认或者空的实现，由子类来选择是否使用钩子<br/>
-4、Template方法<br/>
-把前面的方法按照一定顺序来执行，写成模板方法。<br/>
-注意，该方法一定要写成final！</p>
-
-<p>也就是，你不能改变基类规定的基本原则，执行顺序！</p>
-
-<p>具体子类：<br/>
-1、实现基类中的抽象方法<br/>
-执行子类的个性化行为<br/>
-2、可选择覆盖钩子方法<br/>
-可更加个性化的来影响局部行为</p>
-
-<p>模板方法的适用场景：<br/>
-1、算法或操作遵循相似的逻辑<br/>
-例如上面代码样例中的茶和咖啡，对饮料的泡制具有相似的逻辑，所以可以抽象成模板方法，供所有子类使用！<br/>
-2、重构时(把相同的代码抽取到父类中)<br/>
-新功能加入时<br/>
-3、重要、复杂的算法，核心算法设计为模板算法</p>
-
-<p>模板方法模式的优点:<br/>
-1、封装性好<br/>
-2、复用性好<br/>
-3、屏蔽细节<br/>
-4、便于维护<br/>
-优点具体就不说了，百度一下有很多解释。<br/>
-模板方法模式的缺点:<br/>
-1、继承<br/>
-继承是面向对象的语言的一个核心的特性！<br/>
-Java是单继承语言，也就是一个类只能有一个父类！<br/>
-这种情况下，设想一个情况，在已有的历史系统中，这个系统的类有大量继承，如果我们想做一些重构，用模板方法的模式抽取共性，以及增加架构的弹性的时候，因为我们的类已经处于继承的某个继承的结构之中，如果想引用模板方法，可能就会遇到一些问题！</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
