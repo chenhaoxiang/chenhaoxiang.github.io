@@ -56,7 +56,7 @@ org.springframework.jdbc.UncategorizedSQLException:
 
 其实这是因为top后面不能跟占位符'？'号的原因，可以看调试的sql语句，mybatis为了防止注入，会先使用?号占位符。  
 
-错误解释如下(此句参考网上http://blog.csdn.net/SUN_song520/article/details/50482178解释)：  
+错误解释如下：  
 在Java中对数据库查询时经常使用“Select Top ？ * From 表名 Where 列名 = ？”的SQL语句，此时的问号是PreparedStatement预编译对象的参数占位符，需要使用setXX()系列方法对其赋值后再执行。但是，Top后面是不允许使用问号占位符的，此处的错误就是由此引起的。
 
 解决方法:  
