@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-31T00:21:10+08:00</updated>
+  <updated>2017-08-31T00:29:15+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,168 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【安卓】安卓集成魔窗-完整实例]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/08/23/android-magicwindow/"/>
+    <updated>2017-08-23T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/08/23/android-magicwindow</id>
+    <content type="html"><![CDATA[<p>前些日子，公司安卓应用的魔窗出现问题，需要重新写过。于是，就有了此篇魔窗HelloWord。 <br/>
+没有包含微信分享，如果有微信分享，无非就是再集成微信分享，将分享链接改为魔窗的mLink深度链接即可</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>魔窗官网:<a href="http://www.magicwindow.cn/">http://www.magicwindow.cn/</a></p>
+
+<p>魔窗介绍就不重复了，想去了解的可以去官网看看、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>企业级的深度链接（Deeplink）解决方案mLink
+</span><span class='line'>场景式连接/服务连接
+</span><span class='line'>内容分发
+</span><span class='line'>跨App Store/应用市场的渠道分析</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以这么理解，通过浏览器访问某一链接(可以带参数)，直接在本机上打开安装的应用(通过scheme)，通过配置或者参数跳转到不同的场景</p>
+
+<p>首先当然是去注册账号咯。 <br/>
+然后进入到管理后台，也就是<a href="http://mgnt.magicwindow.cn">http://mgnt.magicwindow.cn</a></p>
+
+<p><img src="http://i.imgur.com/9d9Zn1E.png" alt="" /></p>
+
+<p>填写产品信息：<br/>
+<img src="http://i.imgur.com/O0xpipe.png" alt="" /><br/>
+这里的微信分享AppID，是你集成微信分享(微信会分配给你一个appid)后需要填写的。</p>
+
+<p>填写APP信息:
+<img src="http://i.imgur.com/4OK2wSh.png" alt="" /><br/>
+iOS应用的填写先不管，这里讲的是安卓。<br/>
+包名就是你的项目AndroidManifest.xml里面的包名：<br/>
+<img src="http://i.imgur.com/LwT2SXa.png" alt="" /><br/>
+URL Scheme其实填写的是你的应用的唯一标识，你可以自定义，记住后面需要加<code>://</code>
+下载地址是你没有安装应用时，访问链接后跳转的链接，一般填写应用下载地址</p>
+
+<p>魔窗位信息:<br/>
+<img src="http://i.imgur.com/wHpDWIO.png" alt="" /><br/>
+不需要填写，直接点完成即可。</p>
+
+<p>下面就是选择添加mLink服务，选择好产品之后，点击添加mLink服务<br/>
+<img src="http://i.imgur.com/N2B1kxL.png" alt="" /></p>
+
+<p>接下来就是填写信息了：<br/>
+<img src="http://i.imgur.com/Ml1sLgh.png" alt="" /></p>
+
+<p>mLink服务名称自定义。可以有中文。<br/>
+mLink服务key： 页面key只能包含英文字母,数字和下划线，且只能以英文字母或者下划线开头,且长度不得大于50<br/>
+也就是mLink的唯一标识<br/>
+iOS URL我现在不管。<br/>
+Android URL： 第一个参数mLinkHello我是随便写的(可以自定义为其他的)，我到现在都不明白配置这个有什么用。<br/>
+官方文档解释为:<br/>
+<img src="http://i.imgur.com/zpUfGIi.png" alt="" /><br/>
+貌似这是一个动态参数，我没用到这个，不管，我随便填写的。<br/>
+?问号后面的也是动态参数，这是我比较熟悉的传参。id和name为参数名。记得中间需要填写的是<code>=:</code>这两个符号不能分开写。<br/>
+点击保存即可。<br/>
+不出意外的话，会这样:<br/>
+<img src="http://i.imgur.com/nDlsJxM.png" alt="" /></p>
+
+<p>现在配置完了，直接看代码吧。</p>
+
+<p>首先你需要创建一个启动页(Cocos2d-x开发的游戏也可以)，记得是启动页而不是首页。<br/>
+在AndroidManifest.xml中配置启动页:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>    <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;.HomeMWActivity&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;intent-filter&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/intent-filter&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;intent-filter&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;data</span> <span class="na">android:scheme=</span><span class="s">&quot;chenhaoxiang&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.action.VIEW&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.DEFAULT&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.BROWSABLE&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/intent-filter&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/activity&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>首页:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>    <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">&quot;.MainActivity&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;intent-filter&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.DEFAULT&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/intent-filter&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/activity&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>需要跳转的页面:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>    <span class="nt">&lt;activity</span>
+</span><span class='line'>        <span class="na">android:name=</span><span class="s">&quot;.ParaSetActivity&quot;</span>
+</span><span class='line'>        <span class="na">android:label=</span><span class="s">&quot;ParaSetActivity&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;intent-filter&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">&quot;android.intent.category.DEFAULT&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/intent-filter&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/activity&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ParaSetActivity类上的注解的值为mLink的key</p>
+
+<p>实例说明，没有集成微信分享，想测试的，可以直接用mLink短链接带上参数，例如：<a href="https://aevcir.mlinks.cc/A0dY?id=1&amp;name=chx">https://aevcir.mlinks.cc/A0dY?id=1&amp;name=chx</a><br/>
+在浏览器中直接访问，即可跳转到ParaSetActivity页面,参数值也可在app中读出<br/>
+实例中的MW_APPID请替换为自己的魔窗App Key，可以在产品管理中看到：<br/>
+<img src="http://i.imgur.com/i6h5nAB.png" alt="" /></p>
+
+<p>更多的理解，可以通过下面的实例(使用android studio开发)去看看。也可以直接下载官方的DEMO</p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170823/code/testMagicWindow' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【Cocos2d-x】Sprite精灵类-创建Sprite精灵对象]]></title>
@@ -818,7 +980,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x75;&#x69;&#102;&#x75;&#116;&#117;&#x72;&#x65;&#64;&#x75;&#105;&#x66;&#x75;&#x74;&#117;&#114;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x75;&#105;&#x66;&#x75;&#116;&#x75;&#x72;&#101;&#64;&#117;&#105;&#x66;&#117;&#116;&#x75;&#x72;&#101;&#46;&#x63;&#x6f;&#x6d;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x75;&#x69;&#102;&#x75;&#116;&#x75;&#114;&#x65;&#x40;&#x75;&#105;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#46;&#x63;&#111;&#x6d;">&#x75;&#105;&#102;&#117;&#x74;&#117;&#x72;&#x65;&#x40;&#x75;&#x69;&#x66;&#117;&#116;&#x75;&#x72;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -836,7 +998,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x75;&#x69;&#102;&#x75;&#x74;&#117;&#114;&#x65;&#x40;&#x75;&#x69;&#102;&#x75;&#116;&#117;&#114;&#101;&#x2e;&#x63;&#111;&#109;">&#117;&#x69;&#102;&#117;&#x74;&#x75;&#114;&#101;&#x40;&#117;&#x69;&#x66;&#117;&#116;&#117;&#x72;&#x65;&#x2e;&#99;&#111;&#x6d;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#117;&#105;&#x66;&#117;&#116;&#117;&#114;&#101;&#x40;&#x75;&#x69;&#x66;&#x75;&#116;&#117;&#x72;&#x65;&#46;&#x63;&#x6f;&#x6d;">&#x75;&#x69;&#x66;&#x75;&#116;&#117;&#114;&#x65;&#64;&#117;&#x69;&#102;&#117;&#116;&#x75;&#x72;&#x65;&#x2e;&#99;&#111;&#109;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -4624,224 +4786,6 @@ CTime(int hour,int minute,int second);</p>
 
 <blockquote cite='陈浩翔'>
 GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520/test3' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【C++】C++类和对象]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/20/class-and-object/"/>
-    <updated>2017-05-20T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/20/class-and-object</id>
-    <content type="html"><![CDATA[<p>最近在公司弄游戏开发，C++基础也不是特别好，所以就打算继续开始学习C++。</p>
-
-<p>既然从头学习C++，就打算写一个系列教程。C++学习之路。
-我是在边学习C++，边学习cocos2dx 3.X，白天时间不是很多，
-先把C++系列写完再写coco2dx的教程。
-希望对大家有帮助。
-（可能基础知识不是很详细，对没有其他语言基础的人来说不是很友好，请见谅）</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>每个实体都可以看成一个对象。在C++中，对象的类型被称为类。
-类代表了某一批对象的共性和特征。</p>
-
-<p>类是对象的抽象，而对象是类的具体实现。</p>
-
-<p>在C++中要使用一个类，首先要定义一个类。</p>
-
-<h1>定义类</h1>
-
-<p>定义类和声明结构体的结构是相似的。</p>
-
-<h2>定义结构体</h2>
-
-<figure class='code'><figcaption><span>定义结构体</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">struct</span> <span class="n">Student</span><span class="p">{</span>
-</span><span class='line'>  <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">char</span> <span class="n">add</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>类的定义格式</h2>
-
-<figure class='code'><figcaption><span>类的定义格式</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">class</span> <span class="err">类名{</span>
-</span><span class='line'>  <span class="k">private</span><span class="o">:</span>
-</span><span class='line'>      <span class="err">成员数据</span><span class="p">;</span>
-</span><span class='line'>      <span class="err">成员函数</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">public</span><span class="o">:</span>
-</span><span class='line'>      <span class="err">成员数据</span><span class="p">;</span>
-</span><span class='line'>      <span class="err">成员函数</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">protected</span><span class="o">:</span>
-</span><span class='line'>      <span class="err">成员数据</span><span class="p">;</span>
-</span><span class='line'>      <span class="err">成员函数</span><span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>private,public,protected这3个限定符就不介绍了<br/>
-建议把：<br/>
-public放前面<br/>
-private放最后</p>
-
-<p>别忘了最后的分号哦。<br/>
-struct默认是public<br/>
-class默认是private</p>
-
-<h2>一个简单的例子</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">// test.cpp : 定义控制台应用程序的入口点。</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#include &quot;stdafx.h&quot;</span>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Student</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="k">public</span><span class="o">:</span>
-</span><span class='line'>  <span class="kt">void</span> <span class="n">print</span><span class="p">()</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="n">cout</span> <span class="o">&lt;&lt;</span>  <span class="n">age</span>  <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">getAge</span><span class="p">();</span>
-</span><span class='line'><span class="k">private</span><span class="o">:</span>
-</span><span class='line'>  <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="p">;</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">age</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">char</span> <span class="n">addr</span><span class="p">[</span><span class="mi">128</span><span class="p">]</span> <span class="p">;</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'><span class="kr">inline</span> <span class="kt">int</span> <span class="n">Student</span><span class="o">::</span><span class="n">getAge</span><span class="p">(){</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">age</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="n">_tmain</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">_TCHAR</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="n">Student</span> <span class="n">stu</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">stu</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
-</span><span class='line'>  <span class="n">stu</span><span class="p">.</span><span class="n">getAge</span><span class="p">();</span>
-</span><span class='line'>  <span class="n">getchar</span><span class="p">();</span>
-</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>类和对象的使用</h1>
-
-<h2>对象成员的引用</h2>
-
-<p>程序中访问对象成员有以下三种方法：<br/>
-1、通过对象名和成员访问运算符".&ldquo;来访问<br/>
-2、通过指向对象的指针来访问<br/>
-3、通过引用来访问</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">Student</span> <span class="n">stu</span><span class="p">;</span>
-</span><span class='line'><span class="c1">//通过对象名和成员访问运算符&quot;.&quot;来访问  </span>
-</span><span class='line'><span class="n">stu</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
-</span><span class='line'><span class="n">stu</span><span class="p">.</span><span class="n">getAge</span><span class="p">();</span>
-</span><span class='line'><span class="c1">//通过指向对象的指针来访问  </span>
-</span><span class='line'><span class="n">Student</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">stu</span><span class="p">;</span>
-</span><span class='line'><span class="n">p</span><span class="o">-&gt;</span><span class="n">print</span><span class="p">();</span>
-</span><span class='line'><span class="n">p</span><span class="o">-&gt;</span><span class="n">getAge</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">//通过引用来访问  </span>
-</span><span class='line'><span class="n">Student</span> <span class="o">&amp;</span><span class="n">s</span> <span class="o">=</span> <span class="n">stu</span><span class="p">;</span><span class="c1">//表明s是stu的别名</span>
-</span><span class='line'><span class="n">s</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
-</span><span class='line'><span class="n">s</span><span class="p">.</span><span class="n">getAge</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>类声明和成员函数实现的分离</h2>
-
-<p>类的定义和成员函数的实现一般不放在一起，而是放在不同的文件中。</p>
-
-<p>一般来说，在大型项目中，将类的声明放在单独的头文件中，一般以类名命名。
-成员函数的实现放在该类对应的cpp文件中。
-这样就将类的声明和实现进行了分离.</p>
-
-<p>如果需要使用某个对象，直接引用那个对象声明的头文件即可，而不需要再重复声明了！</p>
-
-<p>这样工程的结构就清晰很多了。</p>
-
-<p>这章很简单，没多少要写的，你有语言基础的话，这章用个5分钟就可以过了~~
-这里我写了2个例子</p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520' target='_blank'>点我进行下载</a>】</strong></p>
 </blockquote>
 
 
