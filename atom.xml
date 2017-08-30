@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-31T00:29:15+08:00</updated>
+  <updated>2017-08-31T00:35:01+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,240 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】Cocos2d-x精灵的性能优化]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/08/24/cocos2dx-sprite-sheet-optimize/"/>
+    <updated>2017-08-24T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/08/24/cocos2dx-sprite-sheet-optimize</id>
+    <content type="html"><![CDATA[<p>Cocos2d-x精灵的性能优化-使用纹理图集和精灵帧缓存</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>使用纹理图集</h1>
+
+<p>纹理图集(Texture)也称为精灵表(Sprite Sheet)</p>
+
+<p>使用纹理图集的优点:
+1、减少文件读取次数，读取一张图片比读取一推小文件要快<br/>
+2、减少OpenGL ES绘制调用并且加速渲染<br/>
+OpenGL ES 1.1仅仅能够使用2的n次幂大小的图片(即宽度或者高度是2、4、8、64&hellip;)。<br/>
+如果采用小图片OpenGL ES1.1会分配给每个图片2的n次幂大小的内存空间，即使这张图片达不到这样的宽度和高度也会分配大于此图片的2的n次幂大小的空间。那么运用这种图片集的方式将会减少内存碎片。<br/>
+虽然在Cocos2d-x v2.0后使用OpenGL ES2.0,它不会再分配2的几次幂的内存块了，但是减少读取次数和绘制的优势依然存在。<br/>
+3、减少内存消耗。<br/>
+4、Cocos2d-x全面支持Zwoptex和TexturePacker，所以创建和使用纹理图集是很容易的</p>
+
+<p><img src="http://i.imgur.com/g2Z6XnO.png" alt="" /><br/>
+这样一张大图，可以让美工来完成，但是记得需要记下坐标，图集中小图的左上角坐标是多少，宽和高是多少，这是需要知道的。<br/>
+这是很耗时的。实际上这是可以由软件(Zwoptex和TexturePacker)来完成的。<br/>
+做出来的纹理图集由两部分构成。一部分是存有纹理的，也就是大图文件。另一部分就是里面精灵/小图的坐标等信息文件</p>
+
+<p><img src="http://i.imgur.com/0CWjIUB.png" alt="" /><br/>
+plist文件是属性列表文件，一种xml文件。每一个小图称为帧(frame),每一个frame包含了该帧的名(key)，坐标,高宽。是否旋转等。这是给程序读的</p>
+
+<figure class='code'><figcaption><span>加载纹理缓存图片/大图</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleOrigin</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">auto</span> <span class="n">background</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;background.png&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">background</span><span class="o">-&gt;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">background</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">auto</span> <span class="n">mountain1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SpriteSheet.png&quot;</span><span class="p">,</span><span class="n">Rect</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">391</span><span class="p">,</span> <span class="mi">934</span><span class="p">,</span> <span class="mi">388</span><span class="p">));</span><span class="c1">//截取图片</span>
+</span><span class='line'>  <span class="n">mountain1</span><span class="o">-&gt;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span><span class="c1">//设置锚点</span>
+</span><span class='line'>    <span class="n">mountain1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="mi">80</span><span class="p">));</span><span class="c1">//设置坐标</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mountain1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Texture2D</span><span class="o">*</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getTextureCache</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">addImage</span><span class="p">(</span><span class="s">&quot;SpriteSheet.png&quot;</span><span class="p">);</span><span class="c1">//加载整个图片到纹理缓存</span>
+</span><span class='line'>    <span class="k">auto</span> <span class="n">hero1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">hero1</span><span class="o">-&gt;</span><span class="n">setTexture</span><span class="p">(</span><span class="n">cache</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">hero1</span><span class="o">-&gt;</span><span class="n">setTextureRect</span><span class="p">(</span><span class="n">Rect</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1706</span><span class="p">,</span><span class="mi">391</span><span class="p">,</span><span class="mi">327</span><span class="p">));</span><span class="c1">//在纹理缓存中截取图片  左上角坐标 以及截取图片的宽高</span>
+</span><span class='line'>    <span class="n">hero1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span><span class="mi">200</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">hero1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>源代码下载地址：</h2>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170824/code/Cocos2dSpriteSheet' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<h1>精灵帧缓存</h1>
+
+<p>精灵帧缓存是缓存的一种，缓存有如下几种:<br/>
+1、纹理缓存(TextureCache)<br/>
+使用纹理缓存可以创建纹理对象<br/>
+2、精灵帧缓存(SpriteFrameCache)<br/>
+和纹理图集相对应，把plist文件读到内存，到文件里面创建精灵帧缓存，然后再从精灵帧缓存中获得精灵对象，反复使用精灵对象时候，使用精灵帧缓存可以节省内存消耗<br/>
+将一个图读到精灵帧缓存中，同时也会加载到纹理缓存中</p>
+
+<p>3、动画缓存(AnimationCache)<br/>
+动画缓存主要用于精灵动画，精灵动画中的每一帧是从动画缓存中获取的</p>
+
+<figure class='code'><figcaption><span>精灵帧缓存</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">SpriteFrameCache</span> <span class="o">*</span><span class="n">frameCache</span> <span class="o">=</span> <span class="n">SpriteFrameCache</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span>
+</span><span class='line'><span class="n">frameCache</span><span class="o">-&gt;</span><span class="n">addSpriteFramesWithFile</span><span class="p">(</span><span class="s">&quot;SpriteSheet.plist&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//单例-将精灵图集的坐标读进去 根据这个坐标获取图集，这个加载过程是在游戏启动的时候加载，并不是在用的时候加载(肯定会占用很多内存的,不过现在手机一般内存都挺多的)  </span>
+</span><span class='line'><span class="k">auto</span> <span class="n">mountain1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrameName</span><span class="p">(</span><span class="s">&quot;mountain1.png&quot;</span><span class="p">);</span><span class="c1">//缓存被创建后，可以通过frame名字(**注意名字冲突的问题，名字一样的精灵帧，后面的会覆盖前面的,可以加前缀以区分**)指定精灵帧来创建一个精灵   这个过程并不是通过大图去创建的，而是通过SpriteFrameCache缓存取出来的，这个速度很快  </span>
+</span><span class='line'><span class="c1">//还可以通过精灵帧来创建精灵  </span>
+</span><span class='line'><span class="n">SpriteFrame</span> <span class="o">*</span><span class="n">heroSpriteFrame</span> <span class="o">=</span> <span class="n">frameCache</span><span class="o">-&gt;</span><span class="n">getSpriteFrameByName</span><span class="p">(</span><span class="s">&quot;hero1.png&quot;</span><span class="p">);</span><span class="c1">//通过精灵帧名字获取精灵帧</span>
+</span><span class='line'><span class="n">Sprite</span> <span class="o">*</span><span class="n">hero1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrame</span><span class="p">(</span><span class="n">heroSpriteFrame</span><span class="p">);</span><span class="c1">//通过精灵帧创建精灵</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>清空或移除精灵帧的缓存函数:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">void</span> <span class="nf">removeSpriteFrameByName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span><span class="c1">//指定具体的精灵帧名将精灵帧从缓存中移除，具体到精灵帧</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">removeSpriteFrames</span><span class="p">();</span><span class="c1">//指定清空所有的精灵帧缓存</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">removeSpriteFramesFromFile</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">plist</span><span class="p">);</span><span class="c1">//指定具体的坐标文件(plist文件)移除精灵帧</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">removeUnusedSpriteFrames</span><span class="p">();</span><span class="c1">//移除没有使用的精灵帧</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>建议初学者不要轻易使用清除缓存函数！</p>
+
+<h1>小项目实例</h1>
+
+<p>现在还做不了太复杂的项目，在目前这个阶段<br/>
+项目描述:<br/>
+我们有这样一个场景，一个背景草地，山，和一个精灵牛仔(还没学帧动画，先做个静态的)。 把这三个精灵放到一个场景中<br/>
+利用精灵帧缓存完成<br/>
+<img src="http://i.imgur.com/6IbcWnk.png" alt="" /></p>
+
+<p>背景没有放到精灵图集中去，这是因为背景是不需要透明的</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleOrigin</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">auto</span> <span class="n">background</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;background.png&quot;</span><span class="p">);</span><span class="c1">//加载背景精灵</span>
+</span><span class='line'>  <span class="n">background</span><span class="o">-&gt;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">background</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">SpriteFrameCache</span> <span class="o">*</span><span class="n">frameCache</span> <span class="o">=</span> <span class="n">SpriteFrameCache</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span><span class="c1">//单例对象</span>
+</span><span class='line'>  <span class="n">frameCache</span><span class="o">-&gt;</span><span class="n">addSpriteFramesWithFile</span><span class="p">(</span><span class="s">&quot;SpriteSheet.plist&quot;</span><span class="p">);</span><span class="c1">//加载精灵图集</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">auto</span> <span class="n">mountain1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrameName</span><span class="p">(</span><span class="s">&quot;mountain1.png&quot;</span><span class="p">);</span><span class="c1">//通过精灵帧名创建精灵</span>
+</span><span class='line'>  <span class="n">mountain1</span><span class="o">-&gt;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span><span class="c1">//设置锚点</span>
+</span><span class='line'>    <span class="n">mountain1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="mi">80</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mountain1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">SpriteFrame</span> <span class="o">*</span><span class="n">heroSpriteFrame</span> <span class="o">=</span> <span class="n">frameCache</span><span class="o">-&gt;</span><span class="n">getSpriteFrameByName</span><span class="p">(</span><span class="s">&quot;hero1.png&quot;</span><span class="p">);</span><span class="c1">//通过精灵帧名字获取精灵帧</span>
+</span><span class='line'>  <span class="n">Sprite</span> <span class="o">*</span><span class="n">hero1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrame</span><span class="p">(</span><span class="n">heroSpriteFrame</span><span class="p">);</span><span class="c1">//通过精灵帧创建精灵</span>
+</span><span class='line'><span class="c1">//上面的两条语句相当于前面一条语句的效果auto mountain1 = Sprite::createWithSpriteFrameName(&quot;mountain1.png&quot;);</span>
+</span><span class='line'>    <span class="n">hero1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span><span class="mi">200</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">hero1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>源代码下载地址：</h2>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170824/code/Cocos2dxHero' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【安卓】安卓集成魔窗-完整实例]]></title>
@@ -980,7 +1214,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x75;&#x69;&#102;&#x75;&#116;&#x75;&#114;&#x65;&#x40;&#x75;&#105;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#46;&#x63;&#111;&#x6d;">&#x75;&#105;&#102;&#117;&#x74;&#117;&#x72;&#x65;&#x40;&#x75;&#x69;&#x66;&#117;&#116;&#x75;&#x72;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x75;&#x69;&#102;&#117;&#116;&#117;&#114;&#101;&#x40;&#x75;&#x69;&#x66;&#x75;&#x74;&#x75;&#x72;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x75;&#x69;&#102;&#x75;&#116;&#117;&#114;&#x65;&#x40;&#x75;&#x69;&#102;&#117;&#116;&#x75;&#x72;&#x65;&#46;&#x63;&#x6f;&#x6d;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -998,7 +1232,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#117;&#105;&#x66;&#117;&#116;&#117;&#114;&#101;&#x40;&#x75;&#x69;&#x66;&#x75;&#116;&#117;&#x72;&#x65;&#46;&#x63;&#x6f;&#x6d;">&#x75;&#x69;&#x66;&#x75;&#116;&#117;&#114;&#x65;&#64;&#117;&#x69;&#102;&#117;&#116;&#x75;&#x72;&#x65;&#x2e;&#99;&#111;&#109;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#97;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x75;&#105;&#x66;&#117;&#116;&#x75;&#x72;&#101;&#64;&#117;&#x69;&#102;&#117;&#x74;&#x75;&#x72;&#101;&#46;&#x63;&#111;&#x6d;">&#117;&#105;&#x66;&#117;&#x74;&#x75;&#114;&#101;&#64;&#117;&#x69;&#x66;&#117;&#x74;&#x75;&#x72;&#x65;&#46;&#99;&#111;&#x6d;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -4615,177 +4849,6 @@ std::vector<char> * getResponseData();<br/>
 
 <blockquote cite='陈浩翔'>
 GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170531/httpTest' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【C++】C++构造函数和析构函数]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor%20-%20%E5%89%AF%E6%9C%AC/"/>
-    <updated>2017-05-20T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/20/constructor-and-destructor - 副本</id>
-    <content type="html"><![CDATA[<p>C++提供构造函数来处理对象的初始化。<br/>
-构造函数是一种特殊的成员函数，不需要用户来调用，定义对象时被自动执行。<br/>
-构造函数名字与类名相同，无返回类型(void也不能有哦)。</p>
-
-<p>可以由用户自己定义实现，根据需要设计对数据成员进行初始化</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>用上个例子来继续写代码进去<br/>
-CTime为类名</p>
-
-<h1>无参数的构造函数：</h1>
-
-<p>在.h文件中进行声明：<br/>
-CTime();<br/>
-在.cpp文件中进行实现：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime::CTime(){
-</span><span class='line'>  m_hour = 0;
-</span><span class='line'>  m_minute = 0;
-</span><span class='line'>  m_second = 0;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>定义对象:<br/>
-CTime time;<br/>
-构造函数不需要我们去调用，定义一个对象的时候，会自动的去调用一个默认的无参构造函数。内部没有其他任何动作！
-一般在构造函数中进行数据的初始化，当然，你还可以进行其他操作。</p>
-
-<p>如果你没写构造函数，在定义一个对象的时候，会自动生成调用一个空构造函数。</p>
-
-<h1>带参数的构造函数</h1>
-
-<p>在.h文件中进行声明： <br/>
-CTime(int hour,int minute,int second);</p>
-
-<p>在.cpp文件中进行实现：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime::CTime(int hour, int minute, int second){
-</span><span class='line'>  m_hour = hour;
-</span><span class='line'>  m_minute = minute;
-</span><span class='line'>  m_second = second;
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>定义对象:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime time(10,50,20);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在一个类中可以有多个构造函数，函数名相同，参数不同，构造函数是可以重载的！</p>
-
-<p>如果你有了其他面向对象语言的基础！前面这些章节都会很容易学的。</p>
-
-<p>可以在声明的时候，给参数一个默认的值：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime(int hour,int minute,int second = 0);  </span></code></pre></td></tr></table></div></figure>
-
-
-<p>在调用的时候，可以只传2个值，这个时候的second就会使用默认的值0；</p>
-
-<p>但是注意：
-不能这么写</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime(int hour,int minute =0,int second);   </span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-上面的写法是错误的！
-也就是说，如果你在某个参数给了默认值，则排在它后面的参数你都需要给上默认值才行！</p>
-
-<p>也不能给构造函数的每个参数都给上默认值</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CTime(int hour=0,int minute=0,int second=0);   </span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样会引起歧义！！！</p>
-
-<h1>析构函数</h1>
-
-<p>也是C++中的一个成员函数。<br/>
-析构函数的作用和构造函数相反。<br/>
-命名规则与类名相同，但是需要在类名前加上"~&ldquo;符号。</p>
-
-<p>~在C++中是取反运算符。</p>
-
-<p>析构函数一般式执行对象的清理工作。
-当对象的生命周期结束之后，会自动调用析构函数。</p>
-
-<p>析构函数的作用不是删除对象，而是说，在对象撤销它所占用的内存之前做一些清理工作，清理之后，这个对象的内存可以被分配给其他对象使用。</p>
-
-<p>在设计类的时候，都会给类提供一个析构函数。</p>
-
-<p>构造函数和析构函数都是可以由用户来定义的，但是调用，都是可以由程序来自动调用的。</p>
-
-<p>构造函数是在定义一个对象的时候执行的，而析构函数是在对象生命周期结束之后，自动执行析构函数。</p>
-
-<p>析构函数没有返回值和参数！</p>
-
-<p>注意：析构函数没有参数，不能被重载，因此一个类只能有一个析构函数。如果用户没有定义，编译器会自动生成一个默认的析构函数。</p>
-
-<p>析构函数的作用并不仅限于释放资源，还可以执行用户自己定义的一些操作，比如输出一些信息等。</p>
-
-<p>声明析构函数：</p>
-
-<figure class='code'><figcaption><span>声明析构函数 </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">~</span><span class="n">CTime</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>定义析构函数：</p>
-
-<figure class='code'><figcaption><span>定义析构函数</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">::~</span><span class="n">CTime</span><span class="p">(){</span>
-</span><span class='line'>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;析构函数被执行了...&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>析构函数的执行顺序和构造函数的执行顺序是相反的！</p>
-
-<p>也就是最先被定义的对象，最后被执行析构函数！</p>
-
-<p>用 new 分配内存时会调用构造函数，用 delete 释放内存时会调用析构函数。构造函数和析构函数对于类来说是不可或缺的！</p>
-
-<p>在函数内部创建的对象是局部对象，它和局部变量类似，位于栈区，函数执行结束时会调用这些对象的析构函数。</p>
-
-<p>new 创建的对象位于堆区，通过 delete 删除时才会调用析构函数；如果没有 delete，析构函数就不会被执行。</p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170520/test3' target='_blank'>点我进行下载</a>】</strong></p>
 </blockquote>
 
 

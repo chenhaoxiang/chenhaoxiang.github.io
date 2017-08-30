@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cocos2d-x | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/cocos2d-x/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-31T00:29:15+08:00</updated>
+  <updated>2017-08-31T00:35:01+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,252 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【Cocos2d-x】Cocos2d-x精灵的性能优化]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/08/24/cocos2dx-sprite-sheet-optimize/"/>
+    <updated>2017-08-24T13:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/08/24/cocos2dx-sprite-sheet-optimize</id>
+    <content type="html"><![CDATA[<p>Cocos2d-x精灵的性能优化-使用纹理图集和精灵帧缓存</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>使用纹理图集</h1>
+
+<p>纹理图集(Texture)也称为精灵表(Sprite Sheet)</p>
+
+<p>使用纹理图集的优点:
+1、减少文件读取次数，读取一张图片比读取一推小文件要快<br/>
+2、减少OpenGL ES绘制调用并且加速渲染<br/>
+OpenGL ES 1.1仅仅能够使用2的n次幂大小的图片(即宽度或者高度是2、4、8、64&hellip;)。<br/>
+如果采用小图片OpenGL ES1.1会分配给每个图片2的n次幂大小的内存空间，即使这张图片达不到这样的宽度和高度也会分配大于此图片的2的n次幂大小的空间。那么运用这种图片集的方式将会减少内存碎片。<br/>
+虽然在Cocos2d-x v2.0后使用OpenGL ES2.0,它不会再分配2的几次幂的内存块了，但是减少读取次数和绘制的优势依然存在。<br/>
+3、减少内存消耗。<br/>
+4、Cocos2d-x全面支持Zwoptex和TexturePacker，所以创建和使用纹理图集是很容易的</p>
+
+<p><img src="http://i.imgur.com/g2Z6XnO.png" alt="" /><br/>
+这样一张大图，可以让美工来完成，但是记得需要记下坐标，图集中小图的左上角坐标是多少，宽和高是多少，这是需要知道的。<br/>
+这是很耗时的。实际上这是可以由软件(Zwoptex和TexturePacker)来完成的。<br/>
+做出来的纹理图集由两部分构成。一部分是存有纹理的，也就是大图文件。另一部分就是里面精灵/小图的坐标等信息文件</p>
+
+<p><img src="http://i.imgur.com/0CWjIUB.png" alt="" /><br/>
+plist文件是属性列表文件，一种xml文件。每一个小图称为帧(frame),每一个frame包含了该帧的名(key)，坐标,高宽。是否旋转等。这是给程序读的<br/>
+<figure class='code'><figcaption><span>加载纹理缓存图片/大图</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleOrigin</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">auto</span> <span class="n">background</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;background.png&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">background</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">background</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">auto</span> <span class="n">mountain1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SpriteSheet.png&quot;</span><span class="p">,</span><span class="n">Rect</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">391</span><span class="p">,</span> <span class="mi">934</span><span class="p">,</span> <span class="mi">388</span><span class="p">));</span><span class="c1">//截取图片</span>
+</span><span class='line'><span class="n">mountain1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span><span class="c1">//设置锚点</span>
+</span><span class='line'><span class="n">mountain1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="mi">80</span><span class="p">));</span><span class="c1">//设置坐标</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mountain1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Texture2D</span><span class="o">*</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getTextureCache</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addImage</span><span class="p">(</span><span class="s">&quot;SpriteSheet.png&quot;</span><span class="p">);</span><span class="c1">//加载整个图片到纹理缓存</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">hero1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+</span><span class='line'><span class="n">hero1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setTexture</span><span class="p">(</span><span class="n">cache</span><span class="p">);</span>
+</span><span class='line'><span class="n">hero1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setTextureRect</span><span class="p">(</span><span class="n">Rect</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1706</span><span class="p">,</span><span class="mi">391</span><span class="p">,</span><span class="mi">327</span><span class="p">));</span><span class="c1">//在纹理缓存中截取图片  左上角坐标 以及截取图片的宽高</span>
+</span><span class='line'><span class="n">hero1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span><span class="mi">200</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">hero1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">```</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="err">源代码下载地址：</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">blockquote</span> <span class="n">cite</span><span class="o">=</span><span class="err">&#39;陈浩翔&#39;</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">GITHUB</span><span class="err">源码下载地址</span><span class="o">:&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="err">【</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="err">&#39;</span><span class="nl">https</span><span class="p">:</span><span class="c1">//github.com/chenhaoxiang/cocos2d-x/tree/master/20170824/code/Cocos2dSpriteSheet&#39; target=&#39;_blank&#39;&gt;点我进行下载&lt;/a&gt;】&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">精灵帧缓存</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">精灵帧缓存是缓存的一种，缓存有如下几种</span><span class="o">:&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="mi">1</span><span class="err">、纹理缓存</span><span class="p">(</span><span class="n">TextureCache</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">使用纹理缓存可以创建纹理对象</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="mi">2</span><span class="err">、精灵帧缓存</span><span class="p">(</span><span class="n">SpriteFrameCache</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">和纹理图集相对应，把</span><span class="n">plist</span><span class="err">文件读到内存，到文件里面创建精灵帧缓存，然后再从精灵帧缓存中获得精灵对象，反复使用精灵对象时候，使用精灵帧缓存可以节省内存消耗</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">将一个图读到精灵帧缓存中，同时也会加载到纹理缓存中</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="mi">3</span><span class="err">、动画缓存</span><span class="p">(</span><span class="n">AnimationCache</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">动画缓存主要用于精灵动画，精灵动画中的每一帧是从动画缓存中获取的</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;c++ 精灵帧缓存&quot;</span><span class="o">&gt;</span><span class="n">SpriteFrameCache</span> <span class="o">*</span><span class="n">frameCache</span> <span class="o">=</span> <span class="n">SpriteFrameCache</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span>
+</span><span class='line'><span class="n">frameCache</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addSpriteFramesWithFile</span><span class="p">(</span><span class="s">&quot;SpriteSheet.plist&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//单例-将精灵图集的坐标读进去 根据这个坐标获取图集，这个加载过程是在游戏启动的时候加载，并不是在用的时候加载(肯定会占用很多内存的,不过现在手机一般内存都挺多的)  </span>
+</span><span class='line'><span class="k">auto</span> <span class="n">mountain1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrameName</span><span class="p">(</span><span class="s">&quot;mountain1.png&quot;</span><span class="p">);</span><span class="c1">//缓存被创建后，可以通过frame名字(**注意名字冲突的问题，名字一样的精灵帧，后面的会覆盖前面的,可以加前缀以区分**)指定精灵帧来创建一个精灵   这个过程并不是通过大图去创建的，而是通过SpriteFrameCache缓存取出来的，这个速度很快  </span>
+</span><span class='line'><span class="c1">//还可以通过精灵帧来创建精灵  </span>
+</span><span class='line'><span class="n">SpriteFrame</span> <span class="o">*</span><span class="n">heroSpriteFrame</span> <span class="o">=</span> <span class="n">frameCache</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getSpriteFrameByName</span><span class="p">(</span><span class="s">&quot;hero1.png&quot;</span><span class="p">);</span><span class="c1">//通过精灵帧名字获取精灵帧</span>
+</span><span class='line'><span class="n">Sprite</span> <span class="o">*</span><span class="n">hero1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrame</span><span class="p">(</span><span class="n">heroSpriteFrame</span><span class="p">);</span><span class="c1">//通过精灵帧创建精灵</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">清空或移除精灵帧的缓存函数</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">C</span><span class="o">++</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">removeSpriteFrameByName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">name</span><span class="p">);</span><span class="c1">//指定具体的精灵帧名将精灵帧从缓存中移除，具体到精灵帧</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">removeSpriteFrames</span><span class="p">();</span><span class="c1">//指定清空所有的精灵帧缓存</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">removeSpriteFramesFromFile</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">plist</span><span class="p">);</span><span class="c1">//指定具体的坐标文件(plist文件)移除精灵帧</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">removeUnusedSpriteFrames</span><span class="p">();</span><span class="c1">//移除没有使用的精灵帧</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">建议初学者不要轻易使用清除缓存函数！</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">小项目实例</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">现在还做不了太复杂的项目，在目前这个阶段</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">项目描述</span><span class="o">:&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">我们有这样一个场景，一个背景草地，山，和一个精灵牛仔</span><span class="p">(</span><span class="err">还没学帧动画，先做个静态的</span><span class="p">)</span><span class="err">。</span> <span class="err">把这三个精灵放到一个场景中</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">利用精灵帧缓存完成</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://i.imgur.com/6IbcWnk.png&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">背景没有放到精灵图集中去，这是因为背景是不需要透明的</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>C++
+bool HelloWorld::init()
+{
+    if ( !Layer::init() )
+    {
+        return false;
+    }</p>
+
+<pre><code>Size visibleSize = Director::getInstance()-&gt;getVisibleSize();
+Vec2 origin = Director::getInstance()-&gt;getVisibleOrigin();
+
+auto background = Sprite::create("background.png");//加载背景精灵
+background-&gt;setAnchorPoint(Vec2::ZERO);
+this-&gt;addChild(background,0);
+
+SpriteFrameCache *frameCache = SpriteFrameCache::getInstance();//单例对象
+frameCache-&gt;addSpriteFramesWithFile("SpriteSheet.plist");//加载精灵图集
+
+auto mountain1 = Sprite::createWithSpriteFrameName("mountain1.png");//通过精灵帧名创建精灵
+mountain1-&gt;setAnchorPoint(Vec2::ZERO);//设置锚点
+mountain1-&gt;setPosition(Vec2(-200,80));
+this-&gt;addChild(mountain1,0);
+
+SpriteFrame *heroSpriteFrame = frameCache-&gt;getSpriteFrameByName("hero1.png");//通过精灵帧名字获取精灵帧
+Sprite *hero1 = Sprite::createWithSpriteFrame(heroSpriteFrame);//通过精灵帧创建精灵
+</code></pre>
+
+<p>//上面的两条语句相当于前面一条语句的效果auto mountain1 = Sprite::createWithSpriteFrameName(&ldquo;mountain1.png&rdquo;);
+    hero1->setPosition(Vec2(800,200));
+    this->addChild(hero1,0);</p>
+
+<pre><code>return true;
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h2>源代码下载地址：</h2>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170824/code/Cocos2dxHero' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【Cocos2d-x】Sprite精灵类-创建Sprite精灵对象]]></title>
@@ -1414,197 +1660,6 @@ this-&gt;addChild(node2, 0);
 
 <blockquote cite='陈浩翔'>
 GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170614/code/OpenGLcoordinates2' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【Cocos2d-x】开发基础-Node与Node层级架构]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/06/11/node-hierarchical-structure/"/>
-    <updated>2017-06-11T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/06/11/node-hierarchical-structure</id>
-    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
-1.Node与Node层级架构<br/>
-2.Node中重要的操作<br/>
-3.Node中重要的属性<br/>
-4.游戏循环与调度</p>
-
-<!-- more -->
-
-
-<hr />
-
-<h1>Node与Node层级架构</h1>
-
-<p>首先来看一张图<br/>
-<img src="http://i.imgur.com/kGQ1oxN.png" alt="" /><br/>
-这个图反应了Node与Node的层级架构<br/>
-所谓层级架构其实就是树形结构/层次结构，从图上可以看出来，树的根是Scene(场景)，然后是层，层里面又包含了精灵，菜单，粒子系统，瓦片地图<br/>
-所有这些元素，都有一个共同的父类，就是Node</p>
-
-<p>这个树形结构，其实就是一种包含关系<br/>
-<img src="http://i.imgur.com/wFK51kL.png" alt="" /><br/>
-这2个文件共同定义了一个HelloWorld的层<br/>
-class HelloWorld : public cocos2d::Layer<br/>
-我们自己自定义了一个类HelloWorld继承了Layer，层最后要放到场景里去<br/>
-<code>c++
-Scene* HelloWorld::createScene()
-{
-    // 创建场景对象
-    auto scene = Scene::create();
-    // 创建层对象
-    auto layer = HelloWorld::create();
-    // 把层放到场景里
-    scene-&gt;addChild(layer);
-    // 返回这个场景
-    return scene;
-}
-</code>
-创建场景以及HelloWord这个层，然后把层放到场景里<br/>
-通过addChild这个方法，把子节点加到父节点里面去<br/>
-以此类推，可以把Layer添加到Scene里，也可以这样把精灵，菜单等添加到层里<br/>
-<code>c++
-this-&gt;addChild(menu, 1);//把菜单放到当前层
-//把标签加入到层中
-this-&gt;addChild(label, 1);
-//把图片精灵加入到层中
-this-&gt;addChild(sprite, 0);
-</code>
-代码在HelloWord.cpp中可以看到<br/>
-所以，最开始的图上的层次结构，是通过add的这个方法添加上来的<br/>
-既然有添加，那么就有移除方法，后面再介绍。<br/>
-主要是树形结构，需要注意的就是添加的顺序和个数<br/>
-一般来说，一个场景会有多个层，我们建立的HelloWord实例中，场景和层是一对一的关系<br/>
-也就是场景中只放了一个层。实际上场景与层是一对多的关系<br/>
-为了减少绘制的次数，不要建立太多的层，那样很消耗cpu</p>
-
-<p>层与精灵也是一对多的关系，然后层与菜单，粒子系统，瓦片地图都是一对多的关系<br/>
-菜单与菜单项是一对多的关系，一个菜单里会有多个菜单项<br/>
-当cocos2d启动一个场景的时候，场景就会加载层，层会加载菜单等等，菜单会加载菜单项。就是这样一种树形结构</p>
-
-<h1>Node中重要的操作</h1>
-
-<p>由于场景、层、菜单、精灵&hellip;都是继承的Node，所以它们有一些共同的属性和方法</p>
-
-<h2>创建节点</h2>
-
-<pre><code class="c++ 创建节点">Node* childNode = Node::create()
-</code></pre>
-
-<h2>增加新的子节点</h2>
-
-<pre><code class="c++ 增加新的子节点">node-&gt;addChild(childNode,0,123)
-</code></pre>
-
-<p>第一个参数是添加的节点；第二个参数是添加的Node的z轴的顺序(添加节点的时候会有顺序的，相当于绘制的时候的先后顺序)；第三个参数是Tag/标签，可以理解成id，通过这个tag来操作node对象    <br/>
-<img src="http://i.imgur.com/eae63yS.png" alt="" /><br/>
-附带第二个参数的英文介绍：<br/>
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">LocalZOrder</span> <span class="n">is</span> <span class="n">the</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">key</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="n">used</span> <span class="n">to</span> <span class="n">sort</span> <span class="n">the</span> <span class="n">node</span> <span class="n">relative</span> <span class="n">to</span> <span class="n">its</span> <span class="n">siblings</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Node</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span> <span class="n">parent</span> <span class="n">will</span> <span class="n">sort</span> <span class="n">all</span> <span class="n">its</span> <span class="n">children</span> <span class="n">based</span> <span class="n">on</span> <span class="n">the</span> <span class="n">LocalZOrder</span> <span class="n">value</span><span class="p">.</span> <span class="n">If</span> <span class="n">two</span> <span class="n">nodes</span> <span class="n">have</span> <span class="n">the</span> <span class="n">same</span> <span class="n">LocalZOrder</span><span class="p">,</span> <span class="n">then</span> <span class="n">the</span> <span class="n">node</span> <span class="n">that</span> <span class="n">was</span> <span class="n">added</span> <span class="n">first</span> <span class="n">to</span> <span class="n">the</span> <span class="n">children</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span> <span class="n">array</span> <span class="n">will</span> <span class="n">be</span> <span class="n">in</span> <span class="n">front</span> <span class="n">of</span> <span class="n">the</span> <span class="n">other</span> <span class="n">node</span> <span class="n">in</span> <span class="n">the</span> <span class="n">array</span><span class="p">.</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Also</span><span class="p">,</span> <span class="n">the</span> <span class="n">Scene</span> <span class="n">Graph</span> <span class="n">is</span> <span class="n">traversed</span> <span class="k">using</span> <span class="n">the</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">In</span><span class="o">-</span><span class="n">Order</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="n">tree</span> <span class="n">traversal</span> <span class="n">algorithm</span> <span class="p">(</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://en.wikipedia.org/wiki/Tree_traversal#In-order&quot;</span><span class="o">&gt;</span><span class="nl">http</span><span class="p">:</span><span class="c1">//en.wikipedia.org/wiki/Tree_traversal#In-order&lt;/a&gt; ) And Nodes that have LocalZOrder values &amp;lt; 0 are the &amp;ldquo;left&amp;rdquo; subtree While Nodes with LocalZOrder &gt;=0 are the &amp;ldquo;right&amp;rdquo; subtree.</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">addChild</span><span class="err">有</span><span class="mi">4</span><span class="err">个方法</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">c</span><span class="o">++</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">)</span>   <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">)</span>   <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">,</span><span class="kt">int</span> <span class="n">tag</span><span class="p">)</span>
-</span><span class='line'><span class="k">virtual</span> <span class="kt">void</span> <span class="n">addChild</span>   <span class="p">(</span> <span class="n">Node</span> <span class="o">*</span> <span class="n">child</span><span class="p">,</span><span class="kt">int</span> <span class="n">localZOrder</span><span class="p">,</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">name</span><span class="p">)</span>  <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h2>查找子节点</h2>
-
-<pre><code class="c++ 通过Tag查找子节点">Node* node = node-&gt;getChildByTag(123)
-</code></pre>
-
-<h2>删除子节点</h2>
-
-<pre><code class="c++ 删除子节点，并停止所有该节点上的一切动作">node-&gt;removeChildByTag(123,true)//第二个参数表示是否在内存中清除这个对象
-</code></pre>
-
-<pre><code class="c++ 通过Node指针删除节点">node-&gt;removeChild(childNode)//直接删除节点
-</code></pre>
-
-<pre><code class="c++ 删除所有子节点，并停止这些子节点上的一切动作">node-&gt;removeAllChildrenWithCleanup(true) //true-清除内存
-</code></pre>
-
-<pre><code class="c++ 从父节点Node中删除当前的节点对象，并停止所有该节点上的一切动作">node-&gt;removeFromParentAndCleanup(true) //true-清除内存
-</code></pre>
-
-<h1>Node中重要的属性</h1>
-
-<p>Node两个非常重要的属性:<br/>
-position和anchorPoint<br/>
-position是指的位置，anchorPoint是指的锚点<br/>
-位置(坐标)很好理解，就是比如放在(5,5),x=5,y=5.但是精灵图片是有大小的，这个时候就需要锚点了。  <br/>
-我们用图来理解吧
-1.anchorPoint为(0.5,0.5)，这个是默认值<br/>
-<img src="http://i.imgur.com/P68puku.png" alt="" /><br/>
-第一个参数0.5，是锚点距离左边边线的距离和图片整个的宽度的比例，也就是1/2<br/>
-第二个参数0.5，是锚点距离底边高度和整个高度的比值，也就是1/2</p>
-
-<p>2.anchorPoint为(0,0)，也就是精灵图片的左下角<br/>
-<img src="http://i.imgur.com/DqOBDal.png" alt="" /></p>
-
-<p>3.anchorPoint为(1.0,1.0)，也就是精灵图片的右上角  <br/>
-<img src="http://i.imgur.com/hHux4IT.png" alt="" /></p>
-
-<p>4.anchorPoint为(0.66,0.5)，这个具有普遍性<br/>
-<img src="http://i.imgur.com/4ZzjNcC.png" alt="" /></p>
-
-<h1>游戏循环与调度</h1>
-
-<p>每一个游戏程序都有一个循环在不断运行，它是有导演对象来管理和维护。<br/>
-如果需要场景中的精灵运动起来，我们可以在游戏循环中使用定时器（Scheduler）对精灵等对象的运行进行调度。<br/>
-因为Node类封装了Scheduler类，所以我们也可以直接使用Node中调用函数。<br/>
-Node中调用函数主要有：<br/>
-<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">void</span> <span class="n">scheduleUpdate</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//开始游戏调度，每个Node对象只要调用该函数，那么这个Node对象就会定时地每帧回调用一次自己的update(float dt)函数，每帧调用一次update函数！这是固定的时间和函数&lt;br/&gt;</span>
-</span><span class='line'><span class="c1">//下面这个函数更加个性化，可以自定义回调函数和时间</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">schedule</span> <span class="p">(</span> <span class="n">SEL_SCHEDULE</span> <span class="n">selector</span><span class="p">,</span>  <span class="kt">float</span>  <span class="n">interval</span> <span class="p">)</span><span class="c1">//与scheduleUpdate函数功能一样，不同的是我们可以指定回调函数（通过selector指定），也可以根据需要指定回调时间间隔</span>
-</span><span class='line'><span class="c1">//一旦调度开始，就会不断循环&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">unscheduleUpdate</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//停止update(float dt)函数调度  和scheduleUpdate对应</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">unschedule</span> <span class="p">(</span> <span class="n">SEL_SCHEDULE</span> <span class="n">selector</span> <span class="p">)</span><span class="c1">//可以指定具体函数停止调度  和schedule对应&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">unscheduleAllSelectors</span> <span class="p">(</span> <span class="kt">void</span> <span class="p">)</span><span class="c1">//可以停止所有调度</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170611/HelloWorld' target='_blank'>点我进行下载</a>】</strong></p>
 </blockquote>
 
 
