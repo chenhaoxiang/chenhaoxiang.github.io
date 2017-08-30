@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-08-24T16:14:09+08:00</updated>
+  <updated>2017-08-31T00:13:01+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -91,6 +91,322 @@ Spring容器优先加载由ServletContextListener（对应applicationContext.xml
 Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是不能继承的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因此，请接受Spring团队的建议并且在具体的类上使用 @Transactional 注解。</p>
 
 <p>在以上解决方法中，若将@Transactional 注解写在接口上，则无法实现事务。所以请将 @Transactional 注解写在实现类中！</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【C++】C++运算符重载-基础]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/08/10/operator-overloading-base/"/>
+    <updated>2017-08-10T18:40:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/08/10/operator-overloading-base</id>
+    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
+运算符重载基础，以及实例</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>运算符重载基础</h1>
+
+<p>运算符重载就是对已有的运算符赋予新的含义，实现新的功能。</p>
+
+<p>运算符重载，如“+”，它可以对int、float、string类型进行加法运算。<br/>
+&ldquo;&lt;&lt;"是C++中的左移运算符，但是在输出操作中与cout配合被称为流插入运算符，可以进行输出。<br/>
+&rdquo;>>&ldquo;是右移运算符，与cin配合使用被称为流提取运算符。<br/>
+它们都被称为运算符重载。</p>
+
+<p>我们也可以根据我们的需要对C++中现有的运算符进行重载，来赋予这些运算符新的含义。<br/>
+如CTime类，重载+运算符，实现两个CTime对象的相加。</p>
+
+<p>介绍运算符重载前，我们看下如何来实现两个CTime对象相加。 <br/>
+CTime重载+运算符实现两个CTime对象的相加，<br/>
+time1 + time2 <br/>
+首先需要定义一个重载的运算符函数，此后在执行被重载的运算符时，系统将自动调用该运算符函数。<br/>
+<strong>运算符重载实际上是函数的重载</strong>。</p>
+
+<p>运算符重载的格式：返回类型 operator运算符（参数列表）</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CTime operator+(CTime& time1, CTime& time2)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+ 
+重载的运算符函数可以作为一般的函数，也可以作为类的成员函数。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CTime operator+(CTime& time) </span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+下面通过代码来看吧
+普通的，通过函数来相加:</p>
+
+<figure class='code'><figcaption><span>Time.h中声明友元函数</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">friend</span> <span class="n">CTime</span> <span class="nf">addTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time2</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>main.cpp中直接实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">addTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time2</span><span class="p">)</span><span class="c1">//这里的相加是时分秒进行相加，满60进1</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="n">time1</span><span class="p">.</span><span class="n">m_nSecond</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">minute</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">second</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">minute</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">minute</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">minute</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">hour</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&gt;</span> <span class="mi">24</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span> <span class="o">-=</span> <span class="mi">24</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">CTime</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span><span class="n">minute</span><span class="p">,</span><span class="n">second</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//输出</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time3</span> <span class="o">=</span> <span class="n">addTime</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">time2</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time3</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time3</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time3</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>+号运算重载：</p>
+
+<figure class='code'><figcaption><span>Time.h中声明</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">friend</span> <span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time2</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>main.cpp中实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time2</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="n">time1</span><span class="p">.</span><span class="n">m_nSecond</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">minute</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">second</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">minute</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">minute</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">minute</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">hour</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&gt;</span> <span class="mi">24</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span> <span class="o">-=</span> <span class="mi">24</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">CTime</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time4</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">time2</span><span class="p">;</span>    <span class="c1">//使用+号重载对两个CTime对象进行相加</span>
+</span><span class='line'>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>输出结果:</h2>
+
+<p><img src="http://i.imgur.com/3xtl8kk.png" alt="" /></p>
+
+<p>在CTime类内部定义+号重载运算符</p>
+
+<figure class='code'><figcaption><span>Time.h中声明</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Time.cpp中实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="n">CTime</span><span class="o">::</span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">m_nSecond</span> <span class="o">+</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">minute</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">second</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">minute</span> <span class="o">+=</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">m_nMinute</span> <span class="o">+</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">minute</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">minute</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">hour</span> <span class="o">+=</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">m_nHour</span> <span class="o">+</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&gt;</span> <span class="mi">24</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span> <span class="o">-=</span> <span class="mi">24</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">CTime</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>main.cpp中调用</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time4</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">time2</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>结果和前面的是一样的。</p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170810/code/operatorOverloadingBase' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
@@ -308,7 +624,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#117;&#105;&#x66;&#117;&#x74;&#x75;&#x72;&#x65;&#x40;&#x75;&#x69;&#x66;&#117;&#116;&#117;&#114;&#101;&#x2e;&#x63;&#111;&#109;">&#117;&#x69;&#x66;&#x75;&#116;&#x75;&#x72;&#101;&#x40;&#117;&#x69;&#102;&#117;&#116;&#117;&#114;&#101;&#x2e;&#99;&#x6f;&#x6d;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#117;&#x69;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#x40;&#x75;&#x69;&#x66;&#117;&#x74;&#x75;&#x72;&#101;&#x2e;&#x63;&#111;&#109;">&#117;&#105;&#102;&#117;&#116;&#x75;&#114;&#101;&#x40;&#117;&#105;&#102;&#x75;&#116;&#117;&#x72;&#101;&#x2e;&#x63;&#x6f;&#x6d;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -326,7 +642,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x75;&#x69;&#x66;&#x75;&#x74;&#x75;&#x72;&#x65;&#64;&#x75;&#105;&#x66;&#117;&#116;&#x75;&#x72;&#x65;&#x2e;&#99;&#111;&#x6d;">&#x75;&#105;&#102;&#117;&#x74;&#117;&#114;&#x65;&#x40;&#117;&#105;&#x66;&#x75;&#116;&#117;&#114;&#x65;&#46;&#99;&#111;&#x6d;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x75;&#105;&#102;&#117;&#116;&#117;&#114;&#101;&#64;&#x75;&#x69;&#x66;&#x75;&#x74;&#117;&#x72;&#101;&#x2e;&#99;&#111;&#109;">&#x75;&#105;&#102;&#x75;&#x74;&#x75;&#114;&#x65;&#64;&#117;&#x69;&#x66;&#x75;&#x74;&#x75;&#114;&#x65;&#46;&#99;&#111;&#x6d;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -6800,579 +7116,6 @@ redis.softMinEvictableIdleTimeMillis=60000
 <p>这个是我当时写一个Web项目的时候，慢慢整合而成的，比较完整的Redis操作工具类，基本上可以满足你操纵Redis的绝大多数需要了。</p>
 
 <p>因为不是个什么完整的项目，就没有上传到github上为大家提供这几个代码的下载了，只能麻烦需要的朋友直接拷贝下了。</p>
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【设计模式】Java设计模式之模板方法模式]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/14/study-in-imooc/"/>
-    <updated>2017-05-14T22:18:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/14/study-in-imooc</id>
-    <content type="html"><![CDATA[<p>我们先这样来想象一个生活中的场景，<br/>
-就是我们在银行柜台进行办理业务的时候，会进行这几步:<br/>
-Step1:进门取号<br/>
-Step2:填写单据<br/>
-Step3:等待叫号<br/>
-Step4:窗口办理</p>
-
-<p>在这里，无论是你我还是他/她，都会遵循这个模板进行业务的办理！
-我们具体看Step2，银行是无法知道我们的信息的，所以无法由银行具体实现了，所以留下接口，需要我们自己去实现。<br/>
-现在我们再继续看下去</p>
-
-<!-- more -->
-
-
-<hr />
-
-<h2>什么是模板方法</h2>
-
-<p>模板方法模式是类的行为模式。准备一个抽象类，将部分逻辑以具体方法以及具体构造函数的形式实现，然后声明一些抽象方法来迫使子类实现剩余的逻辑。不同的子类可以以不同的方式实现这些抽象方法，从而对剩余的逻辑有不同的实现。这就是模板方法模式的用意。
-比如定义一个操作中的算法的骨架，将步骤延迟到子类中。模板方法使得子类能够不去改变一个算法的结构即可重定义算法的某些特定步骤。</p>
-
-<p>前面那个例子可以这样用图来描述：</p>
-
-<p><img src="http://chenhaoxiang.github.io/images/20170514/222935.png"></p>
-
-<p>简单明了，就是Step2自己去具体实现。</p>
-
-<hr />
-
-<h1>模板方法模式的代码实现</h1>
-
-<h2>具体子类实现延迟步骤</h2>
-
-<figure class='code'><figcaption><span>抽象基类 为所有子类提供一个算法框架</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">chenhaoxiang</span><span class="o">.</span><span class="na">template</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * 抽象基类 为所有子类提供一个算法框架</span>
-</span><span class='line'><span class="cm"> * </span>
-</span><span class='line'><span class="cm"> * 提神饮料</span>
-</span><span class='line'><span class="cm"> * </span>
-</span><span class='line'><span class="cm"> * @author chenhaoxiang</span>
-</span><span class='line'><span class="cm"> *</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">RefreshBeverage</span> <span class="o">{</span>
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * final阻止子类对方法的复写 制备饮料的模板方法 封装了所有子类共同遵循的算法框架</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">prepareBeverageTemplate</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="c1">// 步骤1:将水煮沸</span>
-</span><span class='line'>      <span class="n">boilWater</span><span class="o">();</span>
-</span><span class='line'>      <span class="c1">// 步骤2:泡制饮料</span>
-</span><span class='line'>      <span class="n">brew</span><span class="o">();</span>
-</span><span class='line'>      <span class="c1">// 步骤3:将饮料倒入杯中</span>
-</span><span class='line'>      <span class="n">pourInCup</span><span class="o">();</span>
-</span><span class='line'>      <span class="c1">// 步骤4: 加入调味料</span>
-</span><span class='line'>      <span class="n">addCondiments</span><span class="o">();</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 基本方法:将水煮沸</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kt">void</span> <span class="nf">boilWater</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;将水煮沸&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>  
-</span><span class='line'>  
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 抽象的基本方法</span>
-</span><span class='line'><span class="cm">  * 泡制饮料</span>
-</span><span class='line'><span class="cm">  * 注意访问权限为protected</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">brew</span><span class="o">();</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 通用方法</span>
-</span><span class='line'><span class="cm">  * 将饮料倒入杯中</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kt">void</span> <span class="nf">pourInCup</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;将饮料倒入杯子中&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 抽象的基本方法</span>
-</span><span class='line'><span class="cm">  * 加入调味料</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">addCondiments</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>具体子类,提供了咖啡制备的具体实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">chenhaoxiang</span><span class="o">.</span><span class="na">template</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * 具体子类</span>
-</span><span class='line'><span class="cm"> * 提供了咖啡制备的具体实现</span>
-</span><span class='line'><span class="cm"> * </span>
-</span><span class='line'><span class="cm"> * @author chenhaoxiang</span>
-</span><span class='line'><span class="cm"> *</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Coffee</span> <span class="kd">extends</span> <span class="n">RefreshBeverage</span><span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">brew</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;冲泡咖啡...&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">addCondiments</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;加入咖啡调料...&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>具体子类,提供了制备茶的具体实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">chenhaoxiang</span><span class="o">.</span><span class="na">template</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * 具体子类</span>
-</span><span class='line'><span class="cm"> * 提供了制备茶的具体实现</span>
-</span><span class='line'><span class="cm"> * @author chenhaoxiang</span>
-</span><span class='line'><span class="cm"> *</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tea</span> <span class="kd">extends</span> <span class="n">RefreshBeverage</span><span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">brew</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;用80度的热水浸泡茶叶5分钟...&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">addCondiments</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;茶也要调味品？反正我不加.&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>测试类</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">chenhaoxiang</span><span class="o">.</span><span class="na">template</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RefreshBeverageTest</span> <span class="o">{</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>      
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;制备咖啡...&quot;</span><span class="o">);</span>
-</span><span class='line'>      
-</span><span class='line'>      <span class="n">RefreshBeverage</span> <span class="n">beverage</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Coffee</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">beverage</span><span class="o">.</span><span class="na">prepareBeverageTemplate</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;咖啡制作好了.&quot;</span><span class="o">);</span>
-</span><span class='line'>      
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;---------------------&quot;</span><span class="o">);</span>
-</span><span class='line'>      
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;开始制备茶.&quot;</span><span class="o">);</span>
-</span><span class='line'>      <span class="n">RefreshBeverage</span> <span class="n">beverage2</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Tea</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">beverage2</span><span class="o">.</span><span class="na">prepareBeverageTemplate</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;茶制作成功.&quot;</span><span class="o">);</span>
-</span><span class='line'>      
-</span><span class='line'>      
-</span><span class='line'>      
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>结果:</p>
-
-<p><img src="http://chenhaoxiang.github.io/images/20170514/223014.png"></p>
-
-<h2>钩子使子类更灵活</h2>
-
-<p>看上面代码实现的步骤:
-1、把水煮沸
-2、泡饮料
-3、把饮料倒入杯子
-4、加调味品</p>
-
-<p>上面的代码中，我们的子类是必须进行上面的4步的，因为那是在我们的模板方法中定义的。
-如果我们不需要加调味品呢，这个时候就需要引入钩子方法的概念了。</p>
-
-<p>对上面的代码进行变化</p>
-
-<p>未写的是未进行修改的类</p>
-
-<figure class='code'><figcaption><span>抽象基类 为所有子类提供一个算法框架</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">chenhaoxiang</span><span class="o">.</span><span class="na">template</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * 抽象基类 为所有子类提供一个算法框架</span>
-</span><span class='line'><span class="cm"> * </span>
-</span><span class='line'><span class="cm"> * 提神饮料</span>
-</span><span class='line'><span class="cm"> * </span>
-</span><span class='line'><span class="cm"> * @author chenhaoxiang</span>
-</span><span class='line'><span class="cm"> *</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">RefreshBeverage</span> <span class="o">{</span>
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * final阻止子类对方法的复写 制备饮料的模板方法 封装了所有子类共同遵循的算法框架</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">prepareBeverageTemplate</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="c1">// 步骤1:将水煮沸</span>
-</span><span class='line'>      <span class="n">boilWater</span><span class="o">();</span>
-</span><span class='line'>      <span class="c1">// 步骤2:泡制饮料</span>
-</span><span class='line'>      <span class="n">brew</span><span class="o">();</span>
-</span><span class='line'>      <span class="c1">// 步骤3:将饮料倒入杯中</span>
-</span><span class='line'>      <span class="n">pourInCup</span><span class="o">();</span>
-</span><span class='line'>      <span class="k">if</span><span class="o">(</span> <span class="n">isCustomerWantsCondiments</span><span class="o">()</span> <span class="o">){</span>
-</span><span class='line'>          <span class="c1">// 步骤4: 加入调味料</span>
-</span><span class='line'>          <span class="n">addCondiments</span><span class="o">();</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 钩子(Hook)函数</span>
-</span><span class='line'><span class="cm">  * 提供一个默认或空的实现</span>
-</span><span class='line'><span class="cm">  * 具体的子类可以自行决定是否挂钩以及如何挂钩</span>
-</span><span class='line'><span class="cm">  * (让子类选择性的可以钩或者不钩中实现)</span>
-</span><span class='line'><span class="cm">  * 询问用户是否需要加入调料</span>
-</span><span class='line'><span class="cm">  * @return</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isCustomerWantsCondiments</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 基本方法:将水煮沸</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kt">void</span> <span class="nf">boilWater</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;将水煮沸&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>  
-</span><span class='line'>  
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 抽象的基本方法</span>
-</span><span class='line'><span class="cm">  * 泡制饮料</span>
-</span><span class='line'><span class="cm">  * 注意访问权限为protected</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">brew</span><span class="o">();</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 通用方法</span>
-</span><span class='line'><span class="cm">  * 将饮料倒入杯中</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kt">void</span> <span class="nf">pourInCup</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;将饮料倒入杯子中&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 抽象的基本方法</span>
-</span><span class='line'><span class="cm">  * 加入调味料</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">addCondiments</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>提供了制备茶的具体实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">chenhaoxiang</span><span class="o">.</span><span class="na">template</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * 具体子类</span>
-</span><span class='line'><span class="cm"> * 提供了制备茶的具体实现</span>
-</span><span class='line'><span class="cm"> * @author chenhaoxiang</span>
-</span><span class='line'><span class="cm"> *</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tea</span> <span class="kd">extends</span> <span class="n">RefreshBeverage</span><span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">brew</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;用80度的热水浸泡茶叶5分钟...&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">addCondiments</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;茶也要调味品？反正我不加.&quot;</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/**</span>
-</span><span class='line'><span class="cm">  * 子类通过覆盖的形式选择挂载钩子函数并且提供了一个符合自己需求的实现</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isCustomerWantsCondiments</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kc">false</span><span class="o">;</span><span class="c1">//返回false ，addCondiments方法不会执行</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>  
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>演示结果:</p>
-
-<p><img src="http://chenhaoxiang.github.io/images/20170514/225603.png"></p>
-
-<h1>总结</h1>
-
-<p>抽象基类：<br/>
-1、基本方法<br/>
-我们知道所有的子类的实现细节都是一样的，具有共性的<br/>
-可以直接在基类中定义实现<br/>
-2、抽象方法<br/>
-对于只知道原则而不知道细节的方法<br/>
-3、可选钩子函数<br/>
-只在基类中提供默认或者空的实现，由子类来选择是否使用钩子<br/>
-4、Template方法<br/>
-把前面的方法按照一定顺序来执行，写成模板方法。<br/>
-注意，该方法一定要写成final！</p>
-
-<p>也就是，你不能改变基类规定的基本原则，执行顺序！</p>
-
-<p>具体子类：<br/>
-1、实现基类中的抽象方法<br/>
-执行子类的个性化行为<br/>
-2、可选择覆盖钩子方法<br/>
-可更加个性化的来影响局部行为</p>
-
-<p>模板方法的适用场景：<br/>
-1、算法或操作遵循相似的逻辑<br/>
-例如上面代码样例中的茶和咖啡，对饮料的泡制具有相似的逻辑，所以可以抽象成模板方法，供所有子类使用！<br/>
-2、重构时(把相同的代码抽取到父类中)<br/>
-新功能加入时<br/>
-3、重要、复杂的算法，核心算法设计为模板算法</p>
-
-<p>模板方法模式的优点:<br/>
-1、封装性好<br/>
-2、复用性好<br/>
-3、屏蔽细节<br/>
-4、便于维护<br/>
-优点具体就不说了，百度一下有很多解释。<br/>
-模板方法模式的缺点:<br/>
-1、继承<br/>
-继承是面向对象的语言的一个核心的特性！<br/>
-Java是单继承语言，也就是一个类只能有一个父类！<br/>
-这种情况下，设想一个情况，在已有的历史系统中，这个系统的类有大量继承，如果我们想做一些重构，用模板方法的模式抽取共性，以及增加架构的弹性的时候，因为我们的类已经处于继承的某个继承的结构之中，如果想引用模板方法，可能就会遇到一些问题！</p>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
