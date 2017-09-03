@@ -3,7 +3,7 @@ layout: post
 title: "HDOJ 1004题 Let the Balloon Rise  strcmp()函数"
 date: 2015-08-21 02:38:46 +0800
 comments: true
-categories: acm(c)
+categories: acm-c
 tags: [c语言,HDOJ]
 keyword: 陈浩翔, 谙忆
 description: Problem Description Contest time again! How excited it is to see balloons floating around. But to tell you a secret, the judges' favorite time is guessing the most popular problem. When the contest i 

@@ -3,7 +3,7 @@ layout: post
 title: "HDOJ1021题 Fibonacci Again   应用求模公式"
 date: 2015-08-21 05:53:13 +0800
 comments: true
-categories: acm(c)
+categories: acm-c
 tags: [HDOJ,acm,c]
 keyword: 陈浩翔, 谙忆
 description: Problem Description There are another kind of Fibonacci numbers F(0) = 7, F(1) = 11, F(n) = F(n-1) + F(n-2) (n>=2).Input Input consists of a sequence of lines, each containing an integer n.

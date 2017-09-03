@@ -3,7 +3,7 @@ layout: post
 title: "HDOJ 1237题  简单计算器"
 date: 2015-08-22 05:49:01 +0800
 comments: true
-categories: acm(c)
+categories: acm-c
 tags: [acm,c]
 keyword: 陈浩翔, 谙忆
 description: 简单计算器 Time Limit  2000/1000 MS (Java/Others) Memory Limit 65536/32768 K (Java/Others)Total Submission(s) 15220  Accepted Submission(s) 5195Problem Description 读入一个只包含 +, -, *, / 的非负整数计算表达式

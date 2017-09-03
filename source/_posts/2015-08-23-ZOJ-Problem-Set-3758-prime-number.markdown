@@ -3,7 +3,7 @@ layout: post
 title: "ZOJ Problem Set - 3758 素数"
 date: 2015-08-23 06:36:23 +0800
 comments: true
-categories: amc(c)
+categories: acm-c
 tags: [zoj,acm]
 keyword: 陈浩翔, 谙忆
 description: Singles’ DayTime Limit  2 Seconds  Memory Limit  65536 KB Singles’ Day(or One’s Day), an unofficial holiday in China, is a pop culture entertaining holiday on November 11 for young Chinese to celeb 

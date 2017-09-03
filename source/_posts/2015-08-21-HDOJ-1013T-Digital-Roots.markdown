@@ -3,7 +3,7 @@ layout: post
 title: "HDOJ 1013题Digital Roots 大数，9余数定理"
 date: 2015-08-21 05:00:24 +0800
 comments: true
-categories: acm(c)
+categories: acm-c
 tags: [c,HDOJ,acm]
 keyword: 陈浩翔, 谙忆
 description: Problem Description The digital root of a positive integer is found by summing the digits of the integer. If the resulting value is a single digit then that digit is the digital root. If the resultin 

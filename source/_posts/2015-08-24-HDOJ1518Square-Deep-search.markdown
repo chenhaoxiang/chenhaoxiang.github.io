@@ -3,7 +3,7 @@ layout: post
 title: "HDOJ1518Square 深搜"
 date: 2015-08-24 11:51:53 +0800
 comments: true
-categories: acm(c)
+categories: acm-c
 tags: [acm,HDOJ]
 keyword: 陈浩翔, 谙忆
 description: Square 

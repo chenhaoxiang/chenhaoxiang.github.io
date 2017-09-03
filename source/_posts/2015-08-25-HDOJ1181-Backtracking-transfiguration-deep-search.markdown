@@ -3,7 +3,7 @@ layout: post
 title: "HDOJ1181变形课 深搜回溯"
 date: 2015-08-25 10:28:06 +0800
 comments: true
-categories: acm(c)
+categories: acm-c
 tags: [acm,HDOJ,c]
 keyword: 陈浩翔, 谙忆
 description: 变形课上Harry碰到了一点小麻烦,因为他并不像Hermione那样能够记住所有的咒语而随意的将一个棒球变成刺猬什么的,但是他发现了变形咒语的一个统一规律:如果咒语是以a开头b结尾的一个单词,那么它的作用就恰好是使A物体变成B物体. Harry已经将他所会的所有咒语都列成了一个表,他想让你帮忙计算一下他是否能完成老师的作业,将一个B(ball)变成一个M(Mouse),你知道,如果他自己不能完成的话,他就只好向Hermione请教,并且被迫听一大堆好好学习的道理.

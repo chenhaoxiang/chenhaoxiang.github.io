@@ -3,7 +3,7 @@ layout: post
 title: "HDOJ 1312题Red and Black"
 date: 2015-08-22 10:59:23 +0800
 comments: true
-categories: acm(c)
+categories: acm-c
 tags: [acm,c]
 keyword: 陈浩翔, 谙忆
 description: Red and Black Time Limit  
