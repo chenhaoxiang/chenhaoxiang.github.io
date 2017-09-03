@@ -1,0 +1,558 @@
+
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>HDOJ 1312题Red and Black - 谙忆-人生之旅</title>
+
+  <meta name="author" content="陈浩翔">
+
+  
+  <meta name="description" content="Red and Black Time Limit">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2015/08/22/HDOJ-1312T-Red-and-Black/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="jquery1.9.1.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="fonts.googleapis.com.css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="fonts.googleapis.com.css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">谙忆-人生之旅</a></h1>
+  
+    <h2>学不止步,梦不停歇-陈浩翔</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">﻿<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com.hk/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="chenhaoxiang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="请使用谷歌搜索"/>
+  </fieldset>
+</form>
+  
+﻿<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">博客列表</a></li>
+  <li><a href="/reward">打赏名单</a></li>
+  <li><a href="/aboutme">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">HDOJ 1312题Red and Black</h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+2015年08月22日
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Problem Description
+There is a rectangular room, covered with square tiles. Each tile is colored either red or black. A man is standing on a black tile. From a tile, he can move to one of four adjacent tiles. But he can&rsquo;t move on red tiles, he can move only on black tiles.</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>Write a program to count the number of black tiles which he can reach by repeating the moves described above.</p>
+
+<p>Input
+The input consists of multiple data sets. A data set starts with a line containing two positive integers W and H; W and H are the numbers of tiles in the x- and y- directions, respectively. W and H are not more than 20.</p>
+
+<p>There are H more lines in the data set, each of which includes W characters. Each character represents the color of a tile as follows.</p>
+
+<p>&lsquo;.&rsquo; - a black tile
+&lsquo;#&rsquo; - a red tile
+&lsquo;@&rsquo; - a man on a black tile(appears exactly once in a data set)</p>
+
+<p>Output
+For each data set, your program should output a line which contains the number of tiles he can reach from the initial tile (including itself).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Sample Input
+</span><span class='line'>6 9
+</span><span class='line'>....#.
+</span><span class='line'>.....#
+</span><span class='line'>......
+</span><span class='line'>......
+</span><span class='line'>......
+</span><span class='line'>......
+</span><span class='line'>......
+</span><span class='line'>#@...#
+</span><span class='line'>.#..#.
+</span><span class='line'>11 9
+</span><span class='line'>.#.........
+</span><span class='line'>.#.#######.
+</span><span class='line'>.#.#.....#.
+</span><span class='line'>.#.#.###.#.
+</span><span class='line'>.#.#..@#.#.
+</span><span class='line'>.#.#####.#.
+</span><span class='line'>.#.......#.
+</span><span class='line'>.#########.
+</span><span class='line'>...........
+</span><span class='line'>11 6
+</span><span class='line'>..#..#..#..
+</span><span class='line'>..#..#..#..
+</span><span class='line'>..#..#..###
+</span><span class='line'>..#..#..#@.
+</span><span class='line'>..#..#..#..
+</span><span class='line'>..#..#..#..
+</span><span class='line'>7 7
+</span><span class='line'>..#.#..
+</span><span class='line'>..#.#..
+</span><span class='line'>###.###
+</span><span class='line'>...@...
+</span><span class='line'>###.###
+</span><span class='line'>..#.#..
+</span><span class='line'>..#.#..
+</span><span class='line'>0 0</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sample Output
+45
+59
+6
+13</p>
+
+<p>题意：
+   n*m的方阵有红格或是黑格，只能走黑格
+    每次只能走上下左右四个紧邻方向的格子，求
+    这个人最后能走多少个黑格子。</p>
+
+<p>分析：
+   dfs水题。从第一个黑格子开始递归的搜索，
+    每次搜索一个黑格子后为了以后不再重复走
+    这个黑格子，就把当前搜索的这个黑格子换
+    成红格子，然后继续dfs。。。</p>
+
+<p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=1312%EF%BC%9B">http://acm.hdu.edu.cn/showproblem.php?pid=1312%EF%BC%9B</a>
+题目大意：一个长方形空间，上面铺红色和黑色瓦片，一个人起初站在黑色瓦片上，每次可以走到相邻的4个黑色瓦片上，输入数据，求其能走过多少瓦片
+题意：某人在@处为起点（也包括@点）#为墙，点（.）为通路，问最多能走多远统计能走几个点（加上@这个点）
+思路：用dfs；
+代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdlib.h&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;string.h&gt;</span>
+</span><span class='line'><span class="kt">char</span> <span class="n">a</span><span class="p">[</span><span class="mi">30</span><span class="p">][</span><span class="mi">30</span><span class="p">];</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">ss</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span><span class="c1">//这3个值需要用全局变量</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span> <span class="p">{</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">},{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">},{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">},{</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="p">};</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="n">y</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="n">x</span><span class="o">&gt;=</span><span class="n">m</span><span class="o">||</span><span class="n">y</span><span class="o">&gt;=</span><span class="n">n</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">xx</span><span class="o">=</span><span class="n">x</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">yy</span><span class="o">=</span><span class="n">y</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">xx</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="n">yy</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="n">xx</span><span class="o">&gt;=</span><span class="n">m</span><span class="o">||</span><span class="n">yy</span><span class="o">&gt;=</span><span class="n">n</span><span class="o">||</span><span class="n">a</span><span class="p">[</span><span class="n">xx</span><span class="p">][</span><span class="n">yy</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;#&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="c1">//检查该点上下左右的点是否符合题目要求。   </span>
+</span><span class='line'>            <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">ss</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">a</span><span class="p">[</span><span class="n">xx</span><span class="p">][</span><span class="n">yy</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;#&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">//如果该点已经检查过，就把它变成&#39;#&#39;,防止再次被检查。   </span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="o">~</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">)</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">n</span><span class="o">||</span><span class="n">m</span><span class="p">))</span><span class="c1">//n,m不能同时为0</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">pi</span><span class="p">,</span><span class="n">pj</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">getchar</span><span class="p">();</span><span class="c1">//吸收换行符。  </span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;@&#39;</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="n">pi</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">pj</span><span class="o">=</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">getchar</span><span class="p">();</span><span class="c1">//吸收换行符。   </span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">a</span><span class="p">[</span><span class="n">pi</span><span class="p">][</span><span class="n">pj</span><span class="p">]</span><span class="o">=</span><span class="sc">&#39;#&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">ss</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span><span class="n">pj</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ss</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">陈浩翔</span></span>
+
+      ﻿
+
+
+
+
+2015年08月22日
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/acm-c/'>acm(c)</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+
+	﻿
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2015/08/22/HDOJ-1312T-Red-and-Black" style="margin-bottom: 10px; text-align: center;"></div>
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24" style="float: right;">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share?uid=2133017" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2133017" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+		﻿<!--PC版-->
+
+<div id="SOHUCS" sid="/blog/2015/08/22/HDOJ-1312T-Red-and-Black"></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyt09iKYx',
+conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
+});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt09iKYx"></script>
+	
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/08/22/HDOJ-1237TSimple-calculator/" title="Previous Post: HDOJ 1237题  简单计算器">&laquo; HDOJ 1237题  简单计算器</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/08/22/Exhaustive-search-and-deep-search/" title="Next Post: 穷举搜索 回溯与深搜">穷举搜索 回溯与深搜 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    ﻿<section>
+  <h1>最新博客</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/24/cocos2dx-sprite-sheet-optimize/">【Cocos2d-x】Cocos2d-x精灵的性能优化</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/android-magicwindow/">【安卓】安卓集成魔窗-完整实例</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/22/cocos2d-x-create-sprite-object/">【Cocos2d-x】Sprite精灵类-创建Sprite精灵对象</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/21/Spring-SpringMVC-MyBatis-Transactional-Invalid/">【问题解决】SSM-@Transactional注解事务无效探讨</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/10/operator-overloading-base/">【C++】C++运算符重载-基础</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=59ilglu8mky&amp;m=0&amp;c=00fff6&amp;cr1=ff0000&amp;f=ubuntu&amp;l=0" async="async">
+  </script>
+</section>
+﻿
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/acm-c-/'>acm(c) (7)</a></li>
+<li class='category'><a href='/blog/categories/algorithm/'>algorithm (3)</a></li>
+<li class='category'><a href='/blog/categories/amc-c-/'>amc(c) (1)</a></li>
+<li class='category'><a href='/blog/categories/android/'>android (1)</a></li>
+<li class='category'><a href='/blog/categories/c-plus-plus/'>c-plus-plus (7)</a></li>
+<li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (10)</a></li>
+<li class='category'><a href='/blog/categories/java/'>java (6)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/chenhaoxiang">@chenhaoxiang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'chenhaoxiang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+﻿
+	<section>
+<h1>友情链接</h1>
+	<ul>
+        <li>
+        <a href="http://blog.csdn.net/qq_26525215" target="_blank">大学之旅_谙忆</a>
+		</li>
+		<li>
+        <a href="http://blog.csdn.net/marksinoberg" target="_blank">纯臻</a>
+		</li>
+		<li>
+		<a href="http://blog.csdn.net/u013097262" target="_blank">Dream_M</a>
+		</li>
+		<li>
+		<a href="https://bbs.ksyun.com/forum.php" target="_blank">金山云</a>
+		</li>
+</ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 陈浩翔 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261875079'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261875079%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  ﻿<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow62.js"></script>
+<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+
+</body>
+</html>

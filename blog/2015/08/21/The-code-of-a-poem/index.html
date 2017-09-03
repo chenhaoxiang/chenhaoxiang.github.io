@@ -1,0 +1,1003 @@
+
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>一首诗的代码 - 谙忆-人生之旅</title>
+
+  <meta name="author" content="陈浩翔">
+
+  
+  <meta name="description" content="c语言的诗，早期作品">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2015/08/21/The-code-of-a-poem/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="jquery1.9.1.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="fonts.googleapis.com.css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="fonts.googleapis.com.css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">谙忆-人生之旅</a></h1>
+  
+    <h2>学不止步,梦不停歇-陈浩翔</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">﻿<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com.hk/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="chenhaoxiang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="请使用谷歌搜索"/>
+  </fieldset>
+</form>
+  
+﻿<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">博客列表</a></li>
+  <li><a href="/reward">打赏名单</a></li>
+  <li><a href="/aboutme">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">一首诗的代码</h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+2015年08月21日
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>将一首诗用代码输出</p>
+
+<hr />
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+<span class='line-number'>204</span>
+<span class='line-number'>205</span>
+<span class='line-number'>206</span>
+<span class='line-number'>207</span>
+<span class='line-number'>208</span>
+<span class='line-number'>209</span>
+<span class='line-number'>210</span>
+<span class='line-number'>211</span>
+<span class='line-number'>212</span>
+<span class='line-number'>213</span>
+<span class='line-number'>214</span>
+<span class='line-number'>215</span>
+<span class='line-number'>216</span>
+<span class='line-number'>217</span>
+<span class='line-number'>218</span>
+<span class='line-number'>219</span>
+<span class='line-number'>220</span>
+<span class='line-number'>221</span>
+<span class='line-number'>222</span>
+<span class='line-number'>223</span>
+<span class='line-number'>224</span>
+<span class='line-number'>225</span>
+<span class='line-number'>226</span>
+<span class='line-number'>227</span>
+<span class='line-number'>228</span>
+<span class='line-number'>229</span>
+<span class='line-number'>230</span>
+<span class='line-number'>231</span>
+<span class='line-number'>232</span>
+<span class='line-number'>233</span>
+<span class='line-number'>234</span>
+<span class='line-number'>235</span>
+<span class='line-number'>236</span>
+<span class='line-number'>237</span>
+<span class='line-number'>238</span>
+<span class='line-number'>239</span>
+<span class='line-number'>240</span>
+<span class='line-number'>241</span>
+<span class='line-number'>242</span>
+<span class='line-number'>243</span>
+<span class='line-number'>244</span>
+<span class='line-number'>245</span>
+<span class='line-number'>246</span>
+<span class='line-number'>247</span>
+<span class='line-number'>248</span>
+<span class='line-number'>249</span>
+<span class='line-number'>250</span>
+<span class='line-number'>251</span>
+<span class='line-number'>252</span>
+<span class='line-number'>253</span>
+<span class='line-number'>254</span>
+<span class='line-number'>255</span>
+<span class='line-number'>256</span>
+<span class='line-number'>257</span>
+<span class='line-number'>258</span>
+<span class='line-number'>259</span>
+<span class='line-number'>260</span>
+<span class='line-number'>261</span>
+<span class='line-number'>262</span>
+<span class='line-number'>263</span>
+<span class='line-number'>264</span>
+<span class='line-number'>265</span>
+<span class='line-number'>266</span>
+<span class='line-number'>267</span>
+<span class='line-number'>268</span>
+<span class='line-number'>269</span>
+<span class='line-number'>270</span>
+<span class='line-number'>271</span>
+<span class='line-number'>272</span>
+<span class='line-number'>273</span>
+<span class='line-number'>274</span>
+<span class='line-number'>275</span>
+<span class='line-number'>276</span>
+<span class='line-number'>277</span>
+<span class='line-number'>278</span>
+<span class='line-number'>279</span>
+<span class='line-number'>280</span>
+<span class='line-number'>281</span>
+<span class='line-number'>282</span>
+<span class='line-number'>283</span>
+<span class='line-number'>284</span>
+<span class='line-number'>285</span>
+<span class='line-number'>286</span>
+<span class='line-number'>287</span>
+<span class='line-number'>288</span>
+<span class='line-number'>289</span>
+<span class='line-number'>290</span>
+<span class='line-number'>291</span>
+<span class='line-number'>292</span>
+<span class='line-number'>293</span>
+<span class='line-number'>294</span>
+<span class='line-number'>295</span>
+<span class='line-number'>296</span>
+<span class='line-number'>297</span>
+<span class='line-number'>298</span>
+<span class='line-number'>299</span>
+<span class='line-number'>300</span>
+<span class='line-number'>301</span>
+<span class='line-number'>302</span>
+<span class='line-number'>303</span>
+<span class='line-number'>304</span>
+<span class='line-number'>305</span>
+<span class='line-number'>306</span>
+<span class='line-number'>307</span>
+<span class='line-number'>308</span>
+<span class='line-number'>309</span>
+<span class='line-number'>310</span>
+<span class='line-number'>311</span>
+<span class='line-number'>312</span>
+<span class='line-number'>313</span>
+<span class='line-number'>314</span>
+<span class='line-number'>315</span>
+<span class='line-number'>316</span>
+<span class='line-number'>317</span>
+<span class='line-number'>318</span>
+<span class='line-number'>319</span>
+<span class='line-number'>320</span>
+<span class='line-number'>321</span>
+<span class='line-number'>322</span>
+<span class='line-number'>323</span>
+<span class='line-number'>324</span>
+<span class='line-number'>325</span>
+<span class='line-number'>326</span>
+<span class='line-number'>327</span>
+<span class='line-number'>328</span>
+<span class='line-number'>329</span>
+<span class='line-number'>330</span>
+<span class='line-number'>331</span>
+<span class='line-number'>332</span>
+<span class='line-number'>333</span>
+</pre></td><td class='code'><pre><code class='C'><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdlib.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;windows.h&gt;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">one1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">one2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">one3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">one4</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">one5</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">one6</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">color1</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">system</span><span class="p">(</span><span class="s">&quot;color F4&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">Sleep</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">color2</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">system</span><span class="p">(</span><span class="s">&quot;color FC&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">Sleep</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">ai_1</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">n</span><span class="o">=-</span><span class="n">a</span><span class="o">-</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m</span><span class="o">=-</span><span class="n">b</span><span class="o">-</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">one1</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">one1</span><span class="o">%</span><span class="mi">3</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">one1</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">color1</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">ai_2</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">n</span><span class="o">=-</span><span class="n">a</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m</span><span class="o">=-</span><span class="n">b</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">one2</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">one2</span><span class="o">%</span><span class="mi">5</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">one2</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">color2</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">ai_3</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">n</span><span class="o">=-</span><span class="n">a</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m</span><span class="o">=-</span><span class="n">b</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">one3</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">one3</span><span class="o">%</span><span class="mi">7</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">one3</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">color1</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">ai_4</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">n</span><span class="o">=-</span><span class="n">a</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m</span><span class="o">=-</span><span class="n">b</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">one4</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">one4</span><span class="o">%</span><span class="mi">9</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">one4</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">color2</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">ai_5</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">n</span><span class="o">=-</span><span class="n">a</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m</span><span class="o">=-</span><span class="n">b</span><span class="o">-</span><span class="n">j</span><span class="o">-</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">one5</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">one5</span><span class="o">%</span><span class="mi">11</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">one5</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">color1</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">ai_6</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">*</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">n</span><span class="o">=-</span><span class="n">a</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m</span><span class="o">=-</span><span class="n">b</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">one6</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">one6</span><span class="o">%</span><span class="mi">13</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">one6</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">color2</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">ai</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">j</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">n</span><span class="o">=-</span><span class="n">a</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">m</span><span class="o">=-</span><span class="n">b</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">color2</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_1</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;D&#39;</span><span class="p">,</span><span class="sc">&#39;F&#39;</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">,</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;I&#39;</span><span class="p">,</span><span class="sc">&#39;;&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;N&#39;</span><span class="p">,</span><span class="sc">&#39;)&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;2&#39;</span><span class="p">,</span><span class="sc">&#39;I&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;J&#39;</span><span class="p">,</span><span class="sc">&#39;0&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;9&#39;</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;G&#39;</span><span class="p">,</span><span class="sc">&#39;8&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;&lt;&#39;</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;&lt;&#39;</span><span class="p">,</span><span class="sc">&#39;J&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="sc">&#39;@&#39;</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_2</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;4&#39;</span><span class="p">,</span><span class="sc">&#39;1&#39;</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;&lt;&#39;</span><span class="p">,</span><span class="sc">&#39;?&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;)&#39;</span><span class="p">,</span><span class="sc">&#39;+&#39;</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;5&#39;</span><span class="p">,</span><span class="sc">&#39;=&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">,</span><span class="sc">&#39;3&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;Y&#39;</span><span class="p">,</span><span class="sc">&#39;)&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">,</span><span class="sc">&#39;R&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;R&#39;</span><span class="p">,</span><span class="sc">&#39;C&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;R&#39;</span><span class="p">,</span><span class="sc">&#39;-&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">,</span><span class="sc">&#39;A&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;4&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="o">*</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;7&#39;</span><span class="o">+</span><span class="mi">25</span><span class="p">,</span><span class="sc">&#39;B&#39;</span><span class="o">+</span><span class="mi">24</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;?&#39;</span><span class="p">,</span><span class="sc">&#39;=&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_3</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;9&#39;</span><span class="p">,</span><span class="sc">&#39;5&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;-&#39;</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;+&#39;</span><span class="p">,</span><span class="sc">&#39;W&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;9&#39;</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;4&#39;</span><span class="p">,</span><span class="sc">&#39;1&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;8&#39;</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;K&#39;</span><span class="p">,</span><span class="sc">&#39;W&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;2&#39;</span><span class="p">,</span><span class="sc">&#39;&gt;&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;Q&#39;</span><span class="p">,</span><span class="sc">&#39;B&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">39</span><span class="p">,</span><span class="sc">&#39;9&#39;</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai</span><span class="p">(</span><span class="mi">110</span><span class="p">,</span><span class="mi">79</span><span class="p">,</span><span class="mi">50</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="o">-</span><span class="mi">11</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">one1</span><span class="o">*</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_4</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">,</span><span class="sc">&#39;I&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;F&#39;</span><span class="p">,</span><span class="sc">&#39;I&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;T&#39;</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;H&#39;</span><span class="p">,</span><span class="sc">&#39;X&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;/&#39;</span><span class="p">,</span><span class="sc">&#39;G&#39;</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">one6</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;L&#39;</span><span class="p">,</span><span class="sc">&#39;-&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="mi">39</span><span class="p">,</span><span class="sc">&#39;1&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_5</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="n">one6</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;O&#39;</span><span class="p">,</span><span class="sc">&#39;@&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;H&#39;</span><span class="p">,</span><span class="sc">&#39;-&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;3&#39;</span><span class="p">,</span><span class="sc">&#39;P&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;F&#39;</span><span class="p">,</span><span class="sc">&#39;7&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;@&#39;</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;1&#39;</span><span class="p">,</span><span class="sc">&#39;-&#39;</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;+&#39;</span><span class="p">,</span><span class="sc">&#39;7&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;9&#39;</span><span class="p">,</span><span class="sc">&#39;D&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="o">-</span><span class="mi">19</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_6</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">,</span><span class="sc">&#39;J&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;A&#39;</span><span class="p">,</span><span class="sc">&#39;F&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="sc">&#39;2&#39;</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">,</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;S&#39;</span><span class="p">,</span><span class="sc">&#39;Z&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="o">-</span><span class="mi">22</span><span class="p">,</span><span class="o">-</span><span class="mi">12</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_7</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="sc">&#39;F&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;B&#39;</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">,</span><span class="sc">&#39;*&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;Z&#39;</span><span class="p">,</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;9&#39;</span><span class="p">,</span><span class="sc">&#39;K&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="sc">&#39;?&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;K&#39;</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="sc">&#39;+&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;7&#39;</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_8</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="sc">&#39;;&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;N&#39;</span><span class="p">,</span><span class="mi">115</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">,</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span><span class="sc">&#39;7&#39;</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">,</span><span class="sc">&#39;1&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="o">-</span><span class="mi">11</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_9</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">,</span><span class="mi">44</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;?&#39;</span><span class="p">,</span><span class="sc">&#39;;&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;3&#39;</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;L&#39;</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;B&#39;</span><span class="p">,</span><span class="sc">&#39;R&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;E&#39;</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_10</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;I&#39;</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;/&#39;</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;3&#39;</span><span class="p">,</span><span class="sc">&#39;W&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="mi">44</span><span class="p">,</span><span class="sc">&#39;&gt;&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;5&#39;</span><span class="p">,</span><span class="sc">&#39;)&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="o">-</span><span class="mi">18</span><span class="p">,</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_11</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;2&#39;</span><span class="p">,</span><span class="sc">&#39;I&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;3&#39;</span><span class="p">,</span><span class="sc">&#39;X&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;5&#39;</span><span class="p">,</span><span class="sc">&#39;B&#39;</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="sc">&#39;G&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_12</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;1&#39;</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="n">one1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="sc">&#39;=&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;A&#39;</span><span class="p">,</span><span class="sc">&#39;-&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;?&#39;</span><span class="p">,</span><span class="sc">&#39;X&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="mi">38</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="sc">&#39;=&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;B&#39;</span><span class="p">,</span><span class="sc">&#39;.&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;D&#39;</span><span class="p">,</span><span class="mi">33</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="o">-</span><span class="mi">17</span><span class="p">,</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_13</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;3&#39;</span><span class="p">,</span><span class="sc">&#39;N&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;5&#39;</span><span class="p">,</span><span class="sc">&#39;]&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;1&#39;</span><span class="p">,</span><span class="sc">&#39;4&#39;</span><span class="p">,</span><span class="n">one2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;4&#39;</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">,</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="n">one4</span><span class="o">*</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span><span class="sc">&#39;2&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;Y&#39;</span><span class="p">,</span><span class="mi">39</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;7&#39;</span><span class="p">,</span><span class="mi">31</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;X&#39;</span><span class="p">,</span><span class="sc">&#39;V&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;?&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="sc">&#39;@&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_14</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="sc">&#39;?&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">34</span><span class="p">,</span><span class="sc">&#39;J&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="mi">39</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;G&#39;</span><span class="p">,</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="sc">&#39;J&#39;</span><span class="p">,</span><span class="sc">&#39;R&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;/&#39;</span><span class="p">,</span><span class="sc">&#39;@&#39;</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;F&#39;</span><span class="p">,</span><span class="sc">&#39;I&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;G&#39;</span><span class="p">,</span><span class="sc">&#39;O&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_1</span><span class="p">(</span><span class="sc">&#39;H&#39;</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="n">one3</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="mi">34</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">chx_15</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="sc">&#39;H&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_4</span><span class="p">(</span><span class="sc">&#39;9&#39;</span><span class="p">,</span><span class="sc">&#39;L&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="n">one6</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="sc">&#39;B&#39;</span><span class="p">,</span><span class="sc">&#39;&lt;&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;Z&#39;</span><span class="p">,</span><span class="sc">&#39;]&#39;</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_2</span><span class="p">(</span><span class="mi">577</span><span class="p">,</span><span class="mi">545</span><span class="p">,</span><span class="mi">520</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_5</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_6</span><span class="p">(</span><span class="sc">&#39;6&#39;</span><span class="p">,</span><span class="sc">&#39;@&#39;</span><span class="p">,</span><span class="n">one5</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai</span><span class="p">(</span><span class="sc">&#39;F&#39;</span><span class="p">,</span><span class="sc">&#39;:&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="o">-</span><span class="mi">17</span><span class="p">,</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">ai_3</span><span class="p">(</span><span class="o">-</span><span class="mi">18</span><span class="p">,</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="n">one4</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">chx_1</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_2</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_3</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_4</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_5</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_6</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_7</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_8</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_9</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_10</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_11</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_12</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_13</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_14</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">chx_15</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">system</span><span class="p">(</span><span class="s">&quot;cls&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">float</span> <span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">f</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="mf">1.5f</span><span class="p">;</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1.5f</span><span class="p">;</span> <span class="n">y</span> <span class="o">-=</span> <span class="mf">0.1f</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.5f</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">1.5f</span><span class="p">;</span> <span class="n">x</span> <span class="o">+=</span> <span class="mf">0.05f</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">f</span> <span class="o">=</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">*</span> <span class="n">z</span> <span class="o">-</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">putchar</span><span class="p">(</span><span class="n">f</span> <span class="o">&lt;=</span> <span class="mf">0.0f</span> <span class="o">?</span> <span class="s">&quot;.:-=+*#%@&quot;</span><span class="p">[(</span><span class="kt">int</span><span class="p">)(</span><span class="n">f</span> <span class="o">*</span> <span class="o">-</span><span class="mf">8.0f</span><span class="p">)]</span> <span class="o">:</span> <span class="sc">&#39; &#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">system</span><span class="p">(</span><span class="s">&quot;color 0C&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">putchar</span><span class="p">(</span><span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">按下任意键结束...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>回忆而写！</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">陈浩翔</span></span>
+
+      ﻿
+
+
+
+
+2015年08月21日
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/other/'>other</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+
+	﻿
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2015/08/21/The-code-of-a-poem" style="margin-bottom: 10px; text-align: center;"></div>
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24" style="float: right;">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share?uid=2133017" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2133017" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+		﻿<!--PC版-->
+
+<div id="SOHUCS" sid="/blog/2015/08/21/The-code-of-a-poem"></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyt09iKYx',
+conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
+});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt09iKYx"></script>
+	
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/08/21/HDOJ1021T-Fibonacci-Again/" title="Previous Post: HDOJ1021题 Fibonacci Again   应用求模公式">&laquo; HDOJ1021题 Fibonacci Again   应用求模公式</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/08/21/Curriculum-design-file-encryption/" title="Next Post: 课程设计，文件加密">课程设计，文件加密 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    ﻿<section>
+  <h1>最新博客</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/24/cocos2dx-sprite-sheet-optimize/">【Cocos2d-x】Cocos2d-x精灵的性能优化</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/android-magicwindow/">【安卓】安卓集成魔窗-完整实例</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/22/cocos2d-x-create-sprite-object/">【Cocos2d-x】Sprite精灵类-创建Sprite精灵对象</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/21/Spring-SpringMVC-MyBatis-Transactional-Invalid/">【问题解决】SSM-@Transactional注解事务无效探讨</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/10/operator-overloading-base/">【C++】C++运算符重载-基础</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=59ilglu8mky&amp;m=0&amp;c=00fff6&amp;cr1=ff0000&amp;f=ubuntu&amp;l=0" async="async">
+  </script>
+</section>
+﻿
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/acm-c-/'>acm(c) (7)</a></li>
+<li class='category'><a href='/blog/categories/algorithm/'>algorithm (3)</a></li>
+<li class='category'><a href='/blog/categories/amc-c-/'>amc(c) (1)</a></li>
+<li class='category'><a href='/blog/categories/android/'>android (1)</a></li>
+<li class='category'><a href='/blog/categories/c-plus-plus/'>c-plus-plus (7)</a></li>
+<li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (10)</a></li>
+<li class='category'><a href='/blog/categories/java/'>java (6)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/chenhaoxiang">@chenhaoxiang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'chenhaoxiang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+﻿
+	<section>
+<h1>友情链接</h1>
+	<ul>
+        <li>
+        <a href="http://blog.csdn.net/qq_26525215" target="_blank">大学之旅_谙忆</a>
+		</li>
+		<li>
+        <a href="http://blog.csdn.net/marksinoberg" target="_blank">纯臻</a>
+		</li>
+		<li>
+		<a href="http://blog.csdn.net/u013097262" target="_blank">Dream_M</a>
+		</li>
+		<li>
+		<a href="https://bbs.ksyun.com/forum.php" target="_blank">金山云</a>
+		</li>
+</ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 陈浩翔 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261875079'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261875079%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  ﻿<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow62.js"></script>
+<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+
+</body>
+</html>

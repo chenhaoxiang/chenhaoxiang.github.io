@@ -1,0 +1,520 @@
+
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>HDOJ1181变形课 深搜回溯 - 谙忆-人生之旅</title>
+
+  <meta name="author" content="陈浩翔">
+
+  
+  <meta name="description" content="变形课上Harry碰到了一点小麻烦,因为他并不像Hermione那样能够记住所有的咒语而随意的将一个棒球变成刺猬什么的,但是他发现了变形咒语的一个统一规律:如果咒语是以a开头b结尾的一个单词,那么它的作用就恰好是使A物体变成B物体. Harry已经将他所会的所有咒语都列成了一个表, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2015/08/25/HDOJ1181-Backtracking-transfiguration-deep-search/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="jquery1.9.1.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="fonts.googleapis.com.css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="fonts.googleapis.com.css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">谙忆-人生之旅</a></h1>
+  
+    <h2>学不止步,梦不停歇-陈浩翔</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">﻿<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com.hk/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="chenhaoxiang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="请使用谷歌搜索"/>
+  </fieldset>
+</form>
+  
+﻿<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">博客列表</a></li>
+  <li><a href="/reward">打赏名单</a></li>
+  <li><a href="/aboutme">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">HDOJ1181变形课 深搜回溯</h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+2015年08月25日
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Problem Description
+呃&hellip;&hellip;变形课上Harry碰到了一点小麻烦,因为他并不像Hermione那样能够记住所有的咒语而随意的将一个棒球变成刺猬什么的,但是他发现了变形咒语的一个统一规律:如果咒语是以a开头b结尾的一个单词,那么它的作用就恰好是使A物体变成B物体.
+Harry已经将他所会的所有咒语都列成了一个表,他想让你帮忙计算一下他是否能完成老师的作业,将一个B(ball)变成一个M(Mouse),你知道,如果他自己不能完成的话,他就只好向Hermione请教,并且被迫听一大堆好好学习的道理.</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>Input
+测试数据有多组。每组有多行，每行一个单词,仅包括小写字母,是Harry所会的所有咒语.数字0表示一组输入结束.</p>
+
+<p>Output
+如果Harry可以完成他的作业,就输出"Yes.&ldquo;,否则就输出"No.&rdquo;(不要忽略了句号)</p>
+
+<p> ```
+Sample Input
+so
+soon
+river
+goes
+them
+got
+moon
+begin
+big
+0</p>
+
+<p>Sample Output
+Yes.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HintHint 
+</span><span class='line'>Harry 可以念这个咒语:"big-got-them".
+</span><span class='line'>
+</span><span class='line'>这个代码还是很容易理解的，经典的DFS
+</span><span class='line'>不过对于没超时，我感到意外哈
+</span><span class='line'>我是从m往b搜索的</span></code></pre></td></tr></table></div></figure>
+
+
+<p>c</p>
+
+<h1>include&lt;stdlib.h></h1>
+
+<h1>include&lt;stdio.h></h1>
+
+<h1>include &lt;string.h></h1>
+
+<p>using namespace std;
+char a[1000][50];
+int len[1000];
+int k;int flag;
+bool vis[1000];
+void dfs(char x)
+{
+    if(x==&lsquo;b&rsquo;)
+        {
+            flag=1;
+            return ;
+        }
+    if(flag==1)
+    {
+        return;
+    }
+    for(int i=0;i&lt;k;i++)
+    {
+        //printf(&ldquo;vis[%d]=%d\n&rdquo;,i,vis[i]);
+        if(vis[i]==0)
+        {
+            if(a[i][len[i]]==x)
+            {
+   // printf(&ldquo;a[%d][%d]=%c\n&rdquo;,i,len[i],a[i][len[i]]);
+                vis[i]=1;
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                dfs(a[i][0]);
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                vis[i]=0;
+            }
+        }
+    }
+}
+int main()
+{
+    while(scanf(&ldquo;%s&rdquo;,a[0])!=EOF)
+    {
+        flag=0;
+         int i=0;
+        if(a[0][0]==&lsquo;0&rsquo;)
+        {
+            printf(&ldquo;no.\n&rdquo;);
+            continue;
+        }
+        memset(vis,0,sizeof(vis));
+        while(a[i][0]!=&lsquo;0&rsquo;)
+        {
+            len[i]=strlen(a[i])-1;
+            i++;
+            scanf(&ldquo;%s&rdquo;,a[i]);
+        }
+        k=i;
+        dfs(&rsquo;m');
+        if(flag==1)
+            printf(&ldquo;Yes.\n&rdquo;);
+        else
+            printf(&ldquo;No.\n&rdquo;);</p>
+
+<pre><code>}
+</code></pre>
+
+<p>}</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>下面这段代码是从b往m搜索的，差不多
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>include&lt;stdlib.h></h1>
+
+<h1>include&lt;stdio.h></h1>
+
+<h1>include &lt;string.h></h1>
+
+<p>using namespace std;
+char a[1000][50];
+int len[1000];
+int k;int flag;
+bool vis[1000];
+void dfs(char x)
+{
+    if(x==&rsquo;m')
+        {
+            flag=1;
+            return ;
+        }
+    if(flag==1)
+    {
+        return;
+    }
+    for(int i=0;i&lt;k;i++)
+    {
+        //printf(&ldquo;vis[%d]=%d\n&rdquo;,i,vis[i]);
+        if(vis[i]==0)
+        {
+            if(a[i][0]==x)
+            {
+               // printf(&ldquo;a[%d][%d]=%c\n&rdquo;,i,len[i],a[i][len[i]]);
+                vis[i]=1;
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                dfs(a[i][len[i]]);
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                vis[i]=0;
+            }
+        }
+    }
+}
+int main()
+{
+    while(scanf(&ldquo;%s&rdquo;,a[0])!=EOF)
+    {
+        flag=0;
+         int i=0;
+        if(a[0][0]==&lsquo;0&rsquo;)
+        {
+            printf(&ldquo;no.\n&rdquo;);
+            continue;
+        }
+        memset(vis,0,sizeof(vis));
+        while(a[i][0]!=&lsquo;0&rsquo;)
+        {
+            len[i]=strlen(a[i])-1;
+            i++;
+            scanf(&ldquo;%s&rdquo;,a[i]);
+        }
+        k=i;
+        dfs(&lsquo;b&rsquo;);
+        if(flag==1)
+            printf(&ldquo;Yes.\n&rdquo;);
+        else
+            printf(&ldquo;No.\n&rdquo;);</p>
+
+<pre><code>}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">陈浩翔</span></span>
+
+      ﻿
+
+
+
+
+2015年08月25日
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/acm-c/'>acm(c)</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+
+	﻿
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2015/08/25/HDOJ1181-Backtracking-transfiguration-deep-search" style="margin-bottom: 10px; text-align: center;"></div>
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24" style="float: right;">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share?uid=2133017" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2133017" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+		﻿<!--PC版-->
+
+<div id="SOHUCS" sid="/blog/2015/08/25/HDOJ1181-Backtracking-transfiguration-deep-search"></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyt09iKYx',
+conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
+});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt09iKYx"></script>
+	
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/08/24/HDOJ1518Square-Deep-search/" title="Previous Post: HDOJ1518Square 深搜">&laquo; HDOJ1518Square 深搜</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/08/26/Recursive-as/" title="Next Post: 递归简论">递归简论 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    ﻿<section>
+  <h1>最新博客</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/24/cocos2dx-sprite-sheet-optimize/">【Cocos2d-x】Cocos2d-x精灵的性能优化</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/android-magicwindow/">【安卓】安卓集成魔窗-完整实例</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/22/cocos2d-x-create-sprite-object/">【Cocos2d-x】Sprite精灵类-创建Sprite精灵对象</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/21/Spring-SpringMVC-MyBatis-Transactional-Invalid/">【问题解决】SSM-@Transactional注解事务无效探讨</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/10/operator-overloading-base/">【C++】C++运算符重载-基础</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=59ilglu8mky&amp;m=0&amp;c=00fff6&amp;cr1=ff0000&amp;f=ubuntu&amp;l=0" async="async">
+  </script>
+</section>
+﻿
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/acm-c-/'>acm(c) (7)</a></li>
+<li class='category'><a href='/blog/categories/algorithm/'>algorithm (3)</a></li>
+<li class='category'><a href='/blog/categories/amc-c-/'>amc(c) (1)</a></li>
+<li class='category'><a href='/blog/categories/android/'>android (1)</a></li>
+<li class='category'><a href='/blog/categories/c-plus-plus/'>c-plus-plus (7)</a></li>
+<li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (10)</a></li>
+<li class='category'><a href='/blog/categories/java/'>java (6)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/chenhaoxiang">@chenhaoxiang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'chenhaoxiang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+﻿
+	<section>
+<h1>友情链接</h1>
+	<ul>
+        <li>
+        <a href="http://blog.csdn.net/qq_26525215" target="_blank">大学之旅_谙忆</a>
+		</li>
+		<li>
+        <a href="http://blog.csdn.net/marksinoberg" target="_blank">纯臻</a>
+		</li>
+		<li>
+		<a href="http://blog.csdn.net/u013097262" target="_blank">Dream_M</a>
+		</li>
+		<li>
+		<a href="https://bbs.ksyun.com/forum.php" target="_blank">金山云</a>
+		</li>
+</ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 陈浩翔 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261875079'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261875079%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  ﻿<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow62.js"></script>
+<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+
+</body>
+</html>

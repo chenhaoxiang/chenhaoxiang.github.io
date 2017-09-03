@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Acm(c) | 谙忆-人生之旅]]></title>
+  <link href="http://chenhaoxiang.github.io/blog/categories/acm-c/atom.xml" rel="self"/>
+  <link href="http://chenhaoxiang.github.io/"/>
+  <updated>2017-09-03T23:54:12+08:00</updated>
+  <id>http://chenhaoxiang.github.io/</id>
+  <author>
+    <name><![CDATA[陈浩翔]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[HDOJ1181变形课 深搜回溯]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2015/08/25/HDOJ1181-Backtracking-transfiguration-deep-search/"/>
+    <updated>2015-08-25T10:28:06+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2015/08/25/HDOJ1181-Backtracking-transfiguration-deep-search</id>
+    <content type="html"><![CDATA[<p>Problem Description
+呃&hellip;&hellip;变形课上Harry碰到了一点小麻烦,因为他并不像Hermione那样能够记住所有的咒语而随意的将一个棒球变成刺猬什么的,但是他发现了变形咒语的一个统一规律:如果咒语是以a开头b结尾的一个单词,那么它的作用就恰好是使A物体变成B物体.
+Harry已经将他所会的所有咒语都列成了一个表,他想让你帮忙计算一下他是否能完成老师的作业,将一个B(ball)变成一个M(Mouse),你知道,如果他自己不能完成的话,他就只好向Hermione请教,并且被迫听一大堆好好学习的道理.</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>Input
+测试数据有多组。每组有多行，每行一个单词,仅包括小写字母,是Harry所会的所有咒语.数字0表示一组输入结束.</p>
+
+<p>Output
+如果Harry可以完成他的作业,就输出"Yes.&ldquo;,否则就输出"No.&rdquo;(不要忽略了句号)</p>
+
+<pre><code class="`">Sample Input
+so
+soon
+river
+goes
+them
+got
+moon
+begin
+big
+0
+
+
+Sample Output
+Yes.
+</code></pre>
+
+<p>HintHint
+Harry 可以念这个咒语:&ldquo;big-got-them&rdquo;.</p>
+
+<p>这个代码还是很容易理解的，经典的DFS
+不过对于没超时，我感到意外哈
+我是从m往b搜索的
+```c</p>
+
+<h1>include&lt;stdlib.h></h1>
+
+<h1>include&lt;stdio.h></h1>
+
+<h1>include &lt;string.h></h1>
+
+<p>using namespace std;
+char a[1000][50];
+int len[1000];
+int k;int flag;
+bool vis[1000];
+void dfs(char x)
+{
+    if(x==&lsquo;b&rsquo;)
+        {
+            flag=1;
+            return ;
+        }
+    if(flag==1)
+    {
+        return;
+    }
+    for(int i=0;i&lt;k;i++)
+    {
+        //printf(&ldquo;vis[%d]=%d\n&rdquo;,i,vis[i]);
+        if(vis[i]==0)
+        {
+            if(a[i][len[i]]==x)
+            {
+   // printf(&ldquo;a[%d][%d]=%c\n&rdquo;,i,len[i],a[i][len[i]]);
+                vis[i]=1;
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                dfs(a[i][0]);
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                vis[i]=0;
+            }
+        }
+    }
+}
+int main()
+{
+    while(scanf(&ldquo;%s&rdquo;,a[0])!=EOF)
+    {
+        flag=0;
+         int i=0;
+        if(a[0][0]==&lsquo;0&rsquo;)
+        {
+            printf(&ldquo;no.\n&rdquo;);
+            continue;
+        }
+        memset(vis,0,sizeof(vis));
+        while(a[i][0]!=&lsquo;0&rsquo;)
+        {
+            len[i]=strlen(a[i])-1;
+            i++;
+            scanf(&ldquo;%s&rdquo;,a[i]);
+        }
+        k=i;
+        dfs(&rsquo;m');
+        if(flag==1)
+            printf(&ldquo;Yes.\n&rdquo;);
+        else
+            printf(&ldquo;No.\n&rdquo;);</p>
+
+<pre><code>}
+</code></pre>
+
+<p>}</p>
+
+<pre><code>下面这段代码是从b往m搜索的，差不多
+</code></pre>
+
+<h1>include&lt;stdlib.h></h1>
+
+<h1>include&lt;stdio.h></h1>
+
+<h1>include &lt;string.h></h1>
+
+<p>using namespace std;
+char a[1000][50];
+int len[1000];
+int k;int flag;
+bool vis[1000];
+void dfs(char x)
+{
+    if(x==&rsquo;m')
+        {
+            flag=1;
+            return ;
+        }
+    if(flag==1)
+    {
+        return;
+    }
+    for(int i=0;i&lt;k;i++)
+    {
+        //printf(&ldquo;vis[%d]=%d\n&rdquo;,i,vis[i]);
+        if(vis[i]==0)
+        {
+            if(a[i][0]==x)
+            {
+               // printf(&ldquo;a[%d][%d]=%c\n&rdquo;,i,len[i],a[i][len[i]]);
+                vis[i]=1;
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                dfs(a[i][len[i]]);
+               // printf(&ldquo;x=%c\n&rdquo;,x);
+                vis[i]=0;
+            }
+        }
+    }
+}
+int main()
+{
+    while(scanf(&ldquo;%s&rdquo;,a[0])!=EOF)
+    {
+        flag=0;
+         int i=0;
+        if(a[0][0]==&lsquo;0&rsquo;)
+        {
+            printf(&ldquo;no.\n&rdquo;);
+            continue;
+        }
+        memset(vis,0,sizeof(vis));
+        while(a[i][0]!=&lsquo;0&rsquo;)
+        {
+            len[i]=strlen(a[i])-1;
+            i++;
+            scanf(&ldquo;%s&rdquo;,a[i]);
+        }
+        k=i;
+        dfs(&lsquo;b&rsquo;);
+        if(flag==1)
+            printf(&ldquo;Yes.\n&rdquo;);
+        else
+            printf(&ldquo;No.\n&rdquo;);</p>
+
+<pre><code>}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HDOJ1518Square 深搜]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2015/08/24/HDOJ1518Square-Deep-search/"/>
+    <updated>2015-08-24T11:51:53+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2015/08/24/HDOJ1518Square-Deep-search</id>
+    <content type="html"><![CDATA[<p>Problem Description
+Given a set of sticks of various lengths, is it possible to join them end-to-end to form a square?</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>Input
+The first line of input contains N, the number of test cases. Each test case begins with an integer 4 &lt;= M &lt;= 20, the number of sticks. M integers follow; each gives the length of a stick - an integer between 1 and 10,000.</p>
+
+<p>Output
+For each case, output a line containing &ldquo;yes&rdquo; if is is possible to form a square; otherwise output &ldquo;no&rdquo;.</p>
+
+<pre><code>Sample Input
+3
+4 1 1 1 1
+5 10 20 30 40 50
+8 1 7 2 6 4 4 3 5
+
+
+Sample Output
+yes
+no
+yes
+</code></pre>
+
+<p> 题意就是：看这个数组中的数字组合是否能够构成一个正方形
+ 不能分割数字，不能重复组合</p>
+
+<p>代码：</p>
+
+<pre><code>#include&lt;string.h&gt;
+#include&lt;stdio.h&gt;
+#include&lt;algorithm&gt;
+using namespace std;
+int n,s,su,a[1010],vis[1010],len;
+bool cmp(int a,int b)
+{
+    return a&gt;b;//从大到小排序
+}
+void dfs(int a1,int a2,int a3)//(0,0,1)
+{
+    if(a1==3)/**只需要筹齐3次，那么剩下的一定能够成len长度**/
+    {
+        su=1;
+        return ;
+    }
+    if(su==1)
+        return ;/**优化时间**/
+    for(int i=a3; i&lt;=n; i++)
+    {
+  /**对于那些用过的和不符合条件的，for那里可以不扫,故从a3开始**/
+   /**a3前面的对于最初的a2来说一定不符合**/
+        if(vis[i]==0)
+        {
+            vis[i]=1;
+            if(a2+a[i]==len)
+            {
+                dfs(a1+1,0,1);
+                 /**但是换另外一条边的时候a3要改回1,因为那些未用的，对上一条边来说不符合条件的，可能符合这条边的条件**/
+            }
+            else if(a2+a[i]&lt;len)
+            {
+                dfs(a1,a2+a[i],i+1);
+                /**没筹齐从i+1继续，前面的不符合**/
+                while(a[i]==a[i+1])
+                    i++;
+                    //回溯后如果后面的相同那么不需要再DFS
+       //前面的数和后面的相同就可以跳过这个数，剪枝
+            }
+            vis[i]=0;
+        }
+    }
+}
+
+int main()
+{
+    int i;
+    scanf("%d",&amp;s);
+    while(s--)
+    {
+        su=0;
+        len=0;
+        memset(vis,0,sizeof(vis));
+        //memset函数在string.h头文件中
+        scanf("%d",&amp;n);
+        for(i=1; i&lt;=n; i++)
+        {
+            scanf("%d",&amp;a[i]);
+            len=len+a[i];
+        }
+        int mm=len/4;
+        sort(a+1,a+n+1,cmp);
+        //在algorithm头文件中
+        if(len%4==0&amp;&amp;a[1]&lt;=mm&amp;&amp;n&gt;=4)
+        {
+            len/=4;
+            dfs(0,0,1);
+            if(su==1)
+                printf("yes\n");
+            else
+                printf("no\n");
+        }
+        else
+        {
+            printf("no\n");
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HDOJ 1312题Red and Black]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2015/08/22/HDOJ-1312T-Red-and-Black/"/>
+    <updated>2015-08-22T10:59:23+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2015/08/22/HDOJ-1312T-Red-and-Black</id>
+    <content type="html"><![CDATA[<p>Problem Description
+There is a rectangular room, covered with square tiles. Each tile is colored either red or black. A man is standing on a black tile. From a tile, he can move to one of four adjacent tiles. But he can&rsquo;t move on red tiles, he can move only on black tiles.</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>Write a program to count the number of black tiles which he can reach by repeating the moves described above.</p>
+
+<p>Input
+The input consists of multiple data sets. A data set starts with a line containing two positive integers W and H; W and H are the numbers of tiles in the x- and y- directions, respectively. W and H are not more than 20.</p>
+
+<p>There are H more lines in the data set, each of which includes W characters. Each character represents the color of a tile as follows.</p>
+
+<p>&lsquo;.&rsquo; - a black tile
+&lsquo;#&rsquo; - a red tile
+&lsquo;@&rsquo; - a man on a black tile(appears exactly once in a data set)</p>
+
+<p>Output
+For each data set, your program should output a line which contains the number of tiles he can reach from the initial tile (including itself).</p>
+
+<pre><code>Sample Input
+6 9
+....#.
+.....#
+......
+......
+......
+......
+......
+#@...#
+.#..#.
+11 9
+.#.........
+.#.#######.
+.#.#.....#.
+.#.#.###.#.
+.#.#..@#.#.
+.#.#####.#.
+.#.......#.
+.#########.
+...........
+11 6
+..#..#..#..
+..#..#..#..
+..#..#..###
+..#..#..#@.
+..#..#..#..
+..#..#..#..
+7 7
+..#.#..
+..#.#..
+###.###
+...@...
+###.###
+..#.#..
+..#.#..
+0 0
+</code></pre>
+
+<p>Sample Output
+45
+59
+6
+13</p>
+
+<p>题意：
+   n*m的方阵有红格或是黑格，只能走黑格
+    每次只能走上下左右四个紧邻方向的格子，求
+    这个人最后能走多少个黑格子。</p>
+
+<p>分析：
+   dfs水题。从第一个黑格子开始递归的搜索，
+    每次搜索一个黑格子后为了以后不再重复走
+    这个黑格子，就把当前搜索的这个黑格子换
+    成红格子，然后继续dfs。。。</p>
+
+<p>题目链接：<a href="http://acm.hdu.edu.cn/showproblem.php?pid=1312%EF%BC%9B">http://acm.hdu.edu.cn/showproblem.php?pid=1312%EF%BC%9B</a>
+题目大意：一个长方形空间，上面铺红色和黑色瓦片，一个人起初站在黑色瓦片上，每次可以走到相邻的4个黑色瓦片上，输入数据，求其能走过多少瓦片
+题意：某人在@处为起点（也包括@点）#为墙，点（.）为通路，问最多能走多远统计能走几个点（加上@这个点）
+思路：用dfs；
+代码：</p>
+
+<pre><code class="C++">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+char a[30][30];
+int ss,n,m;//这3个值需要用全局变量
+int b[4][2]= { {0,-1},{0,1},{1,0},{-1,0} };
+int dfs(int x,int y)
+{
+    int xx,yy;
+    if(x&lt;0||y&lt;0||x&gt;=m||y&gt;=n)
+        return 0;
+    int i;
+    for(i=0; i&lt;4; i++)
+    {
+        xx=x+b[i][0];
+        yy=y+b[i][1];
+        if(xx&lt;0||yy&lt;0||xx&gt;=m||yy&gt;=n||a[xx][yy]=='#')
+        //检查该点上下左右的点是否符合题目要求。   
+            continue;
+        ss++;
+        a[xx][yy]='#';
+        //如果该点已经检查过，就把它变成'#',防止再次被检查。   
+        dfs(xx,yy);
+    }
+}
+int main()
+{
+
+    while(~scanf("%d%d",&amp;n,&amp;m)&amp;&amp;(n||m))//n,m不能同时为0
+    {
+        int i,j;
+        int pi,pj;
+        getchar();//吸收换行符。  
+        for(i=0; i&lt;m; i++)
+        {
+            for(j=0; j&lt;n; j++)
+            {
+                scanf("%c",&amp;a[i][j]);
+                if(a[i][j]=='@')
+                {
+                    pi=i;
+                    pj=j;
+                }
+            }
+            getchar();//吸收换行符。   
+        }
+        a[pi][pj]='#';
+        ss=1;
+        dfs(pi,pj);
+        printf("%d\n",ss);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HDOJ 1237题 简单计算器]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2015/08/22/HDOJ-1237TSimple-calculator/"/>
+    <updated>2015-08-22T05:49:01+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2015/08/22/HDOJ-1237TSimple-calculator</id>
+    <content type="html"><![CDATA[<p>简单计算器
+Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)
+Total Submission(s): 15220    Accepted Submission(s): 5195Problem Description</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>简单计算器
+Time Limit: 2000/1000 MS (Java/Others)    Memory Limit: 65536/32768 K (Java/Others)
+Total Submission(s): 15220    Accepted Submission(s): 5195</p>
+
+<p>Problem Description
+读入一个只包含 +, -, *, / 的非负整数计算表达式，计算该表达式的值。</p>
+
+<p>Input
+测试输入包含若干测试用例，每个测试用例占一行，每行不超过200个字符，整数和运算符之间用一个空格分隔。没有非法表达式。当一行中只有0时输入结束，相应的结果不要输出。</p>
+
+<p>Output
+对每个测试用例输出1行，即该表达式的值，精确到小数点后2位。</p>
+
+<pre><code>Sample Input
+1 + 2
+4 + 2 * 5 - 7 / 11
+0
+
+
+Sample Output
+3.00
+13.36
+</code></pre>
+
+<p>听说大部分人是用栈做的，可惜我现在还不太懂，所以就直接一个一个读入数组做了，开始的时候我出了一个小错误，就是那个0 + 0输出应该是0，而我开始写的判断是直接结束了。
+ac代码：（很容易理解吧）</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include&lt;string.h&gt;
+#include&lt;stdlib.h&gt;
+int main()
+{
+    char a;
+    double s,a1,b[500];
+    int i,j;
+    while(scanf("%lf",&amp;a1))
+    {
+        b[0]=a1;
+        if(a1==0)
+        {
+            a=getchar();
+            if(a=='\n')
+                break;
+        }
+        i=1;
+        while(1)
+        {
+            a=getchar();
+            if(a=='+')
+                {
+                    scanf("%lf",&amp;b[i]);
+                    b[i]=b[i];
+                    i++;
+                }
+            if(a=='-')
+            {
+                scanf("%lf",&amp;b[i]);
+                b[i]=-b[i];
+                i++;
+            }
+            if(a=='/')
+            {
+                scanf("%lf",&amp;b[i]);
+                b[i]=b[i-1]/b[i];
+                b[i-1]=0;
+                i++;
+            }
+            if(a=='*')
+            {
+                scanf("%lf",&amp;b[i]);
+                b[i]=b[i-1]*b[i];
+                b[i-1]=0;
+                i++;
+            }
+            if(a=='\n')
+                break;
+        }
+        s=0;
+        for(j=0;j&lt;i;j++)
+        {
+            s=s+b[j];
+        }
+        printf("%0.2lf\n",s);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HDOJ1021题 Fibonacci Again 应用求模公式]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2015/08/21/HDOJ1021T-Fibonacci-Again/"/>
+    <updated>2015-08-21T05:53:13+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2015/08/21/HDOJ1021T-Fibonacci-Again</id>
+    <content type="html"><![CDATA[<p>Problem Description
+There are another kind of Fibonacci numbers: F(0) = 7, F(1) = 11, F(n) = F(n-1) + F(n-2) (n>=2).Input
+Input consists of a sequence of lines, each containing an integer n. (n &lt; 1,0 求模公式</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>Problem Description
+There are another kind of Fibonacci numbers: F(0) = 7, F(1) = 11, F(n) = F(n-1) + F(n-2) (n>=2).</p>
+
+<p>Input
+Input consists of a sequence of lines, each containing an integer n. (n &lt; 1,000,000).</p>
+
+<p>Output
+Print the word &ldquo;yes&rdquo; if 3 divide evenly into F(n).</p>
+
+<p>Print the word &ldquo;no&rdquo; if not.</p>
+
+<pre><code>Sample Input
+0
+1
+2
+3
+4
+5
+
+
+Sample Output
+no
+no
+yes
+no
+no
+no
+</code></pre>
+
+<pre><code>应用求模公式
+        （1） (a + b) % p = (a % p + b % p) % p 
+        （2） (a - b) % p = (a % p - b % p) % p 
+        （3） (a * b) % p = (a % p * b % p) % p 
+        （4）  a ^ b % p = ((a % p)^b) % p 
+        如果不用的话会溢出。
+</code></pre>
+
+<p>代码：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+using namespace std;
+
+int main()
+{
+    int a[1000001],i,j,s;
+    a[0]=7;a[1]=11;
+    for(i=2;i&lt;1000001;i++)
+    {
+        a[i]=(a[i-1]%3+a[i-2]%3)%3;//只写最后那个%3也可以
+    }
+    while(~scanf("%d",&amp;s))
+    {
+        if(a[s]%3==0)
+            printf("yes\n");
+        else
+            printf("no\n");
+    }
+    return 0;
+}
+</code></pre>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+</feed>
