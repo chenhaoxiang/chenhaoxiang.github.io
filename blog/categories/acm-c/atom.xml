@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Acm(c) | 谙忆-人生之旅]]></title>
+  <title><![CDATA[Category: Acm-c | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/acm-c/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-03T23:54:12+08:00</updated>
+  <updated>2017-09-04T00:01:01+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -342,6 +342,90 @@ int main()
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[ZOJ Problem Set - 3758 素数]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2015/08/23/ZOJ-Problem-Set-3758-prime-number/"/>
+    <updated>2015-08-23T06:36:23+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2015/08/23/ZOJ-Problem-Set-3758-prime-number</id>
+    <content type="html"><![CDATA[<p>Singles' Day(or One&rsquo;s Day), an unofficial holiday in China, is a pop culture entertaining holiday on November 11 for young Chinese to celebrate their bachelor life. With the meaning of single or bachelor of number &lsquo;1&rsquo; and the huge population of young single man. This festival is very popular among young Chinese people. And many Young bachelors organize parties and Karaoke to meet new friends or to try their fortunes that day.</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>On Singles' Day, a supermarket has a promotional activity. Each customer will get a ticket on which there are two integers b and N, representing an integer M that only contains N digits 1 using b as the radix. And if the number M is a prime number, you will get a gift from the supermarket.</p>
+
+<p>Since there are so many customers, the supermarket manager needs your help.</p>
+
+<p>Input
+There are multiple test cases. Each line has two integers b and N indicating the integer M, which might be very large. (2 &lt;= b &lt;= 16, 1 &lt;= N &lt;= 16)</p>
+
+<p>Output
+If the customer can get a gift, output &ldquo;YES&rdquo;, otherwise &ldquo;NO&rdquo;.</p>
+
+<pre><code>Sample Input
+3 3
+2 4
+2 1
+10 2
+
+Sample Output
+YES
+NO
+NO
+YES
+</code></pre>
+
+<p>Hint
+For the first sample, b=3, N=3, so M=(111)3, which is 13 in decimal. And since 13 is a prime number, the customer can get a gift, you should output &ldquo;YES&rdquo; on a line.
+题意很简单，就是求长度为n的b进制数在每一位都是1的情况下，是不是素数</p>
+
+<pre><code class="c++">#include &lt;stdio.h&gt;
+#include&lt;math.h&gt;
+int su(long long x);
+int main()
+{
+    long long s,p;
+    int n,m,i,j;
+    while(~scanf("%d%d",&amp;n,&amp;m))
+    {
+        s=0;
+        while(m--)
+        {
+            s=s+pow(n,m);
+        }
+            if(su(s)==1)
+            {printf("YES\n");}
+        else
+            {printf("NO\n");}
+    }
+    return 0;
+}
+int su(long long x)
+{
+    long long i;
+    if(x&lt;2)return 0;
+    for(i=2;i*i&lt;=x;i++)
+        {
+            if(x%i==0)
+              return 0;
+        }
+    return 1;
+}
+</code></pre>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[HDOJ 1312题Red and Black]]></title>
     <link href="http://chenhaoxiang.github.io/blog/2015/08/22/HDOJ-1312T-Red-and-Black/"/>
     <updated>2015-08-22T10:59:23+08:00</updated>
@@ -593,95 +677,6 @@ int main()
             s=s+b[j];
         }
         printf("%0.2lf\n",s);
-    }
-    return 0;
-}
-</code></pre>
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[HDOJ1021题 Fibonacci Again 应用求模公式]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2015/08/21/HDOJ1021T-Fibonacci-Again/"/>
-    <updated>2015-08-21T05:53:13+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2015/08/21/HDOJ1021T-Fibonacci-Again</id>
-    <content type="html"><![CDATA[<p>Problem Description
-There are another kind of Fibonacci numbers: F(0) = 7, F(1) = 11, F(n) = F(n-1) + F(n-2) (n>=2).Input
-Input consists of a sequence of lines, each containing an integer n. (n &lt; 1,0 求模公式</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>Problem Description
-There are another kind of Fibonacci numbers: F(0) = 7, F(1) = 11, F(n) = F(n-1) + F(n-2) (n>=2).</p>
-
-<p>Input
-Input consists of a sequence of lines, each containing an integer n. (n &lt; 1,000,000).</p>
-
-<p>Output
-Print the word &ldquo;yes&rdquo; if 3 divide evenly into F(n).</p>
-
-<p>Print the word &ldquo;no&rdquo; if not.</p>
-
-<pre><code>Sample Input
-0
-1
-2
-3
-4
-5
-
-
-Sample Output
-no
-no
-yes
-no
-no
-no
-</code></pre>
-
-<pre><code>应用求模公式
-        （1） (a + b) % p = (a % p + b % p) % p 
-        （2） (a - b) % p = (a % p - b % p) % p 
-        （3） (a * b) % p = (a % p * b % p) % p 
-        （4）  a ^ b % p = ((a % p)^b) % p 
-        如果不用的话会溢出。
-</code></pre>
-
-<p>代码：</p>
-
-<pre><code>#include &lt;iostream&gt;
-#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include&lt;string.h&gt;
-using namespace std;
-
-int main()
-{
-    int a[1000001],i,j,s;
-    a[0]=7;a[1]=11;
-    for(i=2;i&lt;1000001;i++)
-    {
-        a[i]=(a[i-1]%3+a[i-2]%3)%3;//只写最后那个%3也可以
-    }
-    while(~scanf("%d",&amp;s))
-    {
-        if(a[s]%3==0)
-            printf("yes\n");
-        else
-            printf("no\n");
     }
     return 0;
 }
