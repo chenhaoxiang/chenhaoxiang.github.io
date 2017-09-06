@@ -1,6 +1,9 @@
 ﻿source\_includes中的head.html一个谷歌的路径需要改成百度的
 <script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
 
+打赏页面:octopress\source\reward\index.markdown
+
+初始化
 rake install
 
 

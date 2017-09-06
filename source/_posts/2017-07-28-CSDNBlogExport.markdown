@@ -90,6 +90,11 @@ Disclaimer: if the export blog infringement of rights and interests of others, c
 经过测试，在输入50线程时，668篇博客的爬取时间为92S。  
 ![](http://i.imgur.com/XPP3svY.png)   
 
+2017.9.6：  
+进行版本升级，部分拥有两个id的CSDN用户无法备份博客，已进行修复，请下载最新版本2.1  
+现在版本 v2.1    
+感谢CSDN博主<a href="http://blog.csdn.net/a525715275" target='_blank'>[沐雨浩]</a>提示的Bug   
+
 #源代码下载地址：
 <blockquote cite='陈浩翔'>
 GITHUB项目地址:<strong>【<a href='https://github.com/chenhaoxiang/CSDNBlogExport' target='_blank'>点我进行访问</a>】</strong>
