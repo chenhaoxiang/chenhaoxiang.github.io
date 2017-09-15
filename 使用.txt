@@ -79,7 +79,8 @@ echo 'www.chenhaoxiang.cn' >> source/CNAME
 \source\_includes\asides
 友情链接:
 octopress\source\_includes\asides\blog_link.html
-
+修改搜索文字:
+source\_includes\navigation.html
 
 
 新电脑上使用:
