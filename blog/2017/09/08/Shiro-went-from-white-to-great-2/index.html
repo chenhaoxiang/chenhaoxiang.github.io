@@ -1,0 +1,586 @@
+
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>【Shiro】Shiro从小白到大神(二)-Subject认证结合MySQL - 谙忆-人生之旅</title>
+
+  <meta name="author" content="陈浩翔">
+
+  
+  <meta name="description" content="Subject认证主体包含两个信息 Principals 身份，可以是用户名，邮件，手机号码等等，只要能用来标识一个登陆主体身份的东西都可以 Credentials 凭证(比如你说你叫张三，你凭什么说叫张三，你这个时候会拿出身份证说你就是叫张三，这个凭证和身份证差不多)，常见有密码，数字证书等等">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/09/08/Shiro-went-from-white-to-great-2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/jquery1.9.1.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="/javascripts/fonts.googleapis.com.css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/javascripts/fonts.googleapis.com.css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">谙忆-人生之旅</a></h1>
+  
+    <h2>学不止步,梦不停歇-陈浩翔</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">﻿<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com.hk/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="chenhaoxiang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="请使用谷歌搜索"/>
+  </fieldset>
+</form>
+  
+﻿<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">列表</a></li>
+  <li><a href="/reward">打赏名单</a></li>
+  <li><a href="/aboutme">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">【Shiro】Shiro从小白到大神(二)-Subject认证结合MySQL</h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+2017年09月08日
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>上一节博客讲的文本数据验证，基本不会在项目中用到，只是方便用来学习和测试<br/>
+在本节，进行简单的数据库安全验证实例</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>Subject认证主体</h1>
+
+<p>Subject认证主体包含两个信息:<br/>
+Principals: 身份，可以是用户名，邮件，手机号码等等，只要能用来标识一个登陆主体身份的东西都可以 <br/>
+Credentials: 凭证(比如你说你叫张三，你凭什么说叫张三，你这个时候会拿出身份证说你就是叫张三，这个凭证和身份证差不多)，常见有密码，数字证书等等</p>
+
+<h1>认证流程</h1>
+
+<p><img src="https://i.imgur.com/uzTsCic.png" alt="" /><br/>
+细节可以自己去官网链接查看: <a href="http://shiro.apache.org/authentication.html">http://shiro.apache.org/authentication.html</a><br/>
+1.身份凭证登录:.login(token)<br/>
+2.SecurityManager - 管理者<br/>
+3.4.涉及安全数据。在这里涉及到了Realm(意思是域)，Shiro从Realm中获取验证数据(或者叫安全数据)；<br/>
+Realm有很多种类，例如常见的jdbc realm,jndi realm,text realm(上节的博客就是text Realm).<br/>
+我们可以去Shiro的源码查看:<br/>
+<img src="https://i.imgur.com/BijTwuc.png" alt="" /><br/>
+可以看到还是有比较多的。<br/>
+本节讲解jdbc Realm。</p>
+
+<h1>实例</h1>
+
+<p>既然是数据库操作，首先当然是去建数据库和表啦</p>
+
+<figure class='code'><figcaption><span>sql语句</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="cm">/*</span>
+</span><span class='line'><span class="cm">SQLyog Ultimate v12.3.1 (64 bit)</span>
+</span><span class='line'><span class="cm">MySQL - 5.7.19-log : Database - db_shiro</span>
+</span><span class='line'><span class="cm">*********************************************************************</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*!40101 SET NAMES utf8 */</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*!40101 SET SQL_MODE=&#39;&#39;*/</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */</span><span class="p">;</span>
+</span><span class='line'><span class="cm">/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */</span><span class="p">;</span>
+</span><span class='line'><span class="cm">/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=&#39;NO_AUTO_VALUE_ON_ZERO&#39; */</span><span class="p">;</span>
+</span><span class='line'><span class="cm">/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="cm">/*!32312 IF NOT EXISTS*/</span><span class="o">`</span><span class="n">db_shiro</span><span class="o">`</span> <span class="cm">/*!40100 DEFAULT CHARACTER SET utf8 */</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">USE</span> <span class="o">`</span><span class="n">db_shiro</span><span class="o">`</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*Table structure for table `users` */</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="o">`</span><span class="n">users</span><span class="o">`</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">users</span><span class="o">`</span> <span class="p">(</span>
+</span><span class='line'>  <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+</span><span class='line'>  <span class="o">`</span><span class="n">username</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>  <span class="o">`</span><span class="n">password</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span>
+</span><span class='line'><span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">3</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*Data for the table `users` */</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">insert</span>  <span class="k">into</span> <span class="o">`</span><span class="n">users</span><span class="o">`</span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">username</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="n">password</span><span class="o">`</span><span class="p">)</span> <span class="k">values</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;chx&#39;</span><span class="p">,</span><span class="s1">&#39;123456&#39;</span><span class="p">),</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;jack&#39;</span><span class="p">,</span><span class="s1">&#39;12345&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*!40101 SET SQL_MODE=@OLD_SQL_MODE */</span><span class="p">;</span>
+</span><span class='line'><span class="cm">/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */</span><span class="p">;</span>
+</span><span class='line'><span class="cm">/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */</span><span class="p">;</span>
+</span><span class='line'><span class="cm">/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>直接拷贝进数据库运行即可(数据库文件在项目src\sql目录下)<br/>
+<strong>注意事项：</strong><br/>
+<strong>表名一定要是: users</strong><br/>
+<strong>用户名列名必须是: userName(大小写不区分)</strong>  **</p>
+
+<p>jdbc_realm.ini配置文件</p>
+
+<figure class='code'><figcaption><span>jdbc_realm.ini配置文件</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[main]</span>
+</span><span class='line'><span class="na">jdbcRealm</span><span class="o">=</span><span class="s">org.apache.shiro.realm.jdbc.JdbcRealm</span>
+</span><span class='line'><span class="c1">;定义JdbcRealm实例-固定语法</span>
+</span><span class='line'><span class="na">dataSource</span><span class="o">=</span><span class="s">com.mchange.v2.c3p0.ComboPooledDataSource</span>
+</span><span class='line'><span class="c1">;数据库链接池-查看JdbcRealm类的源码可以看到需要dataSource数据源 在om.xml导入c3p0的jar包</span>
+</span><span class='line'><span class="na">dataSource.driverClass</span><span class="o">=</span><span class="s">com.mysql.jdbc.Driver</span>
+</span><span class='line'><span class="c1">;设置dataSource的jdbc驱动包 - 相当于dataSource调用了setriverClass</span>
+</span><span class='line'><span class="na">dataSource.jdbcUrl</span><span class="o">=</span><span class="s">jdbc:mysql://localhost:3306/db_shiroD</span>
+</span><span class='line'><span class="c1">;数据库连接地址</span>
+</span><span class='line'><span class="na">dataSource.user</span><span class="o">=</span><span class="s">root</span>
+</span><span class='line'><span class="c1">;数据库账号</span>
+</span><span class='line'><span class="na">dataSource.password</span><span class="o">=</span><span class="s">123456</span>
+</span><span class='line'><span class="c1">;数据库密码</span>
+</span><span class='line'><span class="na">jdbcRealm.dataSource</span><span class="o">=</span><span class="s">$dataSource</span>
+</span><span class='line'><span class="c1">;为jdbcRealm赋值dataSource,jdbcRealm调用set</span>
+</span><span class='line'><span class="na">securityManager.realms</span><span class="o">=</span><span class="s">$jdbcRealm</span>
+</span><span class='line'><span class="c1">;这个realms可以有多个，多个之间用英文逗号隔开</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&ldquo;;"为ini文件的注释</p>
+
+<p>测试类:</p>
+
+<figure class='code'><figcaption><span>JdbcRealmTest.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kn">package</span> <span class="n">cn</span><span class="o">.</span><span class="na">chenhaoxiang</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.apache.shiro.SecurityUtils</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.apache.shiro.authc.AuthenticationException</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.apache.shiro.authc.UsernamePasswordToken</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.apache.shiro.config.IniSecurityManagerFactory</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.apache.shiro.mgt.SecurityManager</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.apache.shiro.subject.Subject</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.apache.shiro.util.Factory</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JdbcRealmTest</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">JdbcRealmTest</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="c1">//IniSecurityManagerFactory方法在1.4.0中被注解标志为不建议使用</span>
+</span><span class='line'>        <span class="c1">//读取配置文件，初始化SecurityManager工厂</span>
+</span><span class='line'>        <span class="n">Factory</span><span class="o">&lt;</span><span class="n">SecurityManager</span><span class="o">&gt;</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">IniSecurityManagerFactory</span><span class="o">(</span><span class="s">&quot;classpath:jdbc_realm.ini&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="c1">//获取securityManager 实例</span>
+</span><span class='line'>        <span class="n">SecurityManager</span> <span class="n">securityManager</span><span class="o">=</span><span class="n">factory</span><span class="o">.</span><span class="na">getInstance</span><span class="o">();</span>
+</span><span class='line'>        <span class="c1">//把securityManager实例绑定到SecurityUtils</span>
+</span><span class='line'>        <span class="n">SecurityUtils</span><span class="o">.</span><span class="na">setSecurityManager</span><span class="o">(</span><span class="n">securityManager</span><span class="o">);</span>
+</span><span class='line'>        <span class="c1">//得到当前执行的用户</span>
+</span><span class='line'>        <span class="n">Subject</span> <span class="n">subject</span> <span class="o">=</span>  <span class="n">SecurityUtils</span><span class="o">.</span><span class="na">getSubject</span><span class="o">();</span><span class="c1">//认证实体，当前进来的用户</span>
+</span><span class='line'>        <span class="c1">//创建token令牌，用户名/密码</span>
+</span><span class='line'>        <span class="n">UsernamePasswordToken</span> <span class="n">token</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">UsernamePasswordToken</span><span class="o">(</span><span class="s">&quot;jack&quot;</span><span class="o">,</span><span class="s">&quot;12345&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="c1">//身份认证</span>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">subject</span><span class="o">.</span><span class="na">login</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;登录成功！&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AuthenticationException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;登录失败！&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="c1">//登出</span>
+</span><span class='line'>        <span class="n">subject</span><span class="o">.</span><span class="na">logout</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://i.imgur.com/kFIvVI7.png" alt="" /><br/>
+如果验证失败会报异常，可以自己测试</p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/Shiro/tree/master/20170908/code/Shiro2' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">陈浩翔</span></span>
+
+      ﻿
+
+
+
+
+2017年09月08日
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/shiro/'>shiro</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+
+	﻿
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/09/08/Shiro-went-from-white-to-great-2" style="margin-bottom: 10px; text-align: center;"></div>
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24" style="float: right;">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share?uid=2133017" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2133017" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+		﻿<!--PC版-->
+
+<div id="SOHUCS" sid="/blog/2017/09/08/Shiro-went-from-white-to-great-2"></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyt09iKYx',
+conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
+});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt09iKYx"></script>
+	
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/09/07/Shiro-went-from-white-to-great-1/" title="Previous Post: 【Shiro】Shiro从小白到大神(一)-Shiro入门">&laquo; 【Shiro】Shiro从小白到大神(一)-Shiro入门</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2017/09/09/Shiro-went-from-white-to-great-3/" title="Next Post: 【Shiro】Shiro从小白到大神(三)-权限认证(授权)">【Shiro】Shiro从小白到大神(三)-权限认证(授权) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    ﻿<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/09/09/Shiro-went-from-white-to-great-3/">【Shiro】Shiro从小白到大神(三)-权限认证(授权)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/08/Shiro-went-from-white-to-great-2/">【Shiro】Shiro从小白到大神(二)-Subject认证结合MySQL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/07/Shiro-went-from-white-to-great-1/">【Shiro】Shiro从小白到大神(一)-Shiro入门</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion/">【C++】流插入、提取运算符和类型转换</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/04/Member-functions-overload-binary-and-unary-operators/">【C++】成员函数重载二元和一元运算符</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=59ilglu8mky&amp;m=0&amp;c=00fff6&amp;cr1=ff0000&amp;f=ubuntu&amp;l=0" async="async">
+  </script>
+</section>
+﻿
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/acm-c/'>acm-c (11)</a></li>
+<li class='category'><a href='/blog/categories/algorithm/'>algorithm (3)</a></li>
+<li class='category'><a href='/blog/categories/android/'>android (1)</a></li>
+<li class='category'><a href='/blog/categories/c/'>c (2)</a></li>
+<li class='category'><a href='/blog/categories/c-plus-plus/'>c-plus-plus (10)</a></li>
+<li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (10)</a></li>
+<li class='category'><a href='/blog/categories/java/'>java (6)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (2)</a></li>
+<li class='category'><a href='/blog/categories/shiro/'>shiro (3)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/chenhaoxiang">@chenhaoxiang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'chenhaoxiang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+﻿
+	<section>
+<h1>友情链接</h1>
+	<ul>
+        <li>
+        <a href="http://blog.csdn.net/qq_26525215" target="_blank">大学之旅_谙忆</a>
+		</li>
+		<li>
+        <a href="http://blog.csdn.net/marksinoberg" target="_blank">纯臻</a>
+		</li>
+		<li>
+		<a href="http://blog.csdn.net/u013097262" target="_blank">Dream_M</a>
+		</li>
+		<li>
+		<a href="https://bbs.ksyun.com/forum.php" target="_blank">金山云</a>
+		</li>
+</ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 陈浩翔 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261875079'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261875079%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  ﻿<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow62.js"></script>
+<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+
+</body>
+</html>

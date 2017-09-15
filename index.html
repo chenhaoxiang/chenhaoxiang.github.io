@@ -10,9 +10,9 @@
   <meta name="author" content="陈浩翔">
 
   
-  <meta name="description" content="本系列是我在学习Shiro的路上的笔记，第一篇是属于非常入门级别的。
-首先是介绍了下shiro，然后进行了一个小例子进行实际的操作
-本节操作不涉及数据库，只是文本字符操作认证 ">
+  <meta name="description" content="本节讲权限认证，也就是授权
+基于角色的访问控制和基于权限的访问控制的小实例
+以及注解式授权和JSP标签授权详解 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +70,77 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/09/09/Shiro-went-from-white-to-great-3/">【Shiro】Shiro从小白到大神(三)-权限认证(授权)</a></h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>本节讲权限认证，也就是授权<br/>
+基于角色的访问控制和基于权限的访问控制的小实例<br/>
+以及注解式授权和JSP标签授权详解</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2017/09/09/Shiro-went-from-white-to-great-3/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/09/08/Shiro-went-from-white-to-great-2/">【Shiro】Shiro从小白到大神(二)-Subject认证结合MySQL</a></h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>上一节博客讲的文本数据验证，基本不会在项目中用到，只是方便用来学习和测试<br/>
+在本节，进行简单的数据库安全验证实例</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2017/09/08/Shiro-went-from-white-to-great-2/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -352,76 +423,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2017/08/10/operator-overloading-base/">【C++】C++运算符重载-基础</a></h1>
-    
-    
-      <p class="meta">
-        ﻿
-
-
-
-
-
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>本篇博客讲解:<br/>
-运算符重载基础，以及实例</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2017/08/10/operator-overloading-base/">阅读全文 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2017/08/08/mybatis-multilevel-query-question/">【问题解决】Mybatis一对多/多对多查询时只查出了一条数据</a></h1>
-    
-    
-      <p class="meta">
-        ﻿
-
-
-
-
-
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>问题描述:
-如果三表(包括了关系表)级联查询，主表和明细表的主键都是id的话，明细表的多条数据只能查询出来第一条/最后一条数据。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2017/08/08/mybatis-multilevel-query-question/">阅读全文 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; prev</a>
@@ -437,6 +438,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/09/09/Shiro-went-from-white-to-great-3/">【Shiro】Shiro从小白到大神(三)-权限认证(授权)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/08/Shiro-went-from-white-to-great-2/">【Shiro】Shiro从小白到大神(二)-Subject认证结合MySQL</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/09/07/Shiro-went-from-white-to-great-1/">【Shiro】Shiro从小白到大神(一)-Shiro入门</a>
       </li>
     
@@ -446,14 +455,6 @@
     
       <li class="post">
         <a href="/blog/2017/09/04/Member-functions-overload-binary-and-unary-operators/">【C++】成员函数重载二元和一元运算符</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/09/02/Rules-for-operator-overloading/">【C++】C++运算符重载的规则</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2017/08/24/cocos2dx-sprite-sheet-optimize/">【Cocos2d-x】Cocos2d-x精灵的性能优化</a>
       </li>
     
   </ul>
@@ -475,7 +476,7 @@
 <li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (10)</a></li>
 <li class='category'><a href='/blog/categories/java/'>java (6)</a></li>
 <li class='category'><a href='/blog/categories/other/'>other (2)</a></li>
-<li class='category'><a href='/blog/categories/shiro/'>shiro (1)</a></li>
+<li class='category'><a href='/blog/categories/shiro/'>shiro (3)</a></li>
 <li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
 
   </ul>
