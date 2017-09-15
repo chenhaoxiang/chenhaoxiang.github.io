@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Shiro | 谙忆-人生之旅]]></title>
+  <link href="http://chenhaoxiang.github.io/blog/categories/shiro/atom.xml" rel="self"/>
+  <link href="http://chenhaoxiang.github.io/"/>
+  <updated>2017-09-15T10:42:14+08:00</updated>
+  <id>http://chenhaoxiang.github.io/</id>
+  <author>
+    <name><![CDATA[陈浩翔]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[【Shiro】Shiro从小白到大神(一)-Shiro入门]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/09/07/Shiro-went-from-white-to-great-1/"/>
+    <updated>2017-09-07T19:38:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/09/07/Shiro-went-from-white-to-great-1</id>
+    <content type="html"><![CDATA[<p>本系列是我在学习Shiro的路上的笔记，第一篇是属于非常入门级别的。<br/>
+首先是介绍了下shiro，然后进行了一个小例子进行实际的操作<br/>
+本节操作不涉及数据库，只是文本字符操作认证</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>Shiro简介:</h1>
+
+<p>百度百科上的介绍:<br/>
+Apache Shiro（日语“堡垒（Castle）”的意思）是一个强大易用的Java安全框架，提供了认证、授权、加密和会话管理功能，可为任何应用提供安全保障 - 从命令行应用、移动应用到大型网络及企业应用。<br/>
+Shiro为解决下列问题（我喜欢称它们为应用安全的四要素）提供了保护应用的API：<br/>
+认证 - 用户身份识别，常被称为用户“登录”；<br/>
+授权 - 访问控制；<br/>
+密码加密 - 保护或隐藏数据防止被偷窥；<br/>
+会话管理 - 每用户相关的时间敏感的状态。<br/>
+Shiro还支持一些辅助特性，如Web应用安全、单元测试和多线程，它们的存在强化了上面提到的四个要素。</p>
+
+<p>Apache Shiro官网的介绍链接:<a href="http://shiro.apache.org/introduction.html">http://shiro.apache.org/introduction.html</a></p>
+
+<p>Shiro targets what the Shiro development team calls “the four cornerstones of application security” - Authentication(身份认证), Authorization(权限控制), Session Management(Session管理), and Cryptography(加密):</p>
+
+<p>Authentication: Sometimes referred to as ‘login’, this is the act of proving a user is who they say they are.<br/>
+Authorization: The process of access control, i.e. determining ‘who’ has access to ‘what’.<br/>
+Session Management: Managing user-specific sessions, even in non-web or EJB applications.<br/>
+Cryptography: Keeping data secure using cryptographic algorithms while still being easy to use.<br/>
+前面四个是核心的。<br/>
+还具有Web支持，缓存，并发，伪装，"记住我"等</p>
+
+<p>本节实例使用Maven，如不熟悉Maven的，建议先去学习Maven</p>
+
+<h1>Shiro实例-模拟最简单的HelloWord</h1>
+
+<p>引入Shiro的Jar包:<br/>
+<code>xml pom.xml
+ &lt;dependency&gt;
+       &lt;groupId&gt;org.apache.shiro&lt;/groupId&gt;
+       &lt;artifactId&gt;shiro-core&lt;/artifactId&gt;
+       &lt;version&gt;1.3.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code>
+配置配置文件(放在resource文件下):<br/>
+最简单的账户密码形式
+<code>ini shiro.ini
+[users]
+chx=123456
+jack=12345
+</code></p>
+
+<p>Java-HelloWord类</p>
+
+<pre><code class="java HelloWord类">package cn.chenhaoxiang;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class HelloWord {
+    private static Logger logger = LoggerFactory.getLogger(HelloWord.class);
+    public static void main(String[] args) {
+        //IniSecurityManagerFactory方法在1.4.0中被注解标志为不建议使用
+        //读取配置文件，初始化SecurityManager工厂
+        Factory&lt;SecurityManager&gt; factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+        //获取securityManager 实例
+        SecurityManager securityManager=factory.getInstance();
+        //把securityManager实例绑定到SecurityUtils
+        SecurityUtils.setSecurityManager(securityManager);
+        //得到当前执行的用户
+        Subject subject =  SecurityUtils.getSubject();//认证实体，当前进来的用户
+        //创建token令牌，用户名/密码
+        UsernamePasswordToken token = new UsernamePasswordToken("jack","12345");
+        //身份认证
+        try {
+            subject.login(token);
+            logger.info("登录成功！");
+        } catch (AuthenticationException e) {
+//login的接口函数  void login(AuthenticationToken var1) throws AuthenticationException;所以直接抓AuthenticationException异常即可
+//身份认证失败即抛出此异常
+            logger.info("登录失败！");
+            e.printStackTrace();
+        }
+        //登出
+        subject.logout();
+    }
+}
+</code></pre>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+</feed>

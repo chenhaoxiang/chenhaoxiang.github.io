@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cocos2d-x | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/cocos2d-x/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-15T10:38:15+08:00</updated>
+  <updated>2017-09-15T10:42:14+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -45,87 +45,165 @@ OpenGL ES 1.1仅仅能够使用2的n次幂大小的图片(即宽度或者高度�
 
 <p><img src="http://i.imgur.com/0CWjIUB.png" alt="" /><br/>
 plist文件是属性列表文件，一种xml文件。每一个小图称为帧(frame),每一个frame包含了该帧的名(key)，坐标,高宽。是否旋转等。这是给程序读的<br/>
-```C++ 加载纹理缓存图片/大图
-bool HelloWorld::init()
-{
-    if ( !Layer::init() )
-    {
-        return false;
-    }</p>
-
-<pre><code>Size visibleSize = Director::getInstance()-&gt;getVisibleSize();
-Vec2 origin = Director::getInstance()-&gt;getVisibleOrigin();
-
-auto background = Sprite::create("background.png");
-background-&gt;setAnchorPoint(Vec2::ZERO);
-this-&gt;addChild(background,0);   
-
-auto mountain1 = Sprite::create("SpriteSheet.png",Rect(2,391, 934, 388));//截取图片
-mountain1-&gt;setAnchorPoint(Vec2::ZERO);//设置锚点
-mountain1-&gt;setPosition(Vec2(-200,80));//设置坐标
-this-&gt;addChild(mountain1,0);
-
-Texture2D* cache = Director::getInstance()-&gt;getTextureCache()-&gt;addImage("SpriteSheet.png");//加载整个图片到纹理缓存
-auto hero1 = Sprite::create();
-hero1-&gt;setTexture(cache);
-hero1-&gt;setTextureRect(Rect(2,1706,391,327));//在纹理缓存中截取图片  左上角坐标 以及截取图片的宽高
-hero1-&gt;setPosition(Vec2(800,200));
-this-&gt;addChild(hero1,0);
-
-return true;
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<h2>源代码下载地址：</h2>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170824/code/Cocos2dSpriteSheet' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<h1>精灵帧缓存</h1>
-
-<p>精灵帧缓存是缓存的一种，缓存有如下几种:<br/>
-1、纹理缓存(TextureCache)<br/>
-使用纹理缓存可以创建纹理对象<br/>
-2、精灵帧缓存(SpriteFrameCache)<br/>
-和纹理图集相对应，把plist文件读到内存，到文件里面创建精灵帧缓存，然后再从精灵帧缓存中获得精灵对象，反复使用精灵对象时候，使用精灵帧缓存可以节省内存消耗<br/>
-将一个图读到精灵帧缓存中，同时也会加载到纹理缓存中</p>
-
-<p>3、动画缓存(AnimationCache)<br/>
-动画缓存主要用于精灵动画，精灵动画中的每一帧是从动画缓存中获取的</p>
-
-<pre><code class="c++ 精灵帧缓存">SpriteFrameCache *frameCache = SpriteFrameCache::getInstance();
-frameCache-&gt;addSpriteFramesWithFile("SpriteSheet.plist");
-//单例-将精灵图集的坐标读进去 根据这个坐标获取图集，这个加载过程是在游戏启动的时候加载，并不是在用的时候加载(肯定会占用很多内存的,不过现在手机一般内存都挺多的)  
-auto mountain1 = Sprite::createWithSpriteFrameName("mountain1.png");//缓存被创建后，可以通过frame名字(**注意名字冲突的问题，名字一样的精灵帧，后面的会覆盖前面的,可以加前缀以区分**)指定精灵帧来创建一个精灵   这个过程并不是通过大图去创建的，而是通过SpriteFrameCache缓存取出来的，这个速度很快  
-//还可以通过精灵帧来创建精灵  
-SpriteFrame *heroSpriteFrame = frameCache-&gt;getSpriteFrameByName("hero1.png");//通过精灵帧名字获取精灵帧
-Sprite *hero1 = Sprite::createWithSpriteFrame(heroSpriteFrame);//通过精灵帧创建精灵
-</code></pre>
-
-<p>清空或移除精灵帧的缓存函数:
-<code>C++
-void removeSpriteFrameByName(const std::string&amp; name);//指定具体的精灵帧名将精灵帧从缓存中移除，具体到精灵帧
-void removeSpriteFrames();//指定清空所有的精灵帧缓存
-void removeSpriteFramesFromFile(const std::string&amp; plist);//指定具体的坐标文件(plist文件)移除精灵帧
-void removeUnusedSpriteFrames();//移除没有使用的精灵帧
-</code>
-建议初学者不要轻易使用清除缓存函数！</p>
-
-<h1>小项目实例</h1>
-
-<p>现在还做不了太复杂的项目，在目前这个阶段<br/>
-项目描述:<br/>
-我们有这样一个场景，一个背景草地，山，和一个精灵牛仔(还没学帧动画，先做个静态的)。 把这三个精灵放到一个场景中<br/>
-利用精灵帧缓存完成<br/>
-<img src="http://i.imgur.com/6IbcWnk.png" alt="" /></p>
-
-<p>背景没有放到精灵图集中去，这是因为背景是不需要透明的<br/>
-```C++
+<figure class='code'><figcaption><span>加载纹理缓存图片/大图</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">()</span> <span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getVisibleOrigin</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">auto</span> <span class="n">background</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;background.png&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">background</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">background</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">auto</span> <span class="n">mountain1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="s">&quot;SpriteSheet.png&quot;</span><span class="p">,</span><span class="n">Rect</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">391</span><span class="p">,</span> <span class="mi">934</span><span class="p">,</span> <span class="mi">388</span><span class="p">));</span><span class="c1">//截取图片</span>
+</span><span class='line'><span class="n">mountain1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setAnchorPoint</span><span class="p">(</span><span class="n">Vec2</span><span class="o">::</span><span class="n">ZERO</span><span class="p">);</span><span class="c1">//设置锚点</span>
+</span><span class='line'><span class="n">mountain1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">,</span><span class="mi">80</span><span class="p">));</span><span class="c1">//设置坐标</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mountain1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Texture2D</span><span class="o">*</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getTextureCache</span><span class="p">()</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addImage</span><span class="p">(</span><span class="s">&quot;SpriteSheet.png&quot;</span><span class="p">);</span><span class="c1">//加载整个图片到纹理缓存</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">hero1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+</span><span class='line'><span class="n">hero1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setTexture</span><span class="p">(</span><span class="n">cache</span><span class="p">);</span>
+</span><span class='line'><span class="n">hero1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setTextureRect</span><span class="p">(</span><span class="n">Rect</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1706</span><span class="p">,</span><span class="mi">391</span><span class="p">,</span><span class="mi">327</span><span class="p">));</span><span class="c1">//在纹理缓存中截取图片  左上角坐标 以及截取图片的宽高</span>
+</span><span class='line'><span class="n">hero1</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span><span class="mi">200</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addChild</span><span class="p">(</span><span class="n">hero1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">```</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="err">源代码下载地址：</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">blockquote</span> <span class="n">cite</span><span class="o">=</span><span class="err">&#39;陈浩翔&#39;</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">GITHUB</span><span class="err">源码下载地址</span><span class="o">:&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="err">【</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="err">&#39;</span><span class="nl">https</span><span class="p">:</span><span class="c1">//github.com/chenhaoxiang/cocos2d-x/tree/master/20170824/code/Cocos2dSpriteSheet&#39; target=&#39;_blank&#39;&gt;点我进行下载&lt;/a&gt;】&lt;/strong&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">精灵帧缓存</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">精灵帧缓存是缓存的一种，缓存有如下几种</span><span class="o">:&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="mi">1</span><span class="err">、纹理缓存</span><span class="p">(</span><span class="n">TextureCache</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">使用纹理缓存可以创建纹理对象</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="mi">2</span><span class="err">、精灵帧缓存</span><span class="p">(</span><span class="n">SpriteFrameCache</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">和纹理图集相对应，把</span><span class="n">plist</span><span class="err">文件读到内存，到文件里面创建精灵帧缓存，然后再从精灵帧缓存中获得精灵对象，反复使用精灵对象时候，使用精灵帧缓存可以节省内存消耗</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">将一个图读到精灵帧缓存中，同时也会加载到纹理缓存中</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="mi">3</span><span class="err">、动画缓存</span><span class="p">(</span><span class="n">AnimationCache</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">动画缓存主要用于精灵动画，精灵动画中的每一帧是从动画缓存中获取的</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;c++ 精灵帧缓存&quot;</span><span class="o">&gt;</span><span class="n">SpriteFrameCache</span> <span class="o">*</span><span class="n">frameCache</span> <span class="o">=</span> <span class="n">SpriteFrameCache</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span>
+</span><span class='line'><span class="n">frameCache</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">addSpriteFramesWithFile</span><span class="p">(</span><span class="s">&quot;SpriteSheet.plist&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//单例-将精灵图集的坐标读进去 根据这个坐标获取图集，这个加载过程是在游戏启动的时候加载，并不是在用的时候加载(肯定会占用很多内存的,不过现在手机一般内存都挺多的)  </span>
+</span><span class='line'><span class="k">auto</span> <span class="n">mountain1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrameName</span><span class="p">(</span><span class="s">&quot;mountain1.png&quot;</span><span class="p">);</span><span class="c1">//缓存被创建后，可以通过frame名字(**注意名字冲突的问题，名字一样的精灵帧，后面的会覆盖前面的,可以加前缀以区分**)指定精灵帧来创建一个精灵   这个过程并不是通过大图去创建的，而是通过SpriteFrameCache缓存取出来的，这个速度很快  </span>
+</span><span class='line'><span class="c1">//还可以通过精灵帧来创建精灵  </span>
+</span><span class='line'><span class="n">SpriteFrame</span> <span class="o">*</span><span class="n">heroSpriteFrame</span> <span class="o">=</span> <span class="n">frameCache</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getSpriteFrameByName</span><span class="p">(</span><span class="s">&quot;hero1.png&quot;</span><span class="p">);</span><span class="c1">//通过精灵帧名字获取精灵帧</span>
+</span><span class='line'><span class="n">Sprite</span> <span class="o">*</span><span class="n">hero1</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">createWithSpriteFrame</span><span class="p">(</span><span class="n">heroSpriteFrame</span><span class="p">);</span><span class="c1">//通过精灵帧创建精灵</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">清空或移除精灵帧的缓存函数</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">C</span><span class="o">++</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">removeSpriteFrameByName</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">name</span><span class="p">);</span><span class="c1">//指定具体的精灵帧名将精灵帧从缓存中移除，具体到精灵帧</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">removeSpriteFrames</span><span class="p">();</span><span class="c1">//指定清空所有的精灵帧缓存</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">removeSpriteFramesFromFile</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">plist</span><span class="p">);</span><span class="c1">//指定具体的坐标文件(plist文件)移除精灵帧</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">removeUnusedSpriteFrames</span><span class="p">();</span><span class="c1">//移除没有使用的精灵帧</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">建议初学者不要轻易使用清除缓存函数！</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">小项目实例</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">现在还做不了太复杂的项目，在目前这个阶段</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">项目描述</span><span class="o">:&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">我们有这样一个场景，一个背景草地，山，和一个精灵牛仔</span><span class="p">(</span><span class="err">还没学帧动画，先做个静态的</span><span class="p">)</span><span class="err">。</span> <span class="err">把这三个精灵放到一个场景中</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="err">利用精灵帧缓存完成</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://i.imgur.com/6IbcWnk.png&quot;</span> <span class="n">alt</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="o">/&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">背景没有放到精灵图集中去，这是因为背景是不需要透明的</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>C++
 bool HelloWorld::init()
 {
     if ( !Layer::init() )
@@ -364,99 +442,189 @@ const ccMenuCallback &amp; callback  //菜单操作的回调函数指针,菜单�
 
 <p>cocos2d帮我们做了一个宏来帮助我们传递回调函数的参数,CC_CALLBACK_n,n为回调的参数个数<br/>
 <img src="http://i.imgur.com/6JjL3zZ.png" alt="" /><br/>
-```C++
-// new callbacks based on C++11</p>
-
-<h1>define CC_CALLBACK_0(<strong>selector</strong>,<strong>target</strong>, &hellip;) std::bind(&amp;<strong>selector</strong>,<strong>target</strong>, ##<strong>VA_ARGS</strong>)</h1>
-
-<h1>define CC_CALLBACK_1(<strong>selector</strong>,<strong>target</strong>, &hellip;) std::bind(&amp;<strong>selector</strong>,<strong>target</strong>, std::placeholders::_1, ##<strong>VA_ARGS</strong>)</h1>
-
-<h1>define CC_CALLBACK_2(<strong>selector</strong>,<strong>target</strong>, &hellip;) std::bind(&amp;<strong>selector</strong>,<strong>target</strong>, std::placeholders::<em>1, std::placeholders::</em>2, ##<strong>VA_ARGS</strong>)</h1>
-
-<h1>define CC_CALLBACK_3(<strong>selector</strong>,<strong>target</strong>, &hellip;) std::bind(&amp;<strong>selector</strong>,<strong>target</strong>, std::placeholders::<em>1, std::placeholders::</em>2, std::placeholders::_3, ##<strong>VA_ARGS</strong>)</h1>
-
-<pre><code>
-文本菜单类MenuItemAtlasFont是基于图片集的文本菜单项，它的其中一个创建函数create定义如下:
-</code></pre>
-
-<p>static MenuItemAtlasFont* create(const std::string&amp; value,//要显示的文本
- const std::string&amp; charMapFile, //图片集文件
-int itemWidth, //要截取的文字在图片中的宽度
-int itemHeight, //要截取的文字在图片中的高度
-char startCharMap,//文字之间的间隔符
- const ccMenuCallback&amp; callback//菜单操作的回调函数指针
-);</p>
-
-<pre><code>实例:
-</code></pre>
-
-<p>bool HelloWorld::init()
-{
-if (!Layer::init())
-{
-return false;
-}</p>
-
-<p>Size visibleSize = Director::getInstance()->getVisibleSize();
-Vec2 origin = Director::getInstance()->getVisibleOrigin();</p>
-
-<p>Sprite *bg = Sprite::create(&ldquo;menu/background.png&rdquo;); //背景图片精灵
-bg->setPosition(Vec2(origin.x + visibleSize.width / 2,
-origin.y + visibleSize.height / 2));
-this->addChild(bg);</p>
-
-<p>MenuItemFont::setFontName(&ldquo;Times New Roman&rdquo;);//使用系统字体，设置系统字体的名字
-MenuItemFont::setFontSize(86);//设置系统字体的大小
-MenuItemFont *item1 = MenuItemFont::create(&ldquo;Start&rdquo;,
-CC_CALLBACK_1(HelloWorld::menuItem1Callback, this)); //创建基于系统字体的MenuItemFont</p>
-
-<p>MenuItemAtlasFont *item2 = MenuItemAtlasFont::create(&ldquo;Help&rdquo;,
-&ldquo;menu/tuffy_bold_italic-charmap.png&rdquo;, 48, 65, &lsquo; &rsquo;,
-CC_CALLBACK_1(HelloWorld::menuItem2Callback, this));</p>
-
-<p>Menu* mn = Menu::create(item1, item2, NULL);//把MenuItem放到Menu里，不能直接把MenuItem放到层里
-mn->alignItemsVertically();//设置菜单位置，垂直对齐
-this->addChild(mn);//把菜单放到层里</p>
-
-<p>return true;
-}</p>
-
-<p>void HelloWorld::menuItem1Callback(Ref<em> pSender)
-{
-//实际上这里传进来的参数是MenuItem类型，所以在这里可以强转，也可以直接把形参类型写成MenuItem，不写成Ref
-MenuItem</em> item = (MenuItem*)pSender;
-//一般情况下，我们不需要这个参数，只有在需要一些特定的信息的情况下，我们才需要进行转换拿值
-log(&ldquo;Touch Start Menu Item %p&rdquo;, item); //这个输出是输出指针的地址，没有意义,在这里只是掩饰回调函数起作用了！且对象传过来了
-}</p>
-
-<p>void HelloWorld::menuItem2Callback(Ref<em> pSender)
-{
-MenuItem</em> item = (MenuItem*)pSender;
-log(&ldquo;Touch Help Menu Item %p&rdquo;, item);
-}</p>
-
-<pre><code>
-##显示效果:  
-![](http://i.imgur.com/LyozJx3.gif)   
-
-##源代码下载地址：
-
-GITHUB源码下载地址:&lt;strong&gt;【[点我进行下载](https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dTextMenu)】&lt;/strong&gt;
-
-#精灵菜单和图片菜单
-
-##精灵菜单项类MenuItemSprite
-创建函数create定义:
-</code></pre>
-
-<p>static MenuItemSprite * create(Node<em> normalSprite, Node</em> selectedSprite, Node<em> disabledSprite = nullptr);<br/>
-static MenuItemSprite</em> create(Node<em> normalSprite,//菜单项正常显示时候的精灵
-Node</em> selectedSprite,//选择菜单项时候的精灵
-Node<em> disableSprite,//菜单项禁用时候的精灵
-const ccMenuCallback&amp; callback //菜单操作的回调函数指针
-)<br/>
-static MenuItemSprite * create(Node</em> normalSprite, Node* selectedSprite, const ccMenuCallback&amp; callback);
-```</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">// new callbacks based on C++11&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_0</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_1</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_2</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">CC_CALLBACK_3</span><span class="p">(</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hellip</span><span class="p">;)</span> <span class="n">std</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">selector</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">target</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">placeholders</span><span class="o">::</span><span class="n">_3</span><span class="p">,</span> <span class="err">##</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">文本菜单类</span><span class="n">MenuItemAtlasFont</span><span class="err">是基于图片集的文本菜单项，它的其中一个创建函数</span><span class="n">create</span><span class="err">定义如下</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">MenuItemAtlasFont</span><span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">value</span><span class="p">,</span><span class="c1">//要显示的文本</span>
+</span><span class='line'> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">charMapFile</span><span class="p">,</span> <span class="c1">//图片集文件</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">itemWidth</span><span class="p">,</span> <span class="c1">//要截取的文字在图片中的宽度</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">itemHeight</span><span class="p">,</span> <span class="c1">//要截取的文字在图片中的高度</span>
+</span><span class='line'><span class="kt">char</span> <span class="n">startCharMap</span><span class="p">,</span><span class="c1">//文字之间的间隔符</span>
+</span><span class='line'> <span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">callback</span><span class="c1">//菜单操作的回调函数指针</span>
+</span><span class='line'><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">实例</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">bool</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">Layer</span><span class="o">::</span><span class="n">init</span><span class="p">())</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Size</span> <span class="n">visibleSize</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleSize</span><span class="p">();</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">Director</span><span class="o">::</span><span class="n">getInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getVisibleOrigin</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Sprite</span> <span class="o">*</span><span class="n">bg</span> <span class="o">=</span> <span class="n">Sprite</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">menu</span><span class="o">/</span><span class="n">background</span><span class="p">.</span><span class="n">png</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span> <span class="c1">//背景图片精灵</span>
+</span><span class='line'><span class="n">bg</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">bg</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">setFontName</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Times</span> <span class="n">New</span> <span class="n">Roman</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="c1">//使用系统字体，设置系统字体的名字</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">setFontSize</span><span class="p">(</span><span class="mi">86</span><span class="p">);</span><span class="c1">//设置系统字体的大小</span>
+</span><span class='line'><span class="n">MenuItemFont</span> <span class="o">*</span><span class="n">item1</span> <span class="o">=</span> <span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Start</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span> <span class="c1">//创建基于系统字体的MenuItemFont&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">MenuItemAtlasFont</span> <span class="o">*</span><span class="n">item2</span> <span class="o">=</span> <span class="n">MenuItemAtlasFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Help</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">menu</span><span class="o">/</span><span class="n">tuffy_bold_italic</span><span class="o">-</span><span class="n">charmap</span><span class="p">.</span><span class="n">png</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem2Callback</span><span class="p">,</span> <span class="k">this</span><span class="p">));</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Menu</span><span class="o">*</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">item1</span><span class="p">,</span> <span class="n">item2</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span><span class="c1">//把MenuItem放到Menu里，不能直接把MenuItem放到层里</span>
+</span><span class='line'><span class="n">mn</span><span class="o">-&gt;</span><span class="n">alignItemsVertically</span><span class="p">();</span><span class="c1">//设置菜单位置，垂直对齐</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">mn</span><span class="p">);</span><span class="c1">//把菜单放到层里&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">(</span><span class="n">Ref</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="c1">//实际上这里传进来的参数是MenuItem类型，所以在这里可以强转，也可以直接把形参类型写成MenuItem，不写成Ref</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//一般情况下，我们不需要这个参数，只有在需要一些特定的信息的情况下，我们才需要进行转换拿值</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Touch</span> <span class="n">Start</span> <span class="n">Menu</span> <span class="n">Item</span> <span class="o">%</span><span class="n">p</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">item</span><span class="p">);</span> <span class="c1">//这个输出是输出指针的地址，没有意义,在这里只是掩饰回调函数起作用了！且对象传过来了</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem2Callback</span><span class="p">(</span><span class="n">Ref</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">pSender</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">MenuItem</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">item</span> <span class="o">=</span> <span class="p">(</span><span class="n">MenuItem</span><span class="o">*</span><span class="p">)</span><span class="n">pSender</span><span class="p">;</span>
+</span><span class='line'><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Touch</span> <span class="n">Help</span> <span class="n">Menu</span> <span class="n">Item</span> <span class="o">%</span><span class="n">p</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">item</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="cp">##显示效果:  </span>
+</span><span class='line'><span class="o">!</span><span class="p">[](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//i.imgur.com/LyozJx3.gif)   </span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">##源代码下载地址：</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">GITHUB</span><span class="err">源码下载地址</span><span class="o">:&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">strong</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="err">【</span><span class="p">[</span><span class="err">点我进行下载</span><span class="p">](</span><span class="nl">https</span><span class="p">:</span><span class="c1">//github.com/chenhaoxiang/cocos2d-x/tree/master/20170701/code/Cocos2dTextMenu)】&amp;lt;/strong&amp;gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#精灵菜单和图片菜单</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">##精灵菜单项类MenuItemSprite</span>
+</span><span class='line'><span class="err">创建函数</span><span class="n">create</span><span class="err">定义</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">MenuItemSprite</span> <span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">normalSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">selectedSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">disabledSprite</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">static</span> <span class="n">MenuItemSprite</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">normalSprite</span><span class="p">,</span><span class="c1">//菜单项正常显示时候的精灵</span>
+</span><span class='line'><span class="n">Node</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">selectedSprite</span><span class="p">,</span><span class="c1">//选择菜单项时候的精灵</span>
+</span><span class='line'><span class="n">Node</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">disableSprite</span><span class="p">,</span><span class="c1">//菜单项禁用时候的精灵</span>
+</span><span class='line'><span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">callback</span> <span class="c1">//菜单操作的回调函数指针</span>
+</span><span class='line'><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">static</span> <span class="n">MenuItemSprite</span> <span class="o">*</span> <span class="n">create</span><span class="p">(</span><span class="n">Node</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">normalSprite</span><span class="p">,</span> <span class="n">Node</span><span class="o">*</span> <span class="n">selectedSprite</span><span class="p">,</span> <span class="k">const</span> <span class="n">ccMenuCallback</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">callback</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h2>图片菜单项类MenuIemImage</h2>
 
@@ -569,16 +737,23 @@ MenuItem* item,//进行切换的菜单项 MenuItem的集合，将其他菜单项
 </code></p>
 
 <p>简单形式的文本类型的开关菜单:<br/>
-```C++
-auto toggleMenuItem = MenuItemToggle::createWithCallback(
-CC_CALLBACK_1(HelloWorld::menuItem1Callback,this),
-MenuItemFont::create(&ldquo;On&rdquo;),
-MenuItemFont::create(&ldquo;Off&rdquo;),
-NULL);//最后记得加NULL(Object-c中区分元素集合的结束)，在开关菜单中，其实只能放两个子菜单项，多菜单项没意义，因为只是两个状态的切换</p>
-
-<p>Menu* mn=Menu::create(toggleMenuItem,NULL);//把菜单项放入菜单中
-this->addChhild(mn);//把菜单放入层中
-```<br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">auto</span> <span class="n">toggleMenuItem</span> <span class="o">=</span> <span class="n">MenuItemToggle</span><span class="o">::</span><span class="n">createWithCallback</span><span class="p">(</span>
+</span><span class='line'><span class="n">CC_CALLBACK_1</span><span class="p">(</span><span class="n">HelloWorld</span><span class="o">::</span><span class="n">menuItem1Callback</span><span class="p">,</span><span class="k">this</span><span class="p">),</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">On</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;),</span>
+</span><span class='line'><span class="n">MenuItemFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Off</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;),</span>
+</span><span class='line'><span class="nb">NULL</span><span class="p">);</span><span class="c1">//最后记得加NULL(Object-c中区分元素集合的结束)，在开关菜单中，其实只能放两个子菜单项，多菜单项没意义，因为只是两个状态的切换&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Menu</span><span class="o">*</span> <span class="n">mn</span><span class="o">=</span><span class="n">Menu</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">toggleMenuItem</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span><span class="c1">//把菜单项放入菜单中</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChhild</span><span class="p">(</span><span class="n">mn</span><span class="p">);</span><span class="c1">//把菜单放入层中</span>
+</span></code></pre></td></tr></table></div></figure><br/>
 这里只是简单的文本菜单，当然也可以是精灵菜单，也可以是图片菜单&hellip;</p>
 
 <h2>实例</h2>
@@ -696,25 +871,41 @@ GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/coc
 <p>const char<em>是C风格的字符串<br/>
 std::string是C++风格的字符串，它封装了const char</em><br/>
 初始化std::string对象:
-```C++ 初始化std::string对象
-std::string name = &ldquo;jack&rdquo;;//直接赋值
-std::string name = std::string(&ldquo;jack&rdquo;);//通过构造函数初始化</p>
-
-<p>//创建对象通过静态方法创建，也就是在程序结束的时候，或者超过作用域的时候，自动释放，这就不需要我们来关心对象的释放
-<code>
-std::string 指针类型
-</code>C++ std::string 指针类型
-std::string<em> namep = new std::string(&ldquo;jack&rdquo;);
-//new 代表创建这个对象是动态创建的，是在程序运行过程中创建的，使用完成之后需要delete删除。
-//返回值不是对象本身，而是指向对象的指针
-&hellip;
-delete namep;
-<code>
-把std::string 转化为const char*类型
-</code>C++ 把std::string 转化为const char</em>类型
-const char<em> cstring = name.c_str();//静态方法创建
-const char</em> cstring = namep->c_str();//namep为指针
-```</p>
+<figure class='code'><figcaption><span>初始化std::string对象</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">jack</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span><span class="c1">//直接赋值</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">jack</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="c1">//通过构造函数初始化&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//创建对象通过静态方法创建，也就是在程序结束的时候，或者超过作用域的时候，自动释放，这就不需要我们来关心对象的释放</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="err">指针类型</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">C</span><span class="o">++</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="err">指针类型</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">namep</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">jack</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="c1">//new 代表创建这个对象是动态创建的，是在程序运行过程中创建的，使用完成之后需要delete删除。</span>
+</span><span class='line'><span class="c1">//返回值不是对象本身，而是指向对象的指针</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">hellip</span><span class="p">;</span>
+</span><span class='line'><span class="k">delete</span> <span class="n">namep</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">把</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="err">转化为</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="err">类型</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">C</span><span class="o">++</span> <span class="err">把</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="err">转化为</span><span class="k">const</span> <span class="kt">char</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="err">类型</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">cstring</span> <span class="o">=</span> <span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span><span class="c1">//静态方法创建</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">cstring</span> <span class="o">=</span> <span class="n">namep</span><span class="o">-&gt;</span><span class="n">c_str</span><span class="p">();</span><span class="c1">//namep为指针</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <pre><code class="C++">std::string name = "jack";//直接赋值
 
@@ -789,105 +980,201 @@ int num2 = ns-&gt;intValue();
 <h3>解决方法二</h3>
 
 <p>转码GBK->UTF-8<br/>
-```C++
-    <strong>String *cns = </strong>String::create(&ldquo;大家好啊&rdquo;);
-    const char* nsc;</p>
-
-<h1>if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)</h1>
-
-<pre><code>std::string sns = MyUtility::gbk_2_utf8(ns-&gt;getCString());
-cns = sns.c_str();
-</code></pre>
-
-<h1>else</h1>
-
-<pre><code>cns = ns-&gt;getCString();
-</code></pre>
-
-<h1>endif</h1>
-
-<pre><code>log("%s", cns);
-auto label = LabelTTF::create(cns, "Arial", 24);
-</code></pre>
-
-<pre><code></code></pre>
-
-<p>//在Win32平台下，将GBK编码转换为UTF-8
-string MyUtility::gbk_2_utf8(const string text){</p>
-
-<h1>if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) //条件编译</h1>
-
-<pre><code>//这里面用的一些库只有win32平台才有的一些类库
-
-//采用Lambda表达式，将string转换成wstring
-wstring tes = [=](){
-    setlocale(LC_ALL, "chs");
-    const char* _Source = text.c_str();
-    size_t _Dsize = text.size() + 1;
-    wchar_t *_Dest = new wchar_t[_Dsize];
-    mbstowcs(_Dest, _Source, _Dsize);
-    std::wstring result = _Dest;
-    delete[]_Dest;
-    setlocale(LC_ALL, "C");
-    return result;
-}();
-
-int asciSize = WideCharToMultiByte(CP_UTF8, 0, tes.c_str(), tes.size(), NULL, 0, NULL, NULL);
-if(asciSize == ERROR_NO_UNICODE_TRANSLATION || asciSize==0){
-    return string();
-}
-
-char *resultString = new char[asciSize];
-int conveResult = WideCharToMultiByte(CP_UTF8, 0, tes.c_str(), tes.size(), resultString, asciSize, NULL, NULL);
-if (conveResult != asciSize){
-    return string();
-}
-string buffer = "";
-buffer.append(resultString,asciSize);
-delete[] resultString;
-return buffer;
-</code></pre>
-
-<h1>else</h1>
-
-<pre><code>return text;
-</code></pre>
-
-<h1>endif</h1>
-
-<p>}</p>
-
-<pre><code>
-###解决方法三
-其实还可以用文本文件来解决中文乱码，就是字符串从xml文件或者json中读取(注意，文本需要是UTF-8编码)，然后传值，这样不会出现乱码问题    
-
-
-#使用标签
-可以把标签理解为一个控件  
-
-![](http://i.imgur.com/nDlGfb0.png)  
-
-此处的大家好和中间的COCOS2DX图片就是标签  
-
-一种是COCOS2DX这样的，可以叫美工做张图片然后放上去就可以了，静态的  
-另外一种是"大家好"这样的动态文字  
-
-##LabelTTF
-TTF基于系统字库  
-
-![](http://i.imgur.com/khRSKgT.png)  
-</code></pre>
-
-<p>//静态create函数创建
-auto label = LabelTTF::create(&ldquo;大家好&rdquo;, &ldquo;Arial&rdquo;, 24);//如乱码请参照前面的解决
-//在不同的平台中都是去找Arial这个系统库，然后去显示出来,24为字号</p>
-
-<p>//指定标签的位置
-label->setPosition(Vec2(origin.x + visibleSize.width/2,origin.y + visibleSize.height - label->getContentSize().height));
-//记住设置位置和锚点，锚点没写就是默认的0.5,0.5
-//把标签加入到层中
-this->addChild(label, 1,123);//设置tag为123，方便后面获取
-```</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">String</span> <span class="o">*</span><span class="n">cns</span> <span class="o">=</span> <span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">String</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="err">大家好啊</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">nsc</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="n">CC_TARGET_PLATFORM</span> <span class="o">==</span> <span class="n">CC_PLATFORM_WIN32</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">sns</span> <span class="o">=</span> <span class="n">MyUtility</span><span class="o">::</span><span class="n">gbk_2_utf8</span><span class="p">(</span><span class="n">ns</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getCString</span><span class="p">());</span>
+</span><span class='line'><span class="n">cns</span> <span class="o">=</span> <span class="n">sns</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="k">else</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">cns</span> <span class="o">=</span> <span class="n">ns</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">getCString</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">log</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">cns</span><span class="p">);</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label</span> <span class="o">=</span> <span class="n">LabelTTF</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="n">cns</span><span class="p">,</span> <span class="s">&quot;Arial&quot;</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//在Win32平台下，将GBK编码转换为UTF-8</span>
+</span><span class='line'><span class="n">string</span> <span class="n">MyUtility</span><span class="o">::</span><span class="n">gbk_2_utf8</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="n">text</span><span class="p">){</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="n">CC_TARGET_PLATFORM</span> <span class="o">==</span> <span class="n">CC_PLATFORM_WIN32</span><span class="p">)</span> <span class="c1">//条件编译&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">//这里面用的一些库只有win32平台才有的一些类库</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//采用Lambda表达式，将string转换成wstring</span>
+</span><span class='line'><span class="n">wstring</span> <span class="n">tes</span> <span class="o">=</span> <span class="p">[</span><span class="o">=</span><span class="p">](){</span>
+</span><span class='line'><span class="n">setlocale</span><span class="p">(</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="s">&quot;chs&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">_Source</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span>
+</span><span class='line'><span class="kt">size_t</span> <span class="n">_Dsize</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="kt">wchar_t</span> <span class="o">*</span><span class="n">_Dest</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">wchar_t</span><span class="p">[</span><span class="n">_Dsize</span><span class="p">];</span>
+</span><span class='line'><span class="n">mbstowcs</span><span class="p">(</span><span class="n">_Dest</span><span class="p">,</span> <span class="n">_Source</span><span class="p">,</span> <span class="n">_Dsize</span><span class="p">);</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">wstring</span> <span class="n">result</span> <span class="o">=</span> <span class="n">_Dest</span><span class="p">;</span>
+</span><span class='line'><span class="k">delete</span><span class="p">[]</span><span class="n">_Dest</span><span class="p">;</span>
+</span><span class='line'><span class="n">setlocale</span><span class="p">(</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="s">&quot;C&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span><span class='line'><span class="p">}();</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">asciSize</span> <span class="o">=</span> <span class="n">WideCharToMultiByte</span><span class="p">(</span><span class="n">CP_UTF8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tes</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">tes</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="n">asciSize</span> <span class="o">==</span> <span class="n">ERROR_NO_UNICODE_TRANSLATION</span> <span class="o">||</span> <span class="n">asciSize</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+</span><span class='line'><span class="k">return</span> <span class="n">string</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">char</span> <span class="o">*</span><span class="n">resultString</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">asciSize</span><span class="p">];</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">conveResult</span> <span class="o">=</span> <span class="n">WideCharToMultiByte</span><span class="p">(</span><span class="n">CP_UTF8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tes</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">tes</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">resultString</span><span class="p">,</span> <span class="n">asciSize</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">conveResult</span> <span class="o">!=</span> <span class="n">asciSize</span><span class="p">){</span>
+</span><span class='line'><span class="k">return</span> <span class="n">string</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">string</span> <span class="n">buffer</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="n">buffer</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">resultString</span><span class="p">,</span><span class="n">asciSize</span><span class="p">);</span>
+</span><span class='line'><span class="k">delete</span><span class="p">[]</span> <span class="n">resultString</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="n">buffer</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="k">else</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="n">text</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="cp">###解决方法三</span>
+</span><span class='line'><span class="err">其实还可以用文本文件来解决中文乱码，就是字符串从</span><span class="n">xml</span><span class="err">文件或者</span><span class="n">json</span><span class="err">中读取</span><span class="p">(</span><span class="err">注意，文本需要是</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="err">编码</span><span class="p">)</span><span class="err">，然后传值，这样不会出现乱码问题</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#使用标签</span>
+</span><span class='line'><span class="err">可以把标签理解为一个控件</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">!</span><span class="p">[](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//i.imgur.com/nDlGfb0.png)  </span>
+</span><span class='line'>
+</span><span class='line'><span class="err">此处的大家好和中间的</span><span class="n">COCOS2DX</span><span class="err">图片就是标签</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">一种是</span><span class="n">COCOS2DX</span><span class="err">这样的，可以叫美工做张图片然后放上去就可以了，静态的</span>
+</span><span class='line'><span class="err">另外一种是</span><span class="s">&quot;大家好&quot;</span><span class="err">这样的动态文字</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">##LabelTTF</span>
+</span><span class='line'><span class="n">TTF</span><span class="err">基于系统字库</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">!</span><span class="p">[](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//i.imgur.com/khRSKgT.png)  </span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//静态create函数创建</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label</span> <span class="o">=</span> <span class="n">LabelTTF</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="err">大家好</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Arial</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="mi">24</span><span class="p">);</span><span class="c1">//如乱码请参照前面的解决</span>
+</span><span class='line'><span class="c1">//在不同的平台中都是去找Arial这个系统库，然后去显示出来,24为字号&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//指定标签的位置</span>
+</span><span class='line'><span class="n">label</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">label</span><span class="o">-&gt;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'><span class="c1">//记住设置位置和锚点，锚点没写就是默认的0.5,0.5</span>
+</span><span class='line'><span class="c1">//把标签加入到层中</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">123</span><span class="p">);</span><span class="c1">//设置tag为123，方便后面获取</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>create函数的完整定义:
 <code>C++
@@ -937,82 +1224,155 @@ LabelBMFont比LabelTTF快很多。LabelBMFont中的每个字符的宽度是可�
 (大家可以简单的学习一下工具)</p>
 
 <p>创建并初始化标签
-```C++
-    auto label2 = LabelBMFont::create(&ldquo;HelloWord&rdquo;,&ldquo;fonts/BMFont.fnt&rdquo;);
-    label2->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - label2->getContentSize().height));
-    this->addChild(label2,1);</p>
-
-<pre><code>效果：  
-![](http://i.imgur.com/Sf2epLr.png)  
-
-##Cocos2d-x 3.x标签类Label
-Cocos2d-x 3.x后推出了新的标签类Label，这种标签通过使用FreeType(开源字体引擎)来使它在不同的平台上有相同的视觉效果。  
-由于使用更快的缓存代理，它的渲染也将更加快速。Label还提供了描边和阴影等特效。  
-![](http://i.imgur.com/HKQ3iDb.png)  
-
-前面三个标签在3.0或者说3.1之后已经过时了，但是还可以用(不推荐使用了)。  
-推荐使用该标签类Label，该类替换了前面的三个标签类  
-
-创建Label类静态create函数常用的有如下几个：
-</code></pre>
-
-<p>static Label* createWithSystemFont(conststd::string &amp;text,   //是要显示的文字                           <br/>
-const std::string&amp; font,                                     //系统字体名<br/>
-float fontSize,                                             //字体的大小<br/>
-const Size&amp; dimensions = Size::ZERO,                        //在屏幕上占用的区域大小,可省略<br/>
-TextHAlignment  hAlignment = TextHAlignment::LEFT,          //文字横向对齐方式,可省略<br/>
-TextVAlignment  vAlignment = TextVAlignment::TOP)           //文字纵向对齐方式,可省略<br/>
-显示的是系统字体，指的是运行环境下的系统，而不是编译系统，相当于原来的LabelTTF</p>
-
-<p>static Label* createWithTTF(conststd::string &amp; text,
-const std::string &amp;  fontFile,                //字体文件<br/>
-float fontSize,                                  //字体的大小<br/>
-const Size &amp;  dimensions = Size::ZERO,                 //可省略<br/>
-TextHAlignment          hAlignment = TextHAlignment::LEFT,    //可省略<br/>
-TextVAlignment           vAlignment = TextVAlignment::TOP)      //可省略<br/>
-createWithTTF和LabelTTF不一样了，也就是fontFile指定的不是系统字体，而是字体文件，也就是字体文件路径</p>
-
-<p>static Label* createWithTTF(constTTFConfig&amp; ttfConfig, //配置参数 constTTFConfig-结构体
-const std::string&amp; text,
-TextHAlignment alignment = TextHAlignment::LEFT,
-int maxLineWidth = 0)</p>
-
-<p>static Label* createWithBMFont(conststd::string&amp; bmfontFilePath,      //位图字体文件<br/>
-const std::string&amp;  text,                                         //是要显示的文字      <br/>
-const TextHAlignment&amp; alignment = TextHAlignment::LEFT,          //可省略<br/>
-int maxLineWidth = 0,                                              //可省略<br/>
-const Point&amp;  imageOffset = Point::ZERO )                               //可省略</p>
-
-<pre><code>
-使用实例
-</code></pre>
-
-<p>auto label1 = Label::createWithSystemFont(&ldquo;Hello World1&rdquo;, &ldquo;Arial&rdquo;, 36);
-label1->setPosition(Vec2(origin.x + visibleSize.width/2,origin.y + visibleSize.height - 100));
-this->addChild(label1, 1);//Win32的字体库可以在控制面板中找到</p>
-
-<p>auto label2 = Label::createWithTTF(&ldquo;Hello World2&rdquo;, &ldquo;fonts/Marker Felt.ttf&rdquo;, 36);
-label2->setPosition(Vec2(origin.x + visibleSize.width/2,origin.y + visibleSize.height - 200));
-this->addChild(label2, 1);</p>
-
-<p>auto label3 = Label::createWithBMFont(&ldquo;fonts/BMFont.fnt&rdquo;, &ldquo;Hello World3&rdquo;);
-label3->setPosition(Vec2(origin.x + visibleSize.width/2,origin.y + visibleSize.height - 300));
-this->addChild(label3, 1);</p>
-
-<p>TTFConfig ttfConfig(&ldquo;fonts/Marker Felt.ttf&rdquo;,36,GlyphCollection::DYNAMIC);
-auto label4 = Label::createWithTTF(ttfConfig, &ldquo;Hello World4&rdquo;);
-label4->setPosition(Vec2(origin.x + visibleSize.width/2,origin.y + visibleSize.height - 400));
-this->addChild(label4 , 1);</p>
-
-<p>ttfConfig.outlineSize = 4;
-auto label5 = Label::createWithTTF(ttfConfig, &ldquo;Hello World5&rdquo;);
-//ttfConfig-结构体配置，能配置更多的特效，比如描边，阴影，闪烁的文字等
-//只能是TTF文件的，才能使用这些特效
-label5->setPosition(Vec2(origin.x + visibleSize.width/2,origin.y + visibleSize.height - 500));
-label5->enableShadow(Color4B(255,255,255,128), Size(4, -4));//设置阴影，阴影的颜色，阴影的大小
-label5->setColor(Color3B::RED);//设置颜色
-this->addChild(label5, 1);
-```</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">auto</span> <span class="n">label2</span> <span class="o">=</span> <span class="n">LabelBMFont</span><span class="o">::</span><span class="n">create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">HelloWord</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">fonts</span><span class="o">/</span><span class="n">BMFont</span><span class="p">.</span><span class="n">fnt</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="n">label2</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">label2</span><span class="o">-&gt;</span><span class="n">getContentSize</span><span class="p">().</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">效果：</span>
+</span><span class='line'><span class="o">!</span><span class="p">[](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//i.imgur.com/Sf2epLr.png)  </span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">##Cocos2d-x 3.x标签类Label</span>
+</span><span class='line'><span class="n">Cocos2d</span><span class="o">-</span><span class="n">x</span> <span class="mf">3.</span><span class="n">x</span><span class="err">后推出了新的标签类</span><span class="n">Label</span><span class="err">，这种标签通过使用</span><span class="n">FreeType</span><span class="p">(</span><span class="err">开源字体引擎</span><span class="p">)</span><span class="err">来使它在不同的平台上有相同的视觉效果。</span>
+</span><span class='line'><span class="err">由于使用更快的缓存代理，它的渲染也将更加快速。</span><span class="n">Label</span><span class="err">还提供了描边和阴影等特效。</span>
+</span><span class='line'><span class="o">!</span><span class="p">[](</span><span class="nl">http</span><span class="p">:</span><span class="c1">//i.imgur.com/HKQ3iDb.png)  </span>
+</span><span class='line'>
+</span><span class='line'><span class="err">前面三个标签在</span><span class="mf">3.0</span><span class="err">或者说</span><span class="mf">3.1</span><span class="err">之后已经过时了，但是还可以用</span><span class="p">(</span><span class="err">不推荐使用了</span><span class="p">)</span><span class="err">。</span>
+</span><span class='line'><span class="err">推荐使用该标签类</span><span class="n">Label</span><span class="err">，该类替换了前面的三个标签类</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">创建</span><span class="n">Label</span><span class="err">类静态</span><span class="n">create</span><span class="err">函数常用的有如下几个：</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithSystemFont</span><span class="p">(</span><span class="n">conststd</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">text</span><span class="p">,</span>   <span class="c1">//是要显示的文字                           &lt;br/&gt;</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">font</span><span class="p">,</span>                                     <span class="c1">//系统字体名&lt;br/&gt;</span>
+</span><span class='line'><span class="kt">float</span> <span class="n">fontSize</span><span class="p">,</span>                                             <span class="c1">//字体的大小&lt;br/&gt;</span>
+</span><span class='line'><span class="k">const</span> <span class="n">Size</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">dimensions</span> <span class="o">=</span> <span class="n">Size</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span>                        <span class="c1">//在屏幕上占用的区域大小,可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="n">TextHAlignment</span>  <span class="n">hAlignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>          <span class="c1">//文字横向对齐方式,可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="n">TextVAlignment</span>  <span class="n">vAlignment</span> <span class="o">=</span> <span class="n">TextVAlignment</span><span class="o">::</span><span class="n">TOP</span><span class="p">)</span>           <span class="c1">//文字纵向对齐方式,可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="err">显示的是系统字体，指的是运行环境下的系统，而不是编译系统，相当于原来的</span><span class="n">LabelTTF</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithTTF</span><span class="p">(</span><span class="n">conststd</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">text</span><span class="p">,</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>  <span class="n">fontFile</span><span class="p">,</span>                <span class="c1">//字体文件&lt;br/&gt;</span>
+</span><span class='line'><span class="kt">float</span> <span class="n">fontSize</span><span class="p">,</span>                                  <span class="c1">//字体的大小&lt;br/&gt;</span>
+</span><span class='line'><span class="k">const</span> <span class="n">Size</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>  <span class="n">dimensions</span> <span class="o">=</span> <span class="n">Size</span><span class="o">::</span><span class="n">ZERO</span><span class="p">,</span>                 <span class="c1">//可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="n">TextHAlignment</span>          <span class="n">hAlignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>    <span class="c1">//可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="n">TextVAlignment</span>           <span class="n">vAlignment</span> <span class="o">=</span> <span class="n">TextVAlignment</span><span class="o">::</span><span class="n">TOP</span><span class="p">)</span>      <span class="c1">//可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="n">createWithTTF</span><span class="err">和</span><span class="n">LabelTTF</span><span class="err">不一样了，也就是</span><span class="n">fontFile</span><span class="err">指定的不是系统字体，而是字体文件，也就是字体文件路径</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithTTF</span><span class="p">(</span><span class="n">constTTFConfig</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">ttfConfig</span><span class="p">,</span> <span class="c1">//配置参数 constTTFConfig-结构体</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">text</span><span class="p">,</span>
+</span><span class='line'><span class="n">TextHAlignment</span> <span class="n">alignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">maxLineWidth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">Label</span><span class="o">*</span> <span class="n">createWithBMFont</span><span class="p">(</span><span class="n">conststd</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">bmfontFilePath</span><span class="p">,</span>      <span class="c1">//位图字体文件&lt;br/&gt;</span>
+</span><span class='line'><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>  <span class="n">text</span><span class="p">,</span>                                         <span class="c1">//是要显示的文字      &lt;br/&gt;</span>
+</span><span class='line'><span class="k">const</span> <span class="n">TextHAlignment</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">alignment</span> <span class="o">=</span> <span class="n">TextHAlignment</span><span class="o">::</span><span class="n">LEFT</span><span class="p">,</span>          <span class="c1">//可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">maxLineWidth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>                                              <span class="c1">//可省略&lt;br/&gt;</span>
+</span><span class='line'><span class="k">const</span> <span class="n">Point</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>  <span class="n">imageOffset</span> <span class="o">=</span> <span class="n">Point</span><span class="o">::</span><span class="n">ZERO</span> <span class="p">)</span>                               <span class="c1">//可省略&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">使用实例</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">auto</span> <span class="n">label1</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithSystemFont</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Hello</span> <span class="n">World1</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Arial</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="mi">36</span><span class="p">);</span>
+</span><span class='line'><span class="n">label1</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">100</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="c1">//Win32的字体库可以在控制面板中找到&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">auto</span> <span class="n">label2</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Hello</span> <span class="n">World2</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">fonts</span><span class="o">/</span><span class="n">Marker</span> <span class="n">Felt</span><span class="p">.</span><span class="n">ttf</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="mi">36</span><span class="p">);</span>
+</span><span class='line'><span class="n">label2</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">200</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">auto</span> <span class="n">label3</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithBMFont</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">fonts</span><span class="o">/</span><span class="n">BMFont</span><span class="p">.</span><span class="n">fnt</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Hello</span> <span class="n">World3</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="n">label3</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">300</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">TTFConfig</span> <span class="n">ttfConfig</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">fonts</span><span class="o">/</span><span class="n">Marker</span> <span class="n">Felt</span><span class="p">.</span><span class="n">ttf</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="mi">36</span><span class="p">,</span><span class="n">GlyphCollection</span><span class="o">::</span><span class="n">DYNAMIC</span><span class="p">);</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label4</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="n">ttfConfig</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Hello</span> <span class="n">World4</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="n">label4</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">400</span><span class="p">));</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label4</span> <span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ttfConfig</span><span class="p">.</span><span class="n">outlineSize</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">label5</span> <span class="o">=</span> <span class="n">Label</span><span class="o">::</span><span class="n">createWithTTF</span><span class="p">(</span><span class="n">ttfConfig</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Hello</span> <span class="n">World5</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="c1">//ttfConfig-结构体配置，能配置更多的特效，比如描边，阴影，闪烁的文字等</span>
+</span><span class='line'><span class="c1">//只能是TTF文件的，才能使用这些特效</span>
+</span><span class='line'><span class="n">label5</span><span class="o">-&gt;</span><span class="n">setPosition</span><span class="p">(</span><span class="n">Vec2</span><span class="p">(</span><span class="n">origin</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">origin</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">visibleSize</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">500</span><span class="p">));</span>
+</span><span class='line'><span class="n">label5</span><span class="o">-&gt;</span><span class="n">enableShadow</span><span class="p">(</span><span class="n">Color4B</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">128</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">));</span><span class="c1">//设置阴影，阴影的颜色，阴影的大小</span>
+</span><span class='line'><span class="n">label5</span><span class="o">-&gt;</span><span class="n">setColor</span><span class="p">(</span><span class="n">Color3B</span><span class="o">::</span><span class="n">RED</span><span class="p">);</span><span class="c1">//设置颜色</span>
+</span><span class='line'><span class="k">this</span><span class="o">-&gt;</span><span class="n">addChild</span><span class="p">(</span><span class="n">label5</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h2>标签中文乱码问题</h2>
 
@@ -1126,18 +1486,27 @@ OpenGL属于右手坐标！<br/>
 <h2>世界坐标与模型坐标互相转换</h2>
 
 <p>通过Node对象如下函数实现：<br/>
-```C++ 世界坐标与模型坐标互相转换
-Vec2 convertToNodeSpace ( const Vec2 &amp; worldPoint ) //将世界坐标转换为模型坐标。坐标原点看成模型(对象，精灵)的左下角所在
-Vec2 convertToNodeSpaceAR ( const Vec2 &amp; worldPoint ) //将世界坐标转换为模型坐标。AR表示相对于锚点。</p>
-
-<p>Vec2 convertTouchToNodeSpace ( Touch * touch ) //将世界坐标中触摸点转换为模型坐标。
-Vec2 convertTouchToNodeSpaceAR ( Touch * touch ) //将世界坐标中触摸点转换为模型坐标。AR表示相对于锚点。
-//凡是后面是ToNodeSpace的这个函数，是从世界坐标到模型坐标的转换  Node就是节点，也就是我们说的模型
-//所有带有AR的，表示相对于锚点，也就是坐标原点看成模型(对象，精灵)的锚点所在</p>
-
-<p>Vec2 convertToWorldSpace ( const Vec2 &amp; nodePoint ) //将模型坐标中触摸点转换为世界坐标。
-Vec2 convertToWorldSpaceAR ( const Vec2 &amp; nodePoint ) //将模型坐标中触摸点转换为世界坐标。AR表示相对于锚点。
-```</p>
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">Vec2</span> <span class="n">convertToNodeSpace</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">worldPoint</span> <span class="p">)</span> <span class="c1">//将世界坐标转换为模型坐标。坐标原点看成模型(对象，精灵)的左下角所在</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">convertToNodeSpaceAR</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">worldPoint</span> <span class="p">)</span> <span class="c1">//将世界坐标转换为模型坐标。AR表示相对于锚点。&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Vec2</span> <span class="n">convertTouchToNodeSpace</span> <span class="p">(</span> <span class="n">Touch</span> <span class="o">*</span> <span class="n">touch</span> <span class="p">)</span> <span class="c1">//将世界坐标中触摸点转换为模型坐标。</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">convertTouchToNodeSpaceAR</span> <span class="p">(</span> <span class="n">Touch</span> <span class="o">*</span> <span class="n">touch</span> <span class="p">)</span> <span class="c1">//将世界坐标中触摸点转换为模型坐标。AR表示相对于锚点。</span>
+</span><span class='line'><span class="c1">//凡是后面是ToNodeSpace的这个函数，是从世界坐标到模型坐标的转换  Node就是节点，也就是我们说的模型</span>
+</span><span class='line'><span class="c1">//所有带有AR的，表示相对于锚点，也就是坐标原点看成模型(对象，精灵)的锚点所在&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Vec2</span> <span class="n">convertToWorldSpace</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">nodePoint</span> <span class="p">)</span> <span class="c1">//将模型坐标中触摸点转换为世界坐标。</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">convertToWorldSpaceAR</span> <span class="p">(</span> <span class="k">const</span> <span class="n">Vec2</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">nodePoint</span> <span class="p">)</span> <span class="c1">//将模型坐标中触摸点转换为世界坐标。AR表示相对于锚点。</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h1>实例：世界坐标转换为模型坐标</h1>
 
@@ -1152,22 +1521,30 @@ C相对于A:(100,-100)</p>
 C相对于B:(-200,-200)</p>
 
 <p>Node2的世界坐标转换为相对于Node1的模型坐标:
-```
-//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的坐标原点,也就是A点
-Vec2 point1 = node1->convertToNodeSpace(node2->getPosition());</p>
-
-<p>//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的锚点,也就是B点
-Vec2 point2 = node1->convertToNodeSpaceAR(node2->getPosition());
-```</p>
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的坐标原点,也就是A点</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">point1</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToNodeSpace</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//将Node2的位置转换为相对于Node1的模型坐标，不带AR的，表示相对于Node1的锚点,也就是B点</span>
+</span><span class='line'><span class="n">Vec2</span> <span class="n">point2</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToNodeSpaceAR</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>所以得出的结果就是:
-```
-log(&ldquo;Node2 NodeSpace = (%f,%f)&rdquo;,point1.x,point1.y);
-//Node2 NodeSpace = (100.000000,-100.000000)</p>
-
-<p>log(&ldquo;Node2 NodeSpaceAR = (%f,%f)&rdquo;, point2.x, point2.y);
-//Node2 NodeSpaceAR = (-200.000000,-200.000000)
-```</p>
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Node2</span> <span class="n">NodeSpace</span> <span class="o">=</span> <span class="p">(</span><span class="o">%</span><span class="n">f</span><span class="p">,</span><span class="o">%</span><span class="n">f</span><span class="p">)</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="n">point1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">point1</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//Node2 NodeSpace = (100.000000,-100.000000)&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">log</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Node2</span> <span class="n">NodeSpaceAR</span> <span class="o">=</span> <span class="p">(</span><span class="o">%</span><span class="n">f</span><span class="p">,</span><span class="o">%</span><span class="n">f</span><span class="p">)</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">point2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">point2</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//Node2 NodeSpaceAR = (-200.000000,-200.000000)</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <pre><code>bool HelloWorld::init()
 {
@@ -1216,11 +1593,13 @@ GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/coc
 Node2是放置在Node1中的，它对于Node1的模型坐标是(0,0),大小是150</em>150像素</p>
 
 <p>Node2相对于Node1的模型坐标转换的世界坐标:<br/>
-```
-Vec2 point1 = node1->convertToWorldSpace(node2->getPosition());</p>
-
-<blockquote><p>//node2->getPosition()为Node2在Node1中的模型坐标(相对于Node1的坐标原点得到的坐标) ->(convertToWorldSpace)->转换为世界坐标，Node2在Node1中的坐标实际上是(0,0),在世界坐标中，Node2的坐标其实就是A点的坐标
-```
+<figure class='code'><figcaption><span>世界坐标与模型坐标互相转换</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">Vec2</span> <span class="n">point1</span> <span class="o">=</span> <span class="n">node1</span><span class="o">-&gt;</span><span class="n">convertToWorldSpace</span><span class="p">(</span><span class="n">node2</span><span class="o">-&gt;</span><span class="n">getPosition</span><span class="p">());</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">blockquote</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//node2-&gt;getPosition()为Node2在Node1中的模型坐标(相对于Node1的坐标原点得到的坐标) -&gt;(convertToWorldSpace)-&gt;转换为世界坐标，Node2在Node1中的坐标实际上是(0,0),在世界坐标中，Node2的坐标其实就是A点的坐标</span>
+</span></code></pre></td></tr></table></div></figure>
 (150,50)为Node2的宽高<br/>
 A点的坐标 = (400,500) - (150,50) = (250,450)</p></blockquote>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Acm-c | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/acm-c/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-15T10:38:15+08:00</updated>
+  <updated>2017-09-15T10:42:14+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -202,20 +202,30 @@ Ray又对数字的列产生了兴趣：
 0 0 0 0
 </code>
 Sample Output
-```
-1234 1243 1324 1342 1423 1432
-2134 2143 2314 2341 2413 2431
-3124 3142 3214 3241 3412 3421
-4123 4132 4213 4231 4312 4321</p>
-
-<p>1123 1132 1213 1231 1312 1321
-2113 2131 2311
-3112 3121 3211</p>
-
-<p>1023 1032 1203 1230 1302 1320
-2013 2031 2103 2130 2301 2310
-3012 3021 3102 3120 3201 3210
-```</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1234 1243 1324 1342 1423 1432
+</span><span class='line'>2134 2143 2314 2341 2413 2431
+</span><span class='line'>3124 3142 3214 3241 3412 3421
+</span><span class='line'>4123 4132 4213 4231 4312 4321&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;1123 1132 1213 1231 1312 1321
+</span><span class='line'>2113 2131 2311
+</span><span class='line'>3112 3121 3211&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;1023 1032 1203 1230 1302 1320
+</span><span class='line'>2013 2031 2103 2130 2301 2310
+</span><span class='line'>3012 3021 3102 3120 3201 3210</span></code></pre></td></tr></table></div></figure></p>
 
 <p>这是一个求一个排序的下一个排列的函数，可以遍历全排列,要包含头文件<br/>
 下面是以前的笔记    与之完全相反的函数还有prev_permutation <br/>
@@ -274,26 +284,42 @@ Problem B</p>
 每组输出数据间空一行，最后一组数据后面没有空行。</p>
 
 <p>Sample Input
-```
-1 2 3 4
-1 1 2 3
-0 1 2 3
-0 0 0 0</p>
-
-<p>Sample Output
-1234 1243 1324 1342 1423 1432
-2134 2143 2314 2341 2413 2431
-3124 3142 3214 3241 3412 3421
-4123 4132 4213 4231 4312 4321</p>
-
-<p>1123 1132 1213 1231 1312 1321
-2113 2131 2311
-3112 3121 3211</p>
-
-<p>1023 1032 1203 1230 1302 1320
-2013 2031 2103 2130 2301 2310
-3012 3021 3102 3120 3201 3210
-```</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1 2 3 4
+</span><span class='line'>1 1 2 3
+</span><span class='line'>0 1 2 3
+</span><span class='line'>0 0 0 0&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Sample Output
+</span><span class='line'>1234 1243 1324 1342 1423 1432
+</span><span class='line'>2134 2143 2314 2341 2413 2431
+</span><span class='line'>3124 3142 3214 3241 3412 3421
+</span><span class='line'>4123 4132 4213 4231 4312 4321&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;1123 1132 1213 1231 1312 1321
+</span><span class='line'>2113 2131 2311
+</span><span class='line'>3112 3121 3211&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;1023 1032 1203 1230 1302 1320
+</span><span class='line'>2013 2031 2103 2130 2301 2310
+</span><span class='line'>3012 3021 3102 3120 3201 3210</span></code></pre></td></tr></table></div></figure></p>
 
 <pre><code class="c">#include &lt; iostream &gt;
 #include &lt; stdio.h &gt;

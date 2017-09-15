@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/c/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-15T10:38:15+08:00</updated>
+  <updated>2017-09-15T10:42:14+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -113,89 +113,169 @@ q.back()                返回队列尾元素的值，但不删除该元素
 如果不能做到这一点，那么节省内存的方法就是使用链表存储栈。</p>
 
 <p>线性表实现栈的基本操作<br/>
-```c++
-    #include<iostream><br/>
-    #include<cstdio><br/>
-    using namespace std;<br/>
-    typedef struct Stacknode//定义链式栈的结构体<br/>
-    {<br/>
-        int data;//数据域<br/>
-        Stacknode <em>next;//下一节点的指针域<br/>
-    }Stacknode,</em>Stack;<br/>
-    //初始化一个链式栈（返回一个链式栈的头节点）<br/>
-    Stack InitStack()<br/>
-    {<br/>
-        Stack stack=(Stack)malloc(sizeof(Stacknode));<br/>
-        stack->next=NULL;<br/>
-        return stack;<br/>
-    }<br/>
-    //入栈<br/>
-    void Push(Stack stack,int newData)<br/>
-    {<br/>
-        //判断是否为空<br/>
-        if(stack==NULL)<br/>
-        {<br/>
-            printf(&ldquo;栈未初始化，请初始化以后再使用\n&rdquo;);<br/>
-            return;<br/>
-        }<br/>
-        //找到最后一个节点<br/>
-       Stacknode <em>lastnode=stack;<br/>
-       while(lastnode->next)<br/>
-        {<br/>
-        lastnode=lastnode->next;<br/>
-        }<br/>
-       lastnode->next=(Stacknode</em>)malloc(sizeof(Stacknode<em>));<br/>
-       lastnode->next->data=newData;<br/>
-       lastnode->next->next=NULL;<br/>
-       printf(&ldquo;入栈成功！\n&rdquo;);<br/>
-    }<br/>
-    //出栈<br/>
-    int Pop(Stack stack)<br/>
-    {<br/>
-        //判断栈是否为空<br/>
-        if(!stack->next)<br/>
-        {<br/>
-            printf(&ldquo;栈为空，无法出栈\n&rdquo;);<br/>
-            return -1;//-1只是一个自定义的错误代码<br/>
-        }<br/>
-        //找到最后一个节点的钱一个节点<br/>
-        //tempNode:最后一个节点的前一个节点<br/>
-        Stacknode </em>tempNode=stack;<br/>
-        while(tempNode->next->next)<br/>
-        {<br/>
-            tempNode=tempNode->next;<br/>
-        }<br/>
-        int data=tempNode->next->data;<br/>
-        free(tempNode->next);<br/>
-        tempNode->next=NULL;<br/>
-        return data;<br/>
-    }</p>
-
-<pre><code>int main()  
-{  
-    Stack stack=InitStack();  
-    Push(stack,3);//3进栈  
-    Push(stack,4);//4进栈  
-    Push(stack,5);//5进栈  
-    printf("%d\n",Pop(stack));  
-    printf("%d\n",Pop(stack));  
-    printf("%d\n",Pop(stack));  
-    printf("%d\n",Pop(stack));//第4次出栈，应该出错  
-    return 0;  
-}  
-</code></pre>
-
-<pre><code>queue模版类的定义在&lt;queue&gt;头文件中。  
-queue与stack模版非常类似，queue模版也需要定义两个模版参数，  
-一个是元素类型，一个是容器类型，元素类型是必要的，  
-容器类型是可选的，默认为dqueue类型。  
-
-定义queue对象的示例代码如下：  
-</code></pre>
-
-<p>queue<int>q1;
-queue<double>q2;
-```
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include&lt;iostream&gt;&lt;br/&gt;</span>
+</span><span class='line'><span class="cp">#include&lt;cstdio&gt;&lt;br/&gt;</span>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">typedef</span> <span class="k">struct</span> <span class="n">Stacknode</span><span class="c1">//定义链式栈的结构体&lt;br/&gt;</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span><span class="c1">//数据域&lt;br/&gt;</span>
+</span><span class='line'>    <span class="n">Stacknode</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">next</span><span class="p">;</span><span class="c1">//下一节点的指针域&lt;br/&gt;</span>
+</span><span class='line'><span class="p">}</span><span class="n">Stacknode</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">Stack</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="c1">//初始化一个链式栈（返回一个链式栈的头节点）&lt;br/&gt;</span>
+</span><span class='line'><span class="n">Stack</span> <span class="n">InitStack</span><span class="p">()</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="n">Stack</span> <span class="n">stack</span><span class="o">=</span><span class="p">(</span><span class="n">Stack</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Stacknode</span><span class="p">));</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="n">stack</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">stack</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="c1">//入栈&lt;br/&gt;</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Push</span><span class="p">(</span><span class="n">Stack</span> <span class="n">stack</span><span class="p">,</span><span class="kt">int</span> <span class="n">newData</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="c1">//判断是否为空&lt;br/&gt;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">stack</span><span class="o">==</span><span class="nb">NULL</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="err">栈未初始化，请初始化以后再使用\</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="c1">//找到最后一个节点&lt;br/&gt;</span>
+</span><span class='line'>   <span class="n">Stacknode</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">lastnode</span><span class="o">=</span><span class="n">stack</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>   <span class="k">while</span><span class="p">(</span><span class="n">lastnode</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="n">lastnode</span><span class="o">=</span><span class="n">lastnode</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>   <span class="n">lastnode</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="p">(</span><span class="n">Stacknode</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Stacknode</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="p">));</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>   <span class="n">lastnode</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span><span class="o">=</span><span class="n">newData</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>   <span class="n">lastnode</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>   <span class="n">printf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="err">入栈成功！\</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="c1">//出栈&lt;br/&gt;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">Pop</span><span class="p">(</span><span class="n">Stack</span> <span class="n">stack</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="c1">//判断栈是否为空&lt;br/&gt;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="err">栈为空，无法出栈\</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="c1">//-1只是一个自定义的错误代码&lt;br/&gt;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="c1">//找到最后一个节点的钱一个节点&lt;br/&gt;</span>
+</span><span class='line'>    <span class="c1">//tempNode:最后一个节点的前一个节点&lt;br/&gt;</span>
+</span><span class='line'>    <span class="n">Stacknode</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">tempNode</span><span class="o">=</span><span class="n">stack</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="n">tempNode</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="p">{</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="n">tempNode</span><span class="o">=</span><span class="n">tempNode</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">data</span><span class="o">=</span><span class="n">tempNode</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">(</span><span class="n">tempNode</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="n">tempNode</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">=</span><span class="nb">NULL</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">data</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">Stack</span> <span class="n">stack</span><span class="o">=</span><span class="n">InitStack</span><span class="p">();</span>
+</span><span class='line'><span class="n">Push</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span><span class="c1">//3进栈  </span>
+</span><span class='line'><span class="n">Push</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span><span class="c1">//4进栈  </span>
+</span><span class='line'><span class="n">Push</span><span class="p">(</span><span class="n">stack</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span><span class="c1">//5进栈  </span>
+</span><span class='line'><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">Pop</span><span class="p">(</span><span class="n">stack</span><span class="p">));</span>
+</span><span class='line'><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">Pop</span><span class="p">(</span><span class="n">stack</span><span class="p">));</span>
+</span><span class='line'><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">Pop</span><span class="p">(</span><span class="n">stack</span><span class="p">));</span>
+</span><span class='line'><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">Pop</span><span class="p">(</span><span class="n">stack</span><span class="p">));</span><span class="c1">//第4次出栈，应该出错  </span>
+</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">queue</span><span class="err">模版类的定义在</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">queue</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="err">头文件中。</span>
+</span><span class='line'><span class="n">queue</span><span class="err">与</span><span class="n">stack</span><span class="err">模版非常类似，</span><span class="n">queue</span><span class="err">模版也需要定义两个模版参数，</span>
+</span><span class='line'><span class="err">一个是元素类型，一个是容器类型，元素类型是必要的，</span>
+</span><span class='line'><span class="err">容器类型是可选的，默认为</span><span class="n">dqueue</span><span class="err">类型。</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">定义</span><span class="n">queue</span><span class="err">对象的示例代码如下：</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">q1</span><span class="p">;</span>
+</span><span class='line'><span class="n">queue</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="n">q2</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 queue的基本操作有：<br/>
 1.入队：如q.push(x):将x元素接到队列的末端；<br/>
 2.出队：如q.pop() 弹出队列的第一个元素，并不会返回元素的值；<br/>
@@ -622,80 +702,151 @@ int main()
 有括号()，下标[]，成员(→，.)等几种。</p>
 
 <p>优先级排序：<br/>
-```
-优先级1级 结合方向 左结合（自左至右）编辑
-( ) 圆括号
-[ ] [1]  下标运算符
--> 指向结构体成员运算符
-. 结构体成员运算符[1]  （请注意它是一个实心圆点）</p>
-
-<p>优先级2级 结合方向 右结合（自右至左）单目运算符编辑
-! 逻辑非运算符
-~ 按位取反运算符
-++ 自增运算符
-&ndash; 自减运算符
-- 负号运算符
-(类型) 类型转换运算符
-* 指针运算符
-&amp; 地址与运算符
-sizeof 长度运算符</p>
-
-<p>优先级3级 结合方向 左结合 双目运算符编辑
-* 乘法运算符
-/ 除法运算符
-% 取余运算符</p>
-
-<p>优先级4级 结合方向 左结合 双目运算符编辑
-+ 加法运算符
-- 减法运算符</p>
-
-<p>优先级5级 结合方向 左结合 双目运算符编辑
-&lt;&lt; 左移运算符</p>
-
-<blockquote><blockquote><p>右移运算符</p></blockquote></blockquote>
-
-<p>优先级6级 结合方向 左结合 双目运算符编辑
-&lt;、&lt;=、>、>= 关系运算符</p>
-
-<p>优先级7级 结合方向 左结合 双目运算符编辑
-== 等于运算符 （判断）
-!= 不等于运算符（判断）</p>
-
-<p>优先级8级 结合方向 左结合 双目运算符编辑
-&amp; 按位与运算符</p>
-
-<p>优先级9级 结合方向 左结合 双目运算符编辑
-^ 按位异或运算符</p>
-
-<p>优先级10级 结合方向 左结合 双目运算符编辑
-| 按位或运算符 举例：0xfe|0xef 即为1111 1110 与1110 1111按位或运算则答案为：1111 1111 即0xff。</p>
-
-<p>优先级11级 结合方向 左结合 双目运算符编辑
-&amp;&amp; 逻辑与运算符</p>
-
-<p>优先级12级 结合方向 左结合 双目运算符编辑
-|| 逻辑或运算符</p>
-
-<p>优先级13级 结合方向 右结合 三目运算符编辑
-? : 条件运算符</p>
-
-<p>优先级14级 结合方向 右结合 双目运算符编辑
-= 赋值运算符
-+ = 加后赋值运算符 如s+=1表示s=s+1
-- = 减后赋值运算符 如s-=1表示s=s-1
-* = 乘后赋值运算符
-/ = 除后赋值运算符
-% = 取模后赋值运算符
-&lt; &lt;= 左移后赋值运算符</p>
-
-<blockquote><blockquote><p>=右移后赋值运算符
-&amp;= 按位与后赋值运算符
-^=按位异或后赋值运算符
-|= 按位或后赋值运算符</p></blockquote></blockquote>
-
-<p>优先级15级 结合方向 左结合编辑
-， 逗号运算符
-```</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="err">优先级</span><span class="mi">1</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合（自左至右）编辑</span>
+</span><span class='line'><span class="p">(</span> <span class="p">)</span> <span class="err">圆括号</span>
+</span><span class='line'><span class="p">[</span> <span class="p">]</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="err">下标运算符</span>
+</span><span class='line'><span class="o">-&gt;</span> <span class="err">指向结构体成员运算符</span>
+</span><span class='line'><span class="p">.</span> <span class="err">结构体成员运算符</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="err">（请注意它是一个实心圆点）</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">2</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">右结合（自右至左）单目运算符编辑</span>
+</span><span class='line'><span class="o">!</span> <span class="err">逻辑非运算符</span>
+</span><span class='line'><span class="o">~</span> <span class="err">按位取反运算符</span>
+</span><span class='line'><span class="o">++</span> <span class="err">自增运算符</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span> <span class="err">自减运算符</span>
+</span><span class='line'><span class="o">-</span> <span class="err">负号运算符</span>
+</span><span class='line'><span class="p">(</span><span class="err">类型</span><span class="p">)</span> <span class="err">类型转换运算符</span>
+</span><span class='line'><span class="o">*</span> <span class="err">指针运算符</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="err">地址与运算符</span>
+</span><span class='line'><span class="k">sizeof</span> <span class="err">长度运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">3</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">*</span> <span class="err">乘法运算符</span>
+</span><span class='line'><span class="o">/</span> <span class="err">除法运算符</span>
+</span><span class='line'><span class="o">%</span> <span class="err">取余运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">4</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">+</span> <span class="err">加法运算符</span>
+</span><span class='line'><span class="o">-</span> <span class="err">减法运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">5</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="err">左移运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">blockquote</span><span class="o">&gt;&lt;</span><span class="n">blockquote</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">右移运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">6</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="err">、</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span><span class="err">、</span><span class="o">&gt;</span><span class="err">、</span><span class="o">&gt;=</span> <span class="err">关系运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">7</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">==</span> <span class="err">等于运算符</span> <span class="err">（判断）</span>
+</span><span class='line'><span class="o">!=</span> <span class="err">不等于运算符（判断）</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">8</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="err">按位与运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">9</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">^</span> <span class="err">按位异或运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">10</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">|</span> <span class="err">按位或运算符</span> <span class="err">举例：</span><span class="mh">0xfe</span><span class="o">|</span><span class="mh">0xef</span> <span class="err">即为</span><span class="mi">1111</span> <span class="mi">1110</span> <span class="err">与</span><span class="mi">1110</span> <span class="mi">1111</span><span class="err">按位或运算则答案为：</span><span class="mi">1111</span> <span class="mi">1111</span> <span class="err">即</span><span class="mh">0xff</span><span class="err">。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">11</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="err">逻辑与运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">12</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">||</span> <span class="err">逻辑或运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">13</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">右结合</span> <span class="err">三目运算符编辑</span>
+</span><span class='line'><span class="o">?</span> <span class="o">:</span> <span class="err">条件运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">14</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">右结合</span> <span class="err">双目运算符编辑</span>
+</span><span class='line'><span class="o">=</span> <span class="err">赋值运算符</span>
+</span><span class='line'><span class="o">+</span> <span class="o">=</span> <span class="err">加后赋值运算符</span> <span class="err">如</span><span class="n">s</span><span class="o">+=</span><span class="mi">1</span><span class="err">表示</span><span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span>
+</span><span class='line'><span class="o">-</span> <span class="o">=</span> <span class="err">减后赋值运算符</span> <span class="err">如</span><span class="n">s</span><span class="o">-=</span><span class="mi">1</span><span class="err">表示</span><span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span>
+</span><span class='line'><span class="o">*</span> <span class="o">=</span> <span class="err">乘后赋值运算符</span>
+</span><span class='line'><span class="o">/</span> <span class="o">=</span> <span class="err">除后赋值运算符</span>
+</span><span class='line'><span class="o">%</span> <span class="o">=</span> <span class="err">取模后赋值运算符</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">=</span> <span class="err">左移后赋值运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">blockquote</span><span class="o">&gt;&lt;</span><span class="n">blockquote</span><span class="o">&gt;&lt;</span><span class="n">p</span><span class="o">&gt;=</span><span class="err">右移后赋值运算符</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">=</span> <span class="err">按位与后赋值运算符</span>
+</span><span class='line'><span class="o">^=</span><span class="err">按位异或后赋值运算符</span>
+</span><span class='line'><span class="o">|=</span> <span class="err">按位或后赋值运算符</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">优先级</span><span class="mi">15</span><span class="err">级</span> <span class="err">结合方向</span> <span class="err">左结合编辑</span>
+</span><span class='line'><span class="err">，</span> <span class="err">逗号运算符</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>说明：<br/>
 同一优先级的运算符，运算次序由结合方向所决定。<br/>

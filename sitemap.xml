@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://chenhaoxiang.github.io/blog/2017/09/07/Shiro-went-from-white-to-great-1/</loc>
+<lastmod>2017-09-07T19:38:54+08:00</lastmod>
+</url>
+<url>
 <loc>http://chenhaoxiang.github.io/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion/</loc>
 <lastmod>2017-09-05T17:28:34+08:00</lastmod>
 </url>
@@ -185,16 +189,13 @@
 <lastmod>2015-08-21T02:38:46+08:00</lastmod>
 </url>
 <url>
-<loc>http://chenhaoxiang.github.io/code/20170907/2017-09-07-Shiro-went-from-white-to-great-1.html</loc>
-</url>
-<url>
 <loc>http://chenhaoxiang.github.io/404.html</loc>
 </url>
 <url>
-<loc>http://chenhaoxiang.github.io/blog/archives/</loc>
+<loc>http://chenhaoxiang.github.io/</loc>
 </url>
 <url>
-<loc>http://chenhaoxiang.github.io/</loc>
+<loc>http://chenhaoxiang.github.io/blog/archives/</loc>
 </url>
 <url>
 <loc>http://chenhaoxiang.github.io/aboutme/</loc>
@@ -228,5 +229,8 @@
 </url>
 <url>
 <loc>http://chenhaoxiang.github.io/blog/categories/android/</loc>
+</url>
+<url>
+<loc>http://chenhaoxiang.github.io/blog/categories/shiro/</loc>
 </url>
 </urlset>

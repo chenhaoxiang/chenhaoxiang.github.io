@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C-plus-plus | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/c-plus-plus/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-15T10:38:15+08:00</updated>
+  <updated>2017-09-15T10:42:14+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -81,18 +81,27 @@ istream&amp; operator&gt;&gt;(istream&amp; input, CTime&amp; time)
 </code></pre>
 
 <p>在重载完流插入和提取运算符后，我们就可以对该类使用&lt;&lt;输出数据，使用>>输入数据。这样是非常直观的。
-```C++
-CTime time(10, 50, 20);
-CTime time2(12);</p>
-
-<p>cin >> time;  //在我们重载了输入输出运算符之后，我们也可以像C++里面预定义好的数据类型一样对这个类的对象进行输入输出</p>
-
-<p>cout &lt;&lt; time &lt;&lt; time2;</p>
-
-<p>operator>>(cin, time);
-operator&lt;&lt;(cout, time);
-operator&lt;&lt;(cout, time2);
-```</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'><span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">;</span>  <span class="c1">//在我们重载了输入输出运算符之后，我们也可以像C++里面预定义好的数据类型一样对这个类的对象进行输入输出&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time2</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="k">operator</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;(</span><span class="n">cout</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="k">operator</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;(</span><span class="n">cout</span><span class="p">,</span> <span class="n">time2</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h3>结果</h3>
 
@@ -109,14 +118,19 @@ operator&lt;&lt;(cout, time2);
 <p>CTime(3)这种形式很类似于强制类型转换，将int类型转换为CTime类型。之所以可以进行此种转换，是因为已经为CTime对象定义了具有一个int类型参数的构造函数。因此具有一个参数的构造函数可以用来做类型转换，称之为<strong>转换构造函数</strong></p>
 
 <p>有了类型转换函数，在需要CTime类型参数的地方可以使用int类型代替<br/>
-```C++
-CTime time3(20);
-CTime time4 = 20;//和下面那句效果一样的,自动类型转换
-CTime time5 = CTime(20);</p>
-
-<p>func(time);
-func(10);//编译器会自动构造一个CTime的临时对象
-```</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">time3</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'><span class="n">CTime</span> <span class="n">time4</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span><span class="c1">//和下面那句效果一样的,自动类型转换</span>
+</span><span class='line'><span class="n">CTime</span> <span class="n">time5</span> <span class="o">=</span> <span class="n">CTime</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">func</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="n">func</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="c1">//编译器会自动构造一个CTime的临时对象</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>如果我们期望避免这种转换，我们可以在含有一个参数的构造函数前面加上声明explicit<br/>
 如:
@@ -350,60 +364,102 @@ sizeof(sizeof 是运算符,而不是函数)
 <code>C++ CTime.h声明
 CTime&amp; operator=(CTime&amp; time);//返回的是对象的引用形式
 </code>
-```C++ CTime.cpp定义
-CTime&amp; CTime::operator=(CTime&amp; time)
-{
-    //为了防止同一个对象进行赋值，需要先判断一下,判断地址是不是一样
-    if (this == &amp;time)
-    {
-        return *this;
-    }</p>
-
-<pre><code>//默认的是各个成员分别赋值
-m_nHour = time.m_nHour;
-m_nMinute = time.m_nMinute;
-m_nSecond = time.m_nSecond;
-
-return *this;//返回当前这个对象
-</code></pre>
-
-<p>}
-```</p>
+<figure class='code'><figcaption><span>CTime.cpp定义</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">CTime</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">//为了防止同一个对象进行赋值，需要先判断一下,判断地址是不是一样</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">time</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="c1">//默认的是各个成员分别赋值</span>
+</span><span class='line'><span class="n">m_nHour</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">;</span>
+</span><span class='line'><span class="n">m_nMinute</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">;</span>
+</span><span class='line'><span class="n">m_nSecond</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span><span class="c1">//返回当前这个对象</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>友元函数的运算符重载<br/>
 <code>C++ CTime.h声明
 //friend为友元函数的关键字,这个符号运算符重载函数的参数类型至少有一个类类型或者类的引用,也就是说，可以有一个参数不是对象
 friend CTime operator+(CTime&amp; time1, CTime&amp; time2);
 </code>
-```C++ main.cpp实现-使用类来实现
-//友元函数的运算符重载
-CTime operator+(CTime&amp; time1, CTime&amp; time2)
-{
-    int hour = 0, minute = 0;
-    int second = time1.m_nSecond + time2.m_nSecond;
-    if (second > 60)
-    {
-        minute++;
-        second -= 60;
-    }</p>
-
-<pre><code>minute += (time1.m_nMinute + time2.m_nMinute);
-if (minute &gt; 60)
-{
-    hour++;
-    minute -= 60;
-}
-
-hour += (time1.m_nHour + time2.m_nHour);
-if (hour &gt; 24)
-{
-    hour -= 24;
-}
-return CTime(hour, minute, second);
-</code></pre>
-
-<p>}
-```</p>
+<figure class='code'><figcaption><span>main.cpp实现-使用类来实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//友元函数的运算符重载</span>
+</span><span class='line'><span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time2</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="n">time1</span><span class="p">.</span><span class="n">m_nSecond</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">minute</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">second</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">minute</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">minute</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">hour</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">minute</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">hour</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">24</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">hour</span> <span class="o">-=</span> <span class="mi">24</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">return</span> <span class="n">CTime</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>赋值函数<br/>
 普通函数和类的成员函数都可以作为类的友元，但什么时候应该使用普通函数，什么时候应该使用成员函数方式呢？</p>
@@ -494,92 +550,175 @@ CTime operator+(CTime&amp; time) 
 <code>C++ Time.h中声明友元函数
 friend CTime addTime(CTime&amp; time1, CTime&amp; time2);
 </code>
-```C++ main.cpp中直接实现
-CTime addTime(CTime&amp; time1, CTime&amp; time2)//这里的相加是时分秒进行相加，满60进1
-{
-    int hour=0, minute = 0;
-    int second = time1.m_nSecond + time2.m_nSecond;
-    if (second > 60)
-    {
-        minute++;
-        second -= 60;
-    }</p>
-
-<pre><code>minute += (time1.m_nMinute + time2.m_nMinute);
-if (minute &gt; 60)
-{
-    hour++;
-    minute -= 60;
-}
-
-hour += (time1.m_nHour + time2.m_nHour);
-if (hour &gt; 24)
-{
-    hour -= 24;
-}
-return CTime(hour,minute,second);
-</code></pre>
-
-<p>}</p>
-
-<p>//输出
-int main()
-{
-    CTime time(10, 50, 20);
-    CTime time2(12);
-    CTime time3 = addTime(time, time2);
-    std::cout &lt;&lt; time3.getHour() &lt;&lt; &ldquo;:&rdquo; &lt;&lt; time3.getMinute() &lt;&lt; &ldquo;:&rdquo; &lt;&lt; time3.getSecond() &lt;&lt; endl;
-    getchar();
-    return 0;
-}
-<code>
-+号运算重载：
-</code>C++ Time.h中声明
-friend CTime operator+(CTime&amp; time1, CTime&amp; time2);
-<code>
-</code>C++ main.cpp中实现</p>
-
-<p>CTime operator+(CTime&amp; time1, CTime&amp; time2)
-{
-    int hour = 0, minute = 0;
-    int second = time1.m_nSecond + time2.m_nSecond;
-    if (second > 60)
-    {
-        minute++;
-        second -= 60;
-    }</p>
-
-<pre><code>minute += (time1.m_nMinute + time2.m_nMinute);
-if (minute &gt; 60)
-{
-    hour++;
-    minute -= 60;
-}
-
-hour += (time1.m_nHour + time2.m_nHour);
-if (hour &gt; 24)
-{
-    hour -= 24;
-}
-return CTime(hour, minute, second);
-</code></pre>
-
-<p>}</p>
-
-<p>int main()
-{
-    CTime time(10, 50, 20);
-    CTime time2(12);</p>
-
-<pre><code>CTime time4 = time + time2; //使用+号重载对两个CTime对象进行相加
-std::cout &lt;&lt; time4.getHour() &lt;&lt; ":" &lt;&lt; time4.getMinute() &lt;&lt; ":" &lt;&lt; time4.getSecond() &lt;&lt; endl;
-
-getchar();
-return 0;
-</code></pre>
-
-<p>}
-```</p>
+<figure class='code'><figcaption><span>main.cpp中直接实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="n">addTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time2</span><span class="p">)</span><span class="c1">//这里的相加是时分秒进行相加，满60进1</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="n">time1</span><span class="p">.</span><span class="n">m_nSecond</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">minute</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">second</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">minute</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">minute</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">hour</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">minute</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">hour</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">24</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">hour</span> <span class="o">-=</span> <span class="mi">24</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">return</span> <span class="n">CTime</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span><span class="n">minute</span><span class="p">,</span><span class="n">second</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="c1">//输出</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="n">time3</span> <span class="o">=</span> <span class="n">addTime</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">time2</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time3</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">:&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time3</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">:&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time3</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">+</span><span class="err">号运算重载：</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">C</span><span class="o">++</span> <span class="n">Time</span><span class="p">.</span><span class="n">h</span><span class="err">中声明</span>
+</span><span class='line'><span class="k">friend</span> <span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time2</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">C</span><span class="o">++</span> <span class="n">main</span><span class="p">.</span><span class="n">cpp</span><span class="err">中实现</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">time2</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="n">time1</span><span class="p">.</span><span class="n">m_nSecond</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="n">minute</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">second</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">minute</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">minute</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">hour</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">minute</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">hour</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">24</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">hour</span> <span class="o">-=</span> <span class="mi">24</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">return</span> <span class="n">CTime</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">CTime</span> <span class="n">time4</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">time2</span><span class="p">;</span> <span class="c1">//使用+号重载对两个CTime对象进行相加</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s">&quot;:&quot;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="s">&quot;:&quot;</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time4</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h2>输出结果:</h2>
 
@@ -741,39 +880,67 @@ private:
 </code></pre>
 
 <p>main.cpp
-```C++ main.cpp</p>
-
-<h1>include<iostream></h1>
-
-<h1>include"Time.h"</h1>
-
-<h1>include &ldquo;Date.h&rdquo;</h1>
-
-<p>using namespace std;</p>
-
-<p>void func()
-{
-    CTime time(1,1,1);
-    time.m_nHour = 3;
-    cout &lt;&lt; time.m_nHour &lt;&lt; endl;
-}</p>
-
-<p>int main()
-{
-    const CTime time(10,50,20);
-    CTime const time2;
-    std::cout &lt;&lt; time.getNum() &lt;&lt; std::endl;
-    func();</p>
-
-<pre><code>CDate date(2015, 1, 26);
-date.disPlay(time);
-
-getchar();
-return 0;
-</code></pre>
-
-<p>}
-```</p>
+<figure class='code'><figcaption><span>main.cpp</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span><span class="o">&lt;</span><span class="n">iostream</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span><span class="s">&quot;Time.h&quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Date</span><span class="p">.</span><span class="n">h</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">void</span> <span class="n">func</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">const</span> <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CTime</span> <span class="k">const</span> <span class="n">time2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">time</span><span class="p">.</span><span class="n">getNum</span><span class="p">()</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">func</span><span class="p">();</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">CDate</span> <span class="n">date</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">26</span><span class="p">);</span>
+</span><span class='line'><span class="n">date</span><span class="p">.</span><span class="n">disPlay</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">getchar</span><span class="p">();</span>
+</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h2>演示结果</h2>
 
