@@ -1,0 +1,533 @@
+
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>【C++】流插入、提取运算符和类型转换 - 谙忆-人生之旅</title>
+
+  <meta name="author" content="陈浩翔">
+
+  
+  <meta name="description" content="流插入,流提取运算符重载和类型转换的讲解和实例 流插入运算符">"也可以被用来重载。重载流插入和提取运算符的运算符函数，不能作为类的成员函数，只能作为普通函数">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/jquery1.9.1.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="/javascripts/fonts.googleapis.com.css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/javascripts/fonts.googleapis.com.css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">谙忆-人生之旅</a></h1>
+  
+    <h2>学不止步,梦不停歇-陈浩翔</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">﻿<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com.hk/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="chenhaoxiang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="请使用谷歌搜索"/>
+  </fieldset>
+</form>
+  
+﻿<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">列表</a></li>
+  <li><a href="/reward">打赏名单</a></li>
+  <li><a href="/aboutme">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">【C++】流插入、提取运算符和类型转换</h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+2017年09月05日
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>流插入,流提取运算符重载和类型转换的讲解和实例</p>
+
+<p>重载流插入和提取运算符的运算符函数，不能作为类的成员函数，只能作为普通函数</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>流插入,流提取运算符重载</h1>
+
+<p>流插入运算符"&lt;&lt;&ldquo;和流提取运算符&rdquo;>>&ldquo;也可以被用来重载。</p>
+
+<p>我们可以使用cout对一个int，string等等类型的数据进行输出，我们却不可以对我们自己定义的一个类的对象进行直接输出，因为我们这个类是没有"&lt;&lt;&ldquo;运算符的。</p>
+
+<p>&ldquo;&lt;&lt;"运算符是有两个操作数的，它是一个双目运算符，平时貌似只给了它一个操作数,形如cout&lt;&lt;a;我们只知道a是一个变量，是它的一个操作数，还有一个操作数其实是cout！</p>
+
+<p>cout也是它的一个操作数，cout是一个在ostream类里面已经定义好了的对象，ostream类还为我们定义好了系统中已经存在的类型的输出，如int，double…..这个对象作为了它的左操作数。显然cout这个对象是不属于我们新声明的类的，但是它又需要作为第一个参数，它是没有办法调用我们这个类的成员函数的，所以只能将"&lt;&lt;&ldquo;运算符的重载声明为友元函数。</p>
+
+<p>可以为CTime类定义重载的流插入和流提取运算符。</p>
+
+<p>重载之后就可以直接对CTime对象进行输入和输出：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">;</span>
+</span><span class='line'><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">time</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>重载流插入和提取运算符的运算符函数，不能作为类的成员函数，只能作为普通函数</strong> 这是一个规定，没有为什么</p>
+
+<p>&ldquo;&lt;&lt;"和&rdquo;>>&ldquo;重载的函数声明如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span><span class="c1">//输入流</span>
+</span><span class='line'><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">output</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span><span class="c1">//输出流</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>istream和ostream分别是输入流类和输出流类。cin和cout就分别是istream和ostream的对象。<br/>
+注意:<br/>
+<strong>重载"&lt;&lt;&ldquo;流插入运算符的函数第一个参数和返回类型必须是ostream&amp;类型。<br/>
+重载&rdquo;>>&ldquo;流提取运算符的函数第一个参数和返回类型必须是istream&amp;类型。</strong><br/>
+第二个参数是用户自定义的类</p>
+
+<h2>流提取运算符"&lt;&lt;&ldquo;重载</h2>
+
+<figure class='code'><figcaption><span>流提取运算符重载</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">output</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span> <span class="c1">//返回ostream类的对象output的引用是为了实现连续输出，如cout&lt;&lt;a&lt;&lt;b;</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>流输入运算符">>&ldquo;重载</h2>
+
+<figure class='code'><figcaption><span>流输入运算符">>"重载</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//因为要用到CTime类的成员，所以把流提取运算符作为CTime类的友元</span>
+</span><span class='line'><span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">//可以直接使用CTIme类的数据成员了</span>
+</span><span class='line'>  <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">input</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>Time.h声明友元</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">friend</span> <span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在重载完流插入和提取运算符后，我们就可以对该类使用&lt;&lt;输出数据，使用>>输入数据。这样是非常直观的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'><span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">;</span>  <span class="c1">//在我们重载了输入输出运算符之后，我们也可以像C++里面预定义好的数据类型一样对这个类的对象进行输入输出</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">cout</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">cout</span><span class="p">,</span> <span class="n">time2</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>结果</h3>
+
+<p><img src="https://i.imgur.com/umGMKFJ.png" alt="" /></p>
+
+<h1>类型转换</h1>
+
+<h2>使用构造函数进行类型转换</h2>
+
+<p>在为CTime类重载+运算符后，我们就可以对两个CTime对象使用+运算符进行操作。<br/>
+但仍然不能使用+运算符将一个CTime对象和一个int类型相加。为了实现它，我们可以先将int类型转换为一个CTime的临时对象，然后在进行相加。<br/>
+如下：  <code>time + CTime(3)</code></p>
+
+<p>CTime(3)这种形式很类似于强制类型转换，将int类型转换为CTime类型。之所以可以进行此种转换，是因为已经为CTime对象定义了具有一个int类型参数的构造函数。因此具有一个参数的构造函数可以用来做类型转换，称之为<strong>转换构造函数</strong></p>
+
+<p>有了类型转换函数，在需要CTime类型参数的地方可以使用int类型代替</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">time3</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'><span class="n">CTime</span> <span class="n">time4</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span><span class="c1">//和下面那句效果一样的,自动类型转换</span>
+</span><span class='line'><span class="n">CTime</span> <span class="n">time5</span> <span class="o">=</span> <span class="n">CTime</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">func</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="n">func</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="c1">//编译器会自动构造一个CTime的临时对象</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果我们期望避免这种转换，我们可以在含有一个参数的构造函数前面加上声明explicit<br/>
+如:</p>
+
+<figure class='code'><figcaption><span>Time.h文件</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">explicit</span> <span class="nf">CTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+这样，我们使用前面的func(10),CTime time4 = 20;的时候，编译器就会报错<br/>
+<img src="https://i.imgur.com/PU5wW9T.png" alt="" /></p>
+
+<h2>类型转换函数进行类型转换</h2>
+
+<p>类型转换函数用以将类的对象转换另一种数据类型的函数。<br/>
+类型转换函数没有参数，没有返回类型。它是成员函数。</p>
+
+<p>如 可以将CTime类对象转换int类型。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">int</span> <span class="n">nSecond</span> <span class="o">=</span> <span class="n">time</span><span class="p">;</span>  <span class="c1">//执行了将对象转换为int类型的操作，调用类型转换函数</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>类型转换函数的声明形式：</p>
+
+<figure class='code'><figcaption><span>Time.h</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">operator</span> <span class="nf">int</span><span class="p">();</span>  <span class="c1">//int为它的返回类型</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面定义一个类型转换函数：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="k">operator</span> <span class="kt">int</span><span class="p">()</span> <span class="c1">//将一个CTime类的对象转换成秒数</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">m_nHour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">m_nMinute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">int</span> <span class="n">nSecond</span> <span class="o">=</span> <span class="n">time</span><span class="p">;</span>
+</span><span class='line'><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">nSecond</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://i.imgur.com/tBo8bmZ.png" alt="" /><br/>
+最后面的那行输出 6:3:3的秒数</p>
+
+<p>类型转换函数在平时比较少见，在这里只介绍了一下如何使用的。</p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170905/code/FlowInsertExtractOperator' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">陈浩翔</span></span>
+
+      ﻿
+
+
+
+
+2017年09月05日
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/c-plus-plus/'>c-plus-plus</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+
+	﻿
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion" style="margin-bottom: 10px; text-align: center;"></div>
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24" style="float: right;">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share?uid=2133017" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2133017" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+		﻿<!--PC版-->
+
+<div id="SOHUCS" sid="/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion"></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyt09iKYx',
+conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
+});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt09iKYx"></script>
+	
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/09/04/Member-functions-overload-binary-and-unary-operators/" title="Previous Post: 【C++】成员函数重载二元和一元运算符">&laquo; 【C++】成员函数重载二元和一元运算符</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    ﻿<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion/">【C++】流插入、提取运算符和类型转换</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/04/Member-functions-overload-binary-and-unary-operators/">【C++】成员函数重载二元和一元运算符</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/02/Rules-for-operator-overloading/">【C++】C++运算符重载的规则</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/24/cocos2dx-sprite-sheet-optimize/">【Cocos2d-x】Cocos2d-x精灵的性能优化</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/23/android-magicwindow/">【安卓】安卓集成魔窗-完整实例</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=59ilglu8mky&amp;m=0&amp;c=00fff6&amp;cr1=ff0000&amp;f=ubuntu&amp;l=0" async="async">
+  </script>
+</section>
+﻿
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/acm-c/'>acm-c (11)</a></li>
+<li class='category'><a href='/blog/categories/algorithm/'>algorithm (3)</a></li>
+<li class='category'><a href='/blog/categories/android/'>android (1)</a></li>
+<li class='category'><a href='/blog/categories/c/'>c (2)</a></li>
+<li class='category'><a href='/blog/categories/c-plus-plus/'>c-plus-plus (10)</a></li>
+<li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (10)</a></li>
+<li class='category'><a href='/blog/categories/java/'>java (6)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (2)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/chenhaoxiang">@chenhaoxiang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'chenhaoxiang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+﻿
+	<section>
+<h1>友情链接</h1>
+	<ul>
+        <li>
+        <a href="http://blog.csdn.net/qq_26525215" target="_blank">大学之旅_谙忆</a>
+		</li>
+		<li>
+        <a href="http://blog.csdn.net/marksinoberg" target="_blank">纯臻</a>
+		</li>
+		<li>
+		<a href="http://blog.csdn.net/u013097262" target="_blank">Dream_M</a>
+		</li>
+		<li>
+		<a href="https://bbs.ksyun.com/forum.php" target="_blank">金山云</a>
+		</li>
+</ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 陈浩翔 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261875079'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261875079%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  ﻿<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow62.js"></script>
+<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+
+</body>
+</html>

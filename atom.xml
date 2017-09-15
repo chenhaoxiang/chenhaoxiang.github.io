@@ -4,7 +4,7 @@
   <title><![CDATA[谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-09T00:41:17+08:00</updated>
+  <updated>2017-09-15T10:36:47+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,653 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【C++】流插入、提取运算符和类型转换]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion/"/>
+    <updated>2017-09-05T17:28:34+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion</id>
+    <content type="html"><![CDATA[<p>流插入,流提取运算符重载和类型转换的讲解和实例</p>
+
+<p>重载流插入和提取运算符的运算符函数，不能作为类的成员函数，只能作为普通函数</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>流插入,流提取运算符重载</h1>
+
+<p>流插入运算符"&lt;&lt;&ldquo;和流提取运算符&rdquo;>>&ldquo;也可以被用来重载。</p>
+
+<p>我们可以使用cout对一个int，string等等类型的数据进行输出，我们却不可以对我们自己定义的一个类的对象进行直接输出，因为我们这个类是没有"&lt;&lt;&ldquo;运算符的。</p>
+
+<p>&ldquo;&lt;&lt;"运算符是有两个操作数的，它是一个双目运算符，平时貌似只给了它一个操作数,形如cout&lt;&lt;a;我们只知道a是一个变量，是它的一个操作数，还有一个操作数其实是cout！</p>
+
+<p>cout也是它的一个操作数，cout是一个在ostream类里面已经定义好了的对象，ostream类还为我们定义好了系统中已经存在的类型的输出，如int，double…..这个对象作为了它的左操作数。显然cout这个对象是不属于我们新声明的类的，但是它又需要作为第一个参数，它是没有办法调用我们这个类的成员函数的，所以只能将"&lt;&lt;&ldquo;运算符的重载声明为友元函数。</p>
+
+<p>可以为CTime类定义重载的流插入和流提取运算符。</p>
+
+<p>重载之后就可以直接对CTime对象进行输入和输出：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">;</span>
+</span><span class='line'><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">time</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>重载流插入和提取运算符的运算符函数，不能作为类的成员函数，只能作为普通函数</strong> 这是一个规定，没有为什么</p>
+
+<p>&ldquo;&lt;&lt;"和&rdquo;>>&ldquo;重载的函数声明如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span><span class="c1">//输入流</span>
+</span><span class='line'><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">output</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span><span class="c1">//输出流</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>istream和ostream分别是输入流类和输出流类。cin和cout就分别是istream和ostream的对象。<br/>
+注意:<br/>
+<strong>重载"&lt;&lt;&ldquo;流插入运算符的函数第一个参数和返回类型必须是ostream&amp;类型。<br/>
+重载&rdquo;>>&ldquo;流提取运算符的函数第一个参数和返回类型必须是istream&amp;类型。</strong><br/>
+第二个参数是用户自定义的类</p>
+
+<h2>流提取运算符"&lt;&lt;&ldquo;重载</h2>
+
+<figure class='code'><figcaption><span>流提取运算符重载</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">output</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span> <span class="c1">//返回ostream类的对象output的引用是为了实现连续输出，如cout&lt;&lt;a&lt;&lt;b;</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">time</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>流输入运算符">>&ldquo;重载</h2>
+
+<figure class='code'><figcaption><span>流输入运算符">>"重载</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//因为要用到CTime类的成员，所以把流提取运算符作为CTime类的友元</span>
+</span><span class='line'><span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">//可以直接使用CTIme类的数据成员了</span>
+</span><span class='line'>  <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">input</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>Time.h声明友元</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">friend</span> <span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在重载完流插入和提取运算符后，我们就可以对该类使用&lt;&lt;输出数据，使用>>输入数据。这样是非常直观的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'><span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="mi">12</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">time</span><span class="p">;</span>  <span class="c1">//在我们重载了输入输出运算符之后，我们也可以像C++里面预定义好的数据类型一样对这个类的对象进行输入输出</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">cout</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">cout</span><span class="p">,</span> <span class="n">time2</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>结果</h3>
+
+<p><img src="https://i.imgur.com/umGMKFJ.png" alt="" /></p>
+
+<h1>类型转换</h1>
+
+<h2>使用构造函数进行类型转换</h2>
+
+<p>在为CTime类重载+运算符后，我们就可以对两个CTime对象使用+运算符进行操作。<br/>
+但仍然不能使用+运算符将一个CTime对象和一个int类型相加。为了实现它，我们可以先将int类型转换为一个CTime的临时对象，然后在进行相加。<br/>
+如下：  <code>time + CTime(3)</code></p>
+
+<p>CTime(3)这种形式很类似于强制类型转换，将int类型转换为CTime类型。之所以可以进行此种转换，是因为已经为CTime对象定义了具有一个int类型参数的构造函数。因此具有一个参数的构造函数可以用来做类型转换，称之为<strong>转换构造函数</strong></p>
+
+<p>有了类型转换函数，在需要CTime类型参数的地方可以使用int类型代替</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">time3</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'><span class="n">CTime</span> <span class="n">time4</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span><span class="c1">//和下面那句效果一样的,自动类型转换</span>
+</span><span class='line'><span class="n">CTime</span> <span class="n">time5</span> <span class="o">=</span> <span class="n">CTime</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">func</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="n">func</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="c1">//编译器会自动构造一个CTime的临时对象</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果我们期望避免这种转换，我们可以在含有一个参数的构造函数前面加上声明explicit<br/>
+如:</p>
+
+<figure class='code'><figcaption><span>Time.h文件</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">explicit</span> <span class="nf">CTime</span><span class="p">(</span><span class="kt">int</span> <span class="n">value</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+这样，我们使用前面的func(10),CTime time4 = 20;的时候，编译器就会报错<br/>
+<img src="https://i.imgur.com/PU5wW9T.png" alt="" /></p>
+
+<h2>类型转换函数进行类型转换</h2>
+
+<p>类型转换函数用以将类的对象转换另一种数据类型的函数。<br/>
+类型转换函数没有参数，没有返回类型。它是成员函数。</p>
+
+<p>如 可以将CTime类对象转换int类型。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">int</span> <span class="n">nSecond</span> <span class="o">=</span> <span class="n">time</span><span class="p">;</span>  <span class="c1">//执行了将对象转换为int类型的操作，调用类型转换函数</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>类型转换函数的声明形式：</p>
+
+<figure class='code'><figcaption><span>Time.h</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">operator</span> <span class="nf">int</span><span class="p">();</span>  <span class="c1">//int为它的返回类型</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面定义一个类型转换函数：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="k">operator</span> <span class="kt">int</span><span class="p">()</span> <span class="c1">//将一个CTime类的对象转换成秒数</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">m_nHour</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">m_nMinute</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">int</span> <span class="n">nSecond</span> <span class="o">=</span> <span class="n">time</span><span class="p">;</span>
+</span><span class='line'><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">nSecond</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="https://i.imgur.com/tBo8bmZ.png" alt="" /><br/>
+最后面的那行输出 6:3:3的秒数</p>
+
+<p>类型转换函数在平时比较少见，在这里只介绍了一下如何使用的。</p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170905/code/FlowInsertExtractOperator' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【C++】成员函数重载二元和一元运算符]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/09/04/Member-functions-overload-binary-and-unary-operators/"/>
+    <updated>2017-09-04T15:54:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/09/04/Member-functions-overload-binary-and-unary-operators</id>
+    <content type="html"><![CDATA[<p>重载双目运算符时，运算符函数中应该具有两个参数，若运算符函数作为类的成员函数(当运算符重载函数作为类的成员函数时，要求操作数左边必须是一个对象，而函数的参数可以是同类的对象也可以是普通的变量)，则只需要一个参数。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>双目运算符</h1>
+
+<p>双目运算符就是具有两个操作数的运算符。如 +、-、==等。</p>
+
+<p>对双目运算符而言，成员函数重载运算符的函数参数表中只有一个参数，而用友元函数重载运算符函数参数表中含有两个参数。</p>
+
+<h2>成员函数重载 == 、>运算符:</h2>
+
+<figure class='code'><figcaption><span>声明</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span>
+</span><span class='line'><span class="kt">bool</span> <span class="k">operator</span><span class="o">&gt;</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//判断对象的每个成员变量是否相等</span>
+</span><span class='line'><span class="kt">bool</span> <span class="n">CTime</span><span class="o">::</span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">m_nHour</span> <span class="o">==</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span><span class="o">&amp;&amp;</span><span class="n">m_nMinute</span> <span class="o">==</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span><span class="o">&amp;&amp;</span><span class="n">m_nSecond</span> <span class="o">==</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">bool</span> <span class="n">CTime</span><span class="o">::</span><span class="k">operator</span><span class="o">&gt;</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">m_nHour</span> <span class="o">&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">)</span> <span class="c1">//先判断两个对象的小时数的大小</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_nHour</span> <span class="o">&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="c1">//这是两个对象小时数相等的情况，接下来就判断分钟数</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">m_nMinute</span><span class="o">&gt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">)</span> <span class="c1">//再判断两个对象的分钟数的大小</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_nMinute</span> <span class="o">&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">else</span> <span class="c1">//这是两个对象的时钟和分钟相等的情况下</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">m_nSecond</span><span class="o">&gt;</span><span class="n">time</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">)</span> <span class="c1">//最后比较秒钟</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="k">else</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>  <span class="c1">//最后就是两个对象相等，也不满足一个对象大于另外一个对象的情况，返回false</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>成员函数重载++运算符</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="k">operator</span><span class="o">++</span><span class="p">();</span><span class="c1">//前置的++</span>
+</span><span class='line'><span class="n">CTime</span> <span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span><span class="c1">//后置++，这个int类型的参数只是为了区分，我们并不会使用这个参数，所以我们不需要形参的名字</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//前置的++</span>
+</span><span class='line'><span class="n">CTime</span> <span class="n">CTime</span><span class="o">::</span><span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="c1">//重载++(前置)运算符</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//定义了一个秒数为1的对象</span>
+</span><span class='line'>  <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">+</span> <span class="n">time</span><span class="p">;</span><span class="c1">//由于前面的函数已经重载了加号运算符，里面已经定义好了相关的操作，所以这句代码调用了加号运算符的重载函数，并将对象的秒数加一</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> <span class="c1">//前置++的操作顺序就是先加再返回它的值</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CTime</span> <span class="n">CTime</span><span class="o">::</span><span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="c1">//重载++(后置)运算符</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span><span class="c1">//后置++的操作规则是先返回再加，所以需要创建一个临时变量保存好这个对象的值</span>
+</span><span class='line'>  <span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span><span class="c1">//定义了一个秒数为1的对象</span>
+</span><span class='line'>  <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">+</span> <span class="n">time2</span><span class="p">;</span><span class="c1">//同上调用了加法运算符的重载函数</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span><span class="c1">//返回加法操作之前的对象的值</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>测试</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="nf">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">++</span><span class="n">time</span><span class="p">;</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">time</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>结果</h3>
+
+<p><img src="https://i.imgur.com/iUU9UYt.png" alt="" /></p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170904/code/OverloadOperator' target='_blank'>点我进行下载</a>】</strong>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【C++】C++运算符重载的规则]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2017/09/02/Rules-for-operator-overloading/"/>
+    <updated>2017-09-02T18:40:54+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2017/09/02/Rules-for-operator-overloading</id>
+    <content type="html"><![CDATA[<p>本篇博客讲解:<br/>
+运算符重载的规则，以及实例</p>
+
+<!-- more -->
+
+
+<hr />
+
+<h1>运算符重载的规则</h1>
+
+<p><strong>被重载的运算符必须是已经存在的C++运算符，不能重载自己创建的运算符</strong>。<br/>
+运算符被重载之后，<strong>原有功能仍然保留</strong>。只是扩展了原有功能。<br/>
+重载不能改变运算符运算对象的个数。<br/>
++运算符具有两个操作数，在+运算符函数作为类(例如上个例子中的CTime)的成员函数的时候，有一个参数是隐含的，也就是当前的对象，使用this指针来引用。<br/>
+另一个参数通过函数参数指定。</p>
+
+<p>可以重载的运算符：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1.算术运算符：+，-，*，/，%，   
+</span><span class='line'>2.逻辑运算符：&&，||，！  
+</span><span class='line'>3.关系运算符：&gt;,&lt;,=,&gt;=,&lt;=,==,!=  
+</span><span class='line'>4.位操作符：～，&lt;&lt;(左移)，&gt;&gt;(右移)，&，^），|  
+</span><span class='line'>5.自增自减运算符：++，--  
+</span><span class='line'>6.复合赋值运算符：+=，-=，*=，/=，%=  
+</span><span class='line'>7.其他：&(取地址符)、*、 () 、-&gt;(成员访问运算符) 、[] (下标运算符)、.new/delete、&gt;&gt;、&lt;&lt;  </span></code></pre></td></tr></table></div></figure>
+
+
+<p>不能重载的运算符：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>?:(条件运算符) 
+</span><span class='line'>.(成员访问运算符)
+</span><span class='line'>*(成员指针访问运算符)
+</span><span class='line'>::(域运算符)
+</span><span class='line'>sizeof(sizeof 是运算符,而不是函数)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>不需要重载的运算符</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>=（赋值）和&(取地址符)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+因为编译器会为每个类自动实现一个默认的赋值运算符/取地址符的成员函数  <br/>
+当然，我们可以重写这个默认的成员函数。</p>
+
+<figure class='code'><figcaption><span>CTime.h声明</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span><span class="c1">//返回的是对象的引用形式</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>CTime.cpp定义</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">CTime</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="c1">//为了防止同一个对象进行赋值，需要先判断一下,判断地址是不是一样</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">time</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//默认的是各个成员分别赋值</span>
+</span><span class='line'>  <span class="n">m_nHour</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">m_nMinute</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">m_nSecond</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span><span class="c1">//返回当前这个对象</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>友元函数的运算符重载</p>
+
+<figure class='code'><figcaption><span>CTime.h声明</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//friend为友元函数的关键字,这个符号运算符重载函数的参数类型至少有一个类类型或者类的引用,也就是说，可以有一个参数不是对象</span>
+</span><span class='line'><span class="k">friend</span> <span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time2</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span>main.cpp实现-使用类来实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//友元函数的运算符重载</span>
+</span><span class='line'><span class="n">CTime</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time1</span><span class="p">,</span> <span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time2</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">hour</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">minute</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">second</span> <span class="o">=</span> <span class="n">time1</span><span class="p">.</span><span class="n">m_nSecond</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nSecond</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">second</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">minute</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">second</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">minute</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nMinute</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nMinute</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">minute</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">minute</span> <span class="o">-=</span> <span class="mi">60</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">hour</span> <span class="o">+=</span> <span class="p">(</span><span class="n">time1</span><span class="p">.</span><span class="n">m_nHour</span> <span class="o">+</span> <span class="n">time2</span><span class="p">.</span><span class="n">m_nHour</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hour</span> <span class="o">&gt;</span> <span class="mi">24</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">hour</span> <span class="o">-=</span> <span class="mi">24</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">CTime</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">second</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>赋值函数<br/>
+普通函数和类的成员函数都可以作为类的友元，但什么时候应该使用普通函数，什么时候应该使用成员函数方式呢？</p>
+
+<p><strong>普通函数形式的运算符函数一般都声明为类的友元函数</strong>，用以访问类的私有数据成员。<br/>
+这样可以减低开销，但破坏封装性。因此建议尽量使用成员函数形式。</p>
+
+<p><strong>一般将单目运算符重载为成员函数，将双目运算符重载为友元函数</strong></p>
+
+<p>成员函数方式要求左侧的参数要与类的类型相同。而普通函数则要求实参顺序与形参类型顺序一致。</p>
+
+<p>如<br/>
+有的运算符必须定义为类的成员函数</p>
+
+<figure class='code'><figcaption><span>main.cpp实现-使用类来实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">=</span><span class="err">、赋值运算符</span>
+</span><span class='line'><span class="p">[]</span><span class="err">、下标运算符</span>
+</span><span class='line'><span class="p">()</span> <span class="err">函数调用运算符</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>有的运算符不能定义为类的成员函数，只能定义为类的友元</p>
+
+<figure class='code'><figcaption><span>main.cpp实现-使用类来实现</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="o">&lt;&lt;</span><span class="err">、</span><span class="o">&gt;&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运算符重载可以在函数内执行任意的操作，比如可以将+定义成两个对象相减的操作<br/>
+但是这样违背我们日常使用的习惯，容易使用误用，减低程序可读性，因此必须保证重载的运算符与该运算符应用于标准数据类型时所具有的功能。 </p>
+
+<h1>源代码下载地址：</h1>
+
+<blockquote cite='陈浩翔'>
+GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170902/code/operatorOverloadingBase' target='_blank'>点我进行下载</a>】</strong></p>
+</blockquote>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【Cocos2d-x】Cocos2d-x精灵的性能优化]]></title>
@@ -1214,7 +1861,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x75;&#105;&#x66;&#117;&#116;&#x75;&#114;&#x65;&#64;&#x75;&#x69;&#x66;&#117;&#116;&#117;&#x72;&#101;&#x2e;&#99;&#x6f;&#x6d;">&#117;&#x69;&#x66;&#117;&#x74;&#x75;&#114;&#x65;&#64;&#117;&#105;&#102;&#117;&#x74;&#x75;&#x72;&#101;&#x2e;&#x63;&#111;&#109;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#117;&#105;&#x66;&#x75;&#116;&#x75;&#x72;&#101;&#64;&#x75;&#x69;&#x66;&#x75;&#x74;&#117;&#x72;&#x65;&#46;&#99;&#x6f;&#109;">&#x75;&#105;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#64;&#117;&#x69;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#x2e;&#99;&#x6f;&#109;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -1232,7 +1879,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x75;&#x69;&#102;&#117;&#116;&#x75;&#x72;&#101;&#64;&#x75;&#105;&#x66;&#x75;&#116;&#117;&#114;&#101;&#46;&#x63;&#111;&#109;">&#117;&#105;&#x66;&#117;&#116;&#x75;&#114;&#101;&#x40;&#x75;&#x69;&#x66;&#x75;&#116;&#117;&#114;&#101;&#x2e;&#x63;&#x6f;&#109;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x75;&#x69;&#x66;&#x75;&#116;&#x75;&#x72;&#101;&#x40;&#x75;&#105;&#102;&#117;&#116;&#117;&#x72;&#101;&#x2e;&#x63;&#111;&#x6d;">&#117;&#105;&#102;&#117;&#x74;&#x75;&#x72;&#101;&#64;&#117;&#x69;&#x66;&#117;&#x74;&#x75;&#114;&#x65;&#x2e;&#99;&#111;&#109;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -4270,590 +4917,6 @@ const对象调用的成员函数一定都得是const！</p>
 
 <blockquote cite='陈浩翔'>
 GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170603/test2' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【C++】C++类的静态成员]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/06/03/static-member/"/>
-    <updated>2017-06-03T18:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/06/03/static-member</id>
-    <content type="html"><![CDATA[<p>类的静态成员包括静态的数据成员和静态的成员函数！<br/>
-static关键字</p>
-
-<!-- more -->
-
-
-<hr />
-
-<h1>静态数据成员</h1>
-
-<p>比如我们现在要设计一款战争游戏，在这款游戏中，分为多个兵种，每个兵种都有一定数量的士兵，游戏过程中，每隔一定时间每个兵种都会产生一定数量的士兵，由于战争的消耗，每个兵种的士兵都会减少。<br/>
-为了使情节更逼真，引入了士气这个概念，当士气比较高的时候，这个兵种的战斗力就比较强，士气低的时候，这个兵种的战斗力就比较弱。<br/>
-士兵的士气受很多因素影响，其中一个最直接的因素就是和这个兵种的数量直接相关，当这个兵种的士兵比较多，这个兵种的士气就比较高，战斗力就比较强。如果说当前的兵种士兵比较少，那么士气就比较弱，战斗力也比较弱。</p>
-
-<p>为了实现这种情况，那么我们就记录当前士兵的数量这个变量。
-一种比较简单的方法就是，我们可以维护一组全局的变量，每个全局变量都会记录某个兵种当前的数量。<br/>
-但是使用全局变量会引入比较多的问题，不推荐使用！<br/>
-1.使用全局变量的时候，安全性无法得到保证。因为我们在程序的各个地方都可以修改全局变量的值。</p>
-
-<p>2.全局变量也会导致命名空间的污染，如果我们的程序比较大，如果定义了多个全局变量，那么各个模块就可能会冲突！</p>
-
-<p>另一种方法就是使用静态数据成员，因为静态数据成员是各个对象所共有的，不属于某个具体的对象。</p>
-
-<p>静态数据成员为各个对象共有，不属于某个具体的对象，所有对象都可以对它进行引用，都可以读取和修改。若一个对象修改了该静态成员的值，则在其他各个对象中该数据成员的值都会同时改变。</p>
-
-<p>定义静态数据成员 以static关键字开头。</p>
-
-<figure class='code'><figcaption><span>定义静态数据成员</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">static</span> <span class="kt">int</span> <span class="n">m_nNum</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>定义之后不要忘记在cpp中初始化这个静态成员变量。(初始化的时候不要加static关键字哦)
-否则在编译时就会报错：</p>
-
-<figure class='code'><figcaption><span>定义静态数据成员</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="err">错误</span>   <span class="mi">1</span>   <span class="n">error</span> <span class="nl">LNK2001</span><span class="p">:</span> <span class="err">无法解析的外部符号</span> <span class="s">&quot;private: static int CTime::m_nNum&quot;</span> <span class="p">(</span><span class="o">?</span><span class="n">m_nNum</span><span class="err">@</span><span class="n">CTime</span><span class="err">@@</span><span class="mi">0</span><span class="n">HA</span><span class="p">)</span> <span class="nl">E</span><span class="p">:</span><span class="err">\</span><span class="n">chenhaoxiang</span><span class="err">\</span><span class="mi">20170603</span><span class="err">\</span><span class="n">test2</span><span class="err">\</span><span class="n">test2</span><span class="err">\</span><span class="n">Time</span><span class="p">.</span><span class="n">obj</span> <span class="n">test2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>静态的数据成员是属于这个类的，而不是对象！<br/>
-定义类时就为静态数据成员分配空间，不随对象的建立而分配空间。<br/>
-static的成员变量不能在类内进行初始化！<br/>
-定义完类之后就可以直接引用/访问，<br/>
-引用方法： <br/>
-1.类名::静态成员<br/>
-2.对象名.静态成员<br/>
-在类内的静态数据成员仅仅是对该成员的声明，同时还需要在类外部进行定义。</p>
-
-<h1>静态成员函数</h1>
-
-<p>在声明成员函数时在函数前添加static关键字就定义了静态成员函数。</p>
-
-<figure class='code'><figcaption><span>声明</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">static</span> <span class="kt">int</span> <span class="nf">getNum</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><figcaption><span>定义</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="kt">int</span> <span class="n">CTime</span><span class="o">::</span><span class="n">getNum</span><span class="p">(){</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">m_nNum</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>与静态数据成员一样，静态成员函数也是类的一部分。两种引用的方法。</p>
-
-<figure class='code'><figcaption><span>调用的两种方法</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">getNum</span><span class="p">();</span>
-</span><span class='line'><span class="n">time</span><span class="p">.</span><span class="n">getNum</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>静态成员函数一般是为了处理静态的数据成员。<br/>
-与一般成员函数的区别：非静态成员函数有this指针，静态成员函数没有this指针。<br/>
-因为它可以在未定义类对象时就可以引用。因此静态成员函数不能访问本类中的非静态成员。（包括成员函数和数据成员）。</p>
-
-<p>比如在前面定义的getNum()静态函数中，是无法调用其他的非静态方法和变量的！<br/>
-因为getNum()是依赖于具体的类，而其他非静态成员是依赖于具体对象的！<br/>
-getNum()不依赖于任何对象！</p>
-
-<p>类中定义的静态数据成员可以代替全局变量，而且没有全局变量的缺点，作用域仅限于当前类的作用域，防止了在其他类修改成员！</p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170603/test2' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【C++】This指针和复制构造函数]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/06/03/this-pointer/"/>
-    <updated>2017-06-03T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/06/03/this-pointer</id>
-    <content type="html"><![CDATA[<p>在声明一个类的时候，是没有分配存储空间的，只有在真正定义一个对象的时候，程序才会为这个对象分配相应的存储空间。<br/>
-如果定义了多个对象，这些对象都有自己的存储空间，但是这些对象都是用相同的成员方法的。</p>
-
-<p>当不同的对象调用成员方法时，怎么保证就是这个对象的成员？</p>
-
-<!-- more -->
-
-
-<hr />
-
-<h1>this指针</h1>
-
-<p>在每个成员函数中，都包含一个特殊的指针。<br/>
-这个指针的名字是固定的，就是this指针。<br/>
-this指针是指向类对象的指针，它的值是当前被调用的所在对象的地址！</p>
-
-<p>this指针是指向本类对象的指针，它作为参数传递给成员函数<br/>
-this指针是隐式使用的。由编译器自动实现，我们不必人为的在形参中添加this指针。</p>
-
-<p>因为this表示这个对象的指针，所以*this就表示这个对象了</p>
-
-<p>(<em>this).调用成员变量/函数和this->调用成员变量/函数,是一样的效果！<br/>
-注意给</em>this添加括号，因为.运算符的优先级比较高</p>
-
-<h1>复制构造函数</h1>
-
-<p>复制构造函数和普通构造函数有一些相似处的，也没有返回值，类名作为函数名！</p>
-
-<p>复制构造函数一种特殊的构造函数，在创建一个新的对象时将其他对象作为参数时，<br/>
-编译器将会调用复制构造函数。不提供时使用默认构造函数。默认构造函数内部各个成员变量赋值。<br/>
-创建之后，新对象是老对象的副本，二者值相同。但具有不同的存储空间。</p>
-
-<figure class='code'><figcaption><span>形式</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">);</span><span class="c1">//使用类名对象作为参数，传引用</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>调用复制构造函数的时机：</h2>
-
-<p>在什么情况下使用复制构造函数</p>
-
-<h3>1.以其他对象作为参数创建新对象时。</h3>
-
-<p>比如:创建一个新的对象的时候，把原来的一个对象作为参数传递给新的对象作为构造函数</p>
-
-<figure class='code'><figcaption><span>形式</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="n">CTime</span> <span class="n">time</span><span class="p">;</span>
-</span><span class='line'><span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="n">time</span><span class="p">);</span><span class="c1">//会自动执行复制构造函数，复制成员等  </span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<figure class='code'><figcaption><span>复制构造函数</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">CTime</span><span class="o">::</span><span class="n">CTime</span><span class="p">(</span><span class="n">CTime</span><span class="o">&amp;</span> <span class="n">time</span><span class="p">){</span>
-</span><span class='line'>  <span class="n">m_hour</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_hour</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">m_minute</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_minute</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">m_second</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">m_second</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>通过复制构造函数复制原来的time</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="n">CTime</span> <span class="n">time</span><span class="p">;</span>
-</span><span class='line'><span class="n">time</span><span class="p">.</span><span class="n">setHour</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="c1">//通过成员方法设置值</span>
-</span><span class='line'><span class="n">time</span><span class="p">.</span><span class="n">setMinute</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-</span><span class='line'><span class="n">time</span><span class="p">.</span><span class="n">setSecond</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'><span class="c1">//输出结果： 10:20:30</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">CTime</span> <span class="nf">time2</span><span class="p">(</span><span class="n">time</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>(注意，构造函数实现的时候，需要在其他函数前面先实现)<br/>
-复制构造函数也是构造函数的一种！</p>
-
-<h3>2.类对象（传值）作为函数参数时。</h3>
-
-<figure class='code'><figcaption><span>类对象（传值）作为函数参数时。</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
-</span><span class='line'><span class="cp">#include &quot;Time.h&quot;</span>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">CTime</span> <span class="n">time</span><span class="p">){</span>
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">time</span><span class="p">.</span><span class="n">setHour</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="c1">//通过成员方法设置值</span>
-</span><span class='line'>  <span class="n">time</span><span class="p">.</span><span class="n">setMinute</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">time</span><span class="p">.</span><span class="n">setSecond</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">CTime</span> <span class="n">time2</span><span class="p">(</span><span class="n">time</span><span class="p">);</span><span class="c1">//第一次调用复制构造函数</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">func</span><span class="p">(</span><span class="n">time</span><span class="p">);</span><span class="c1">//第二次调用复制构造函数  复制给func中的形参time</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>  <span class="c1">//输出结果： 10:20:30</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">getchar</span><span class="p">();</span><span class="c1">//这句是为了防止输出窗口秒关闭</span>
-</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>3.类对象作为函数返回值时。</h3>
-
-<figure class='code'><figcaption><span>类对象作为函数返回值时。</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
-</span><span class='line'><span class="cp">#include &quot;Time.h&quot;</span>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">void</span> <span class="nf">func</span><span class="p">(</span><span class="n">CTime</span> <span class="n">time</span><span class="p">){</span>
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="n">CTime</span> <span class="nf">func1</span><span class="p">(</span><span class="n">CTime</span> <span class="n">time</span><span class="p">){</span>
-</span><span class='line'>  <span class="c1">//复制给func1中的形参time 也会调用一次复制构造函数</span>
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">time</span><span class="p">;</span><span class="c1">//time在返回的时候会复制给返回的值，这个时候会调用复制构造函数</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-</span><span class='line'>  <span class="n">CTime</span> <span class="n">time</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">time</span><span class="p">.</span><span class="n">setHour</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="c1">//通过成员方法设置值</span>
-</span><span class='line'>  <span class="n">time</span><span class="p">.</span><span class="n">setMinute</span><span class="p">(</span><span class="mi">20</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">time</span><span class="p">.</span><span class="n">setSecond</span><span class="p">(</span><span class="mi">30</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">CTime</span> <span class="n">time2</span><span class="p">(</span><span class="n">time</span><span class="p">);</span><span class="c1">//第一次调用复制构造函数</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">func</span><span class="p">(</span><span class="n">time</span><span class="p">);</span><span class="c1">//第二次调用复制构造函数  复制给func中的形参time</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">CTime</span> <span class="n">time3</span> <span class="o">=</span> <span class="n">func1</span><span class="p">(</span><span class="n">time</span><span class="p">);</span><span class="c1">//第三次和第四次调用复制构造函数</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>  <span class="c1">//输出结果： 10:20:30</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getHour</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getMinute</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;:&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">time2</span><span class="p">.</span><span class="n">getSecond</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">getchar</span><span class="p">();</span><span class="c1">//这句是为了防止输出窗口秒关闭</span>
-</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上面就是复制构造函数使用的三种情形！</p>
-
-<p>如果我们把复制构造函数 CTime::CTime(CTime&amp; time)修改为CTime::CTime(CTime time) <br/>
-CTime&amp; time是一个引用类型的参数，现在将引用去掉的话，就满足了调用复制构造函数中的一种，以类对象（传值）作为函数参数时，<br/>
-这样在使用的时候，就会造成死循环！</p>
-
-<p>所以注意复制构造函数是传引用来实现的！</p>
-
-<p>我们使用类对象作为函数参数的时候，以及返回一个对象的时候，代价是很大的，<br/>
-因为伴随着对象的创建和销毁，还伴随着复制构造函数的调用， 所以一般使用传引用来规避这种代价！<br/>
-引用传递：<br/>
-形参相当于是实参的“别名”，对形参的操作其实就是对实参的操作，在引用传递过程中，被调函数的形式参数虽然也作为局部变量在栈中开辟了内存空间，但是这时存放的是由主调函数放进来的实参变量的地址。被调函数对形参的任何操作都被处理成间接寻址，即通过栈中存放的地址访问主调函数中的实参变量。正因为如此，被调函数对形参做的任何操作都影响了主调函数中的实参变量。</p>
-
-<h1>源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/C-Study/tree/master/20170603/test2' target='_blank'>点我进行下载</a>】</strong></p>
-</blockquote>
-
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【Cocos2d-x】Cocos2d-X网络编程-HttpRequest/HttpClient/HttpResponse]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse/"/>
-    <updated>2017-05-31T13:38:54+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2017/05/31/HttpRequest-HttpResponse</id>
-    <content type="html"><![CDATA[<p>Cocos2d-x封装了3个类来处理HTTP请求：<br/>
-HttpRequest,HttpClient和HttpResponse.</p>
-
-<p>使用HttpRequest,HttpClient和HttpResponse这3个类进行Http进行请求时，需要遵循一定流程</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>请求过程: <br/>
-1.创建HttpRequest的实例。<br/>
-2.设置请求方式，Get、Post等。(千万不要以为只有get和post方式哦,这是一般新手以为的,只是其他请求方式我们平时用到的很少)<br/>
-3.设置请求地址和发送的数据(如果没有发送的数据，可不设置发送数据)。<br/>
-4.设置响应回调函数，在回调函数中处理获取的数据。<br/>
-5.创建HttpClient实例，发送请求。<br/>
-6.释放请求连接。</p>
-
-<h1>使用Cocos2d封装的HttpRequest设置请求信息</h1>
-
-<p>HttpRequest：<br/>
-是一种数据类型，它提供了一些方法用来定义或获取HTTP请求的参数，<br/>
-常用方法包括下面几种:<br/>
-设置请求连接<br/>
-void setUrl(const char * url);<br/>
-设置请求类型<br/>
-void setRequestType(Type type);</p>
-
-<p>这里的Type是Cocos2d-x定义的一个枚举类型，包括5种类型。<br/>
-源码:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="k">class</span> <span class="nc">CC_DLL</span> <span class="nl">HttpRequest</span> <span class="p">:</span> <span class="k">public</span> <span class="n">Ref</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'><span class="k">public</span><span class="o">:</span>
-</span><span class='line'>    <span class="cm">/**</span>
-</span><span class='line'><span class="cm">     * The HttpRequest type enum used in the HttpRequest::setRequestType.</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="k">enum</span> <span class="k">class</span> <span class="nc">Type</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">GET</span><span class="p">,</span>
-</span><span class='line'>        <span class="n">POST</span><span class="p">,</span>
-</span><span class='line'>        <span class="n">PUT</span><span class="p">,</span>
-</span><span class='line'>        <span class="n">DELETE</span><span class="p">,</span>
-</span><span class='line'>        <span class="n">UNKNOWN</span><span class="p">,</span>
-</span><span class='line'>    <span class="p">};</span>
-</span><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>设置回调函数:<br/>
-void setResponseCallback(Ref* pTarget,SEL_HttpResponse pSelector);</p>
-
-<p>设置请求的数据，参数buffer是提交的数据，len是请求数据的长度(使用发送数据的实际长度):<br/>
-void setRequestData(const char* buffer,unsigned int len);</p>
-
-<p>头文件和命名空间:</p>
-
-<figure class='code'><figcaption><span>头文件和命名空间</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &quot;network/HttpRequest.h&quot; </span><span class="c1">//1</span>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="p">;</span> <span class="c1">//2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>完整的Request对象创建</p>
-
-<figure class='code'><figcaption><span>完整的Request对象创建</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="k">auto</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HttpRequest</span><span class="p">();</span>
-</span><span class='line'><span class="c1">//设置请求网址</span>
-</span><span class='line'><span class="n">request</span><span class="o">-&gt;</span><span class="n">setUrl</span><span class="p">(</span><span class="s">&quot;请填写你需要请求的网址&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="c1">//设置请求类型</span>
-</span><span class='line'><span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestType</span><span class="p">(</span><span class="n">HttpRequest</span><span class="o">::</span><span class="n">Type</span><span class="o">::</span><span class="n">GET</span><span class="p">);</span>
-</span><span class='line'><span class="c1">//设置请求的数据</span>
-</span><span class='line'><span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;data&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="n">request</span><span class="o">-&gt;</span><span class="n">setRequestData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>使用Cocos2d封装的HttpClient发送请求</h1>
-
-<p>HttpClient:
- 用来控制请求相关的参数，比如发送请求，设置请求超时时间。<br/>
-它使用单例模型。 这一模式的目的是使得类的一个对象成为系统中的唯一实例。<br/>
-cocos2d中多处用到这一模型。<br/>
-比如Director对象，创建Director::getInstance().获取的都是同一个对象，方便统一管理<br/>
-又比如，音频处理对象： SimpleAudioEngine::getInstance();</p>
-
-<p>常用方法<br/>
-发送请求：
-send(HttpRequest* request)<br/>
-设置连接超时时间:<br/>
-setTimeoutForConnect(int value)</p>
-
-<figure class='code'><figcaption><span>头文件和命名空间</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="cp">#include &quot;network/HttpClient.h&quot;</span>
-</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">cocos2d</span><span class="o">::</span><span class="n">network</span><span class="p">;</span> <span class="c1">//2</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>创建HttpClient对象</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='C++'><span class='line'><span class="c1">//创建HttpClient对象</span>
-</span><span class='line'><span class="k">auto</span> <span class="n">client</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="o">::</span><span class="n">getInstance</span><span class="p">();</span><span class="c1">//getInstance静态成员函数-单例模式模型</span>
-</span><span class='line'><span class="n">client</span><span class="o">-&gt;</span><span class="n">setTimeoutForConnect</span><span class="p">(</span><span class="mi">60</span><span class="p">);</span><span class="c1">//当客户端向服务端发送请求超过这个时间，就会返回一个错误信息</span>
-</span><span class='line'><span class="n">client</span><span class="o">-&gt;</span><span class="n">setTimeoutForRead</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="c1">//接收数据的读取时间</span>
-</span><span class='line'><span class="n">client</span><span class="o">-&gt;</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>使用Cocos2d封装的HttpResponse处理返回的结果</h1>
-
-<p>HttpResponse:<br/>
-包含服务器返回的数据等信息。使用HttpResponse提供的方法可以获取这些数据。<br/>
-常用方法：<br/>
-std::vector<char> * getResponseData();<br/>
-获取请求返回的数据 -返回的是一个char型的数组</p>
-
-<p>getResponseState<br/>
-获取服务器返回的状态，返回值是一个整数，200表示请求成功，400表示服务器错误，404表示服务器上找不到相应的文件。</p>
-
-<p>issucced(),用来判断是否返回成功。</p>
-
-<figure class='code'><figcaption><span>实现回调函数</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="c1">//实现回调函数</span>
-</span><span class='line'><span class="kt">void</span> <span class="n">HelloWorld</span><span class="o">::</span><span class="n">complete</span><span class="p">(</span><span class="n">HttpClient</span> <span class="o">*</span><span class="n">client</span><span class="p">,</span> <span class="n">HttpResponse</span> <span class="o">*</span><span class="n">response</span><span class="p">){</span>
-</span><span class='line'>  <span class="c1">//使用HttpResponse类的相关函数，获取状态和数据</span>
-</span><span class='line'>  <span class="n">log</span><span class="p">(</span><span class="s">&quot;response code is:%d&quot;</span><span class="p">,</span><span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseCode</span><span class="p">());</span><span class="c1">//获取请求返回的状态码</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">response</span><span class="o">-&gt;</span><span class="n">isSucceed</span><span class="p">()){</span><span class="c1">//判断返回是否成功  成功就返回true</span>
-</span><span class='line'>      <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="o">*</span> <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getResponseData</span><span class="p">();</span>
-</span><span class='line'>      <span class="n">log</span><span class="p">(</span><span class="s">&quot;response data is:&quot;</span><span class="p">);</span>
-</span><span class='line'>      <span class="c1">//for (int i = 0; i &lt; data-&gt;size(); i++){</span>
-</span><span class='line'>      <span class="c1">// log(&quot;%c&quot;,(*data)[i]);</span>
-</span><span class='line'>      <span class="c1">// //因为data是一个指针，所以需要取内容操作符，(*data)这样获取的就是数组的首地址，然后再加上角标</span>
-</span><span class='line'>      <span class="c1">//}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">else</span><span class="p">{</span>
-</span><span class='line'>      <span class="n">log</span><span class="p">(</span><span class="s">&quot;error msg is:%s&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">-&gt;</span><span class="n">getErrorBuffer</span><span class="p">());</span> <span class="c1">// getErrorBuffer-会返回请求数据错误的信息</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>完整源代码下载地址：</h1>
-
-<blockquote cite='陈浩翔'>
-GITHUB源码下载地址:<strong>【<a href='https://github.com/chenhaoxiang/cocos2d-x/tree/master/20170531/httpTest' target='_blank'>点我进行下载</a>】</strong></p>
 </blockquote>
 
 

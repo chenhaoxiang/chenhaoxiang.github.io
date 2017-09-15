@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-09T00:41:17+08:00</updated>
+  <updated>2017-09-15T10:38:15+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -104,53 +104,31 @@ Spring团队的建议是你在具体的类（或类的方法）上使用 @Transa
 <p>实体类就不写上来了。</p>
 
 <p>原出错映射文件:
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;cn.kx59.admin.entity.PermissionGroup&quot;</span> <span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!-- 一个权限组 对应多个权限--&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&quot;permissionArrayList&quot;</span> <span class="na">ofType=</span><span class="s">&quot;cn.kx59.admin.entity.Permission&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;url&quot;</span> <span class="na">property=</span><span class="s">&quot;url&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;explain&quot;</span> <span class="na">property=</span><span class="s">&quot;explain&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/collection&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/resultMap&gt;&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;</span>  <span class="c">&lt;!--查询所有的权限组以及权限组包含的权限--&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAllPermissionGroupAndPermission&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="nt">&gt;</span>
-</span><span class='line'>        SELECT *
-</span><span class='line'>  FROM [QPWebDB].[dbo].[permission_group] pg
-</span><span class='line'>  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
-</span><span class='line'>  left join [QPWebDB].[dbo].[permission] p on p.permission_id=ppg.permission_id
-</span><span class='line'>  <span class="nt">&lt;/select&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```xml
+  <resultMap id="permissionGroupResultMap" type="cn.kx59.admin.entity.PermissionGroup" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="decipher" property="decipher" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <!-- 一个权限组 对应多个权限-->
+    <collection property="permissionArrayList" ofType="cn.kx59.admin.entity.Permission">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="url" property="url" jdbcType="VARCHAR" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="explain" property="explain" jdbcType="VARCHAR" />
+      <result column="decipher" property="decipher" jdbcType="VARCHAR" />
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </collection>
+  </resultMap></p>
+
+<p>  <!--查询所有的权限组以及权限组包含的权限-->
+  <select id="selectAllPermissionGroupAndPermission" resultMap="permissionGroupResultMap" >
+        SELECT *
+  FROM [QPWebDB].[dbo].[permission_group] pg
+  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
+  left join [QPWebDB].[dbo].[permission] p on p.permission_id=ppg.permission_id
+  </select>
+```</p>
 
 <p>这是因为主表和明细表的id字段名相同造成的。<br/>
 问题的关键在于resultMap中如果不定义类似主键之类的能够区分每一条结果集的字段的话，会引起后面一条数据覆盖前面一条数据的现象。</p>
@@ -161,65 +139,37 @@ Spring团队的建议是你在具体的类（或类的方法）上使用 @Transa
 <p>解决方法二：<br/>
 查询结果起别名 <br/>
 修改映射文件如下：<br/>
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>  <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;cn.kx59.admin.entity.PermissionGroup&quot;</span> <span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="c">&lt;!-- 一个权限组 对应多个权限--&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&quot;permissionArrayList&quot;</span> <span class="na">ofType=</span><span class="s">&quot;cn.kx59.admin.entity.Permission&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;p_id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;INTEGER&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;url&quot;</span> <span class="na">property=</span><span class="s">&quot;url&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;name&quot;</span> <span class="na">property=</span><span class="s">&quot;name&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;explain&quot;</span> <span class="na">property=</span><span class="s">&quot;explain&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;decipher&quot;</span> <span class="na">property=</span><span class="s">&quot;decipher&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;create_time&quot;</span> <span class="na">property=</span><span class="s">&quot;createTime&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;TIMESTAMP&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/collection&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/resultMap&gt;&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;</span>  <span class="c">&lt;!--查询所有的权限组以及权限组包含的权限--&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAllPermissionGroupAndPermission&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;permissionGroupResultMap&quot;</span> <span class="nt">&gt;</span>
-</span><span class='line'>        SELECT pg.*,
-</span><span class='line'>  p.id p_id,
-</span><span class='line'>  p.url,
-</span><span class='line'>  p.name,
-</span><span class='line'>  p.explain,
-</span><span class='line'>  p.decipher,
-</span><span class='line'>  p.create_time
-</span><span class='line'>  FROM [QPWebDB].[dbo].[permission_group] pg
-</span><span class='line'>  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
-</span><span class='line'>  left join [QPWebDB].[dbo].[permission] p on p.id=ppg.permission_id
-</span><span class='line'>  <span class="nt">&lt;/select&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```xml
+  <resultMap id="permissionGroupResultMap" type="cn.kx59.admin.entity.PermissionGroup" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="decipher" property="decipher" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <!-- 一个权限组 对应多个权限-->
+    <collection property="permissionArrayList" ofType="cn.kx59.admin.entity.Permission">
+      <id column="p_id" property="id" jdbcType="INTEGER" />
+      <result column="url" property="url" jdbcType="VARCHAR" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="explain" property="explain" jdbcType="VARCHAR" />
+      <result column="decipher" property="decipher" jdbcType="VARCHAR" />
+      <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </collection>
+  </resultMap></p>
+
+<p>  <!--查询所有的权限组以及权限组包含的权限-->
+  <select id="selectAllPermissionGroupAndPermission" resultMap="permissionGroupResultMap" >
+        SELECT pg.*,
+  p.id p_id,
+  p.url,
+  p.name,
+  p.explain,
+  p.decipher,
+  p.create_time
+  FROM [QPWebDB].[dbo].[permission_group] pg
+  left join [QPWebDB].[dbo].[permission_permission_group] ppg on pg.id=ppg.permission_group_id
+  left join [QPWebDB].[dbo].[permission] p on p.id=ppg.permission_id
+  </select>
+```</p>
 
 <p>如上两种方法均能解决这个问题，希望对你有帮助 <br/>
 有知道出现这个问题的原理的大佬欢迎在评论区解释下，O(∩_∩)O谢谢</p>
@@ -287,7 +237,7 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。</p>
 
 <p>虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。<br/>
-不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#109;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#117;&#105;&#x66;&#x75;&#x74;&#117;&#114;&#x65;&#64;&#117;&#105;&#x66;&#117;&#x74;&#117;&#x72;&#x65;&#x2e;&#x63;&#111;&#109;">&#117;&#105;&#102;&#x75;&#116;&#x75;&#x72;&#x65;&#64;&#117;&#105;&#102;&#117;&#116;&#117;&#x72;&#x65;&#x2e;&#x63;&#111;&#109;</a><br/>
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x75;&#x69;&#102;&#117;&#x74;&#x75;&#114;&#x65;&#64;&#117;&#105;&#102;&#117;&#116;&#117;&#114;&#x65;&#x2e;&#x63;&#111;&#109;">&#x75;&#x69;&#x66;&#x75;&#116;&#x75;&#114;&#101;&#x40;&#117;&#x69;&#x66;&#117;&#x74;&#x75;&#114;&#101;&#46;&#x63;&#111;&#109;</a><br/>
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用</p>
 
 <p>此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。</p>
@@ -305,7 +255,7 @@ Technical content, it was basically have no what, but also spent most of time to
 And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.</p>
 
 <p>Although very want to send this application is perfect, but due to time constraints or can&rsquo;t do too many things. <br/>
-Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x75;&#105;&#102;&#117;&#x74;&#117;&#114;&#x65;&#64;&#x75;&#x69;&#102;&#117;&#116;&#x75;&#114;&#x65;&#46;&#99;&#x6f;&#x6d;">&#117;&#x69;&#102;&#117;&#x74;&#117;&#x72;&#101;&#x40;&#117;&#x69;&#x66;&#117;&#x74;&#x75;&#x72;&#101;&#46;&#x63;&#111;&#109;</a></p>
+Does not guarantee that this version has been able to use, if one day can&rsquo;t use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#117;&#105;&#x66;&#117;&#116;&#x75;&#114;&#101;&#64;&#x75;&#105;&#102;&#117;&#116;&#117;&#x72;&#101;&#x2e;&#99;&#111;&#109;">&#x75;&#105;&#102;&#117;&#116;&#x75;&#x72;&#x65;&#x40;&#x75;&#x69;&#x66;&#x75;&#x74;&#117;&#114;&#101;&#x2e;&#x63;&#x6f;&#109;</a></p>
 
 <p>I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use</p>
 
@@ -369,79 +319,44 @@ Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException
 <hr />
 
 <p>错误如下:
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>org.springframework.jdbc.UncategorizedSQLException:<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;h3&gt;</span>Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。<span class="nt">&lt;/h3&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;h3&gt;</span>The error may exist in file [E:\Client\KaiXinHuYu\target\classes\cn\kx59\user\mapping\AccountsInfoMapper.xml]<span class="nt">&lt;/h3&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;h3&gt;</span>The error may involve cn.kx59.user.dao.AccountsInfoMapper.selectPageData-Inline<span class="nt">&lt;/h3&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;h3&gt;</span>The error occurred while setting parameters<span class="nt">&lt;/h3&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;h3&gt;</span>SQL: select top ?       UserID, GameID, ProtectID, PasswordID, SpreaderID, Accounts, NickName, RegAccounts,      UnderWrite, PassPortID, Compellation, LogonPass, InsurePass, FaceID, CustomID, Present,      UserMedal, Experience, LoveLiness, UserRight, MasterRight, ServiceRight, MasterOrder,      MemberOrder, MemberOverDate, MemberSwitchDate, CustomFaceVer, Gender, Nullity, NullityOverDate,      StunDown, MoorMachine, IsAndroid, WebLogonTimes, GameLogonTimes, PlayTimeCount, OnLineTimeCount,      LastLogonIP, LastLogonDate, LastLogonMobile, LastLogonMachine, RegisterIP, RegisterDate,      RegisterMobile, RegisterMachine     from AccountsInfo where UserID not in(select top ? UserID from AccountsInfo)<span class="nt">&lt;/h3&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;h3&gt;</span>Cause: com.microsoft.sqlserver.jdbc.SQLServerException: <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。<span class="nt">&lt;/h3&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;</span>; uncategorized SQLException for SQL []; SQL state [S0001]; error code [102]; <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。; nested exception is com.microsoft.sqlserver.jdbc.SQLServerException: <span class="ni">&amp;lsquo;</span>@P0<span class="ni">&amp;rsquo;</span> 附近有语法错误。<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span>at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:84)
-</span><span class='line'>at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
-</span><span class='line'>at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
-</span><span class='line'>at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
-</span><span class='line'>at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:371)
-</span><span class='line'>at $Proxy24.selectList(Unknown Source)
-</span><span class='line'>at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:198)
-</span><span class='line'>at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:122)
-</span><span class='line'>at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:64)
-</span><span class='line'>at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:53)
-</span><span class='line'>at $Proxy25.selectPageData(Unknown Source)
-</span><span class='line'>at cn.kx59.user.service.imp.AccountsInfoServiceImp.selectPageData(AccountsInfoServiceImp.java:33)
-</span><span class='line'>at cn.kx59.user.service.imp.AccountsInfoServiceImp$$FastClassBySpringCGLIB$$f0736e8f.invoke(<span class="ni">&amp;lt;</span>generated<span class="ni">&amp;gt;</span>)
-</span><span class='line'>at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
-</span><span class='line'>at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:718)
-</span><span class='line'>at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
-</span><span class='line'>at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:52)
-</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;</span><span class="ni">&amp;hellip;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+```
+org.springframework.jdbc.UncategorizedSQLException:</p>
+
+<h3>Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。</h3>
+
+<h3>The error may exist in file [E:\Client\KaiXinHuYu\target\classes\cn\kx59\user\mapping\AccountsInfoMapper.xml]</h3>
+
+<h3>The error may involve cn.kx59.user.dao.AccountsInfoMapper.selectPageData-Inline</h3>
+
+<h3>The error occurred while setting parameters</h3>
+
+<h3>SQL: select top ?       UserID, GameID, ProtectID, PasswordID, SpreaderID, Accounts, NickName, RegAccounts,      UnderWrite, PassPortID, Compellation, LogonPass, InsurePass, FaceID, CustomID, Present,      UserMedal, Experience, LoveLiness, UserRight, MasterRight, ServiceRight, MasterOrder,      MemberOrder, MemberOverDate, MemberSwitchDate, CustomFaceVer, Gender, Nullity, NullityOverDate,      StunDown, MoorMachine, IsAndroid, WebLogonTimes, GameLogonTimes, PlayTimeCount, OnLineTimeCount,      LastLogonIP, LastLogonDate, LastLogonMobile, LastLogonMachine, RegisterIP, RegisterDate,      RegisterMobile, RegisterMachine     from AccountsInfo where UserID not in(select top ? UserID from AccountsInfo)</h3>
+
+<h3>Cause: com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。</h3>
+
+<p>; uncategorized SQLException for SQL []; SQL state [S0001]; error code [102]; &lsquo;@P0&rsquo; 附近有语法错误。; nested exception is com.microsoft.sqlserver.jdbc.SQLServerException: &lsquo;@P0&rsquo; 附近有语法错误。</p>
+
+<pre><code>at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:84)
+at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
+at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:81)
+at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:73)
+at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:371)
+at $Proxy24.selectList(Unknown Source)
+at org.mybatis.spring.SqlSessionTemplate.selectList(SqlSessionTemplate.java:198)
+at org.apache.ibatis.binding.MapperMethod.executeForMany(MapperMethod.java:122)
+at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:64)
+at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:53)
+at $Proxy25.selectPageData(Unknown Source)
+at cn.kx59.user.service.imp.AccountsInfoServiceImp.selectPageData(AccountsInfoServiceImp.java:33)
+at cn.kx59.user.service.imp.AccountsInfoServiceImp$$FastClassBySpringCGLIB$$f0736e8f.invoke(&lt;generated&gt;)
+at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:718)
+at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:52)
+</code></pre>
+
+<p>&hellip;
+```</p>
 
 <p>出错代码的MyBatis中查询语句为：
 <code>
