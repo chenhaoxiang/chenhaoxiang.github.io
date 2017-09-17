@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "C++栈和队列"
+title: "[C++]C++栈和队列"
 date: 2015-08-28 10:46:04 +0800
 comments: true
-categories: c
+categories: c-plus-plus
 tags: [栈,c语言,队列]
 keyword: 陈浩翔, 谙忆
 description: 使用标准库的栈和队列时，先包含相关的头文件#include<stack>
