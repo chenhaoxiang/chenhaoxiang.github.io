@@ -1,0 +1,527 @@
+
+﻿<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Malloc函数详解 - 谙忆-人生之旅</title>
+
+  <meta name="author" content="陈浩翔">
+
+  
+  <meta name="description" content="陈浩翔">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://chenhaoxiang.github.io/blog/2015/09/07/malloc-The-function/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="谙忆-人生之旅" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/jquery1.9.1.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="/javascripts/fonts.googleapis.com.css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/javascripts/fonts.googleapis.com.css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">谙忆-人生之旅</a></h1>
+  
+    <h2>学不止步,梦不停歇-陈浩翔</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation">﻿<ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com.hk/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="chenhaoxiang.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="站内谷歌搜索"/>
+  </fieldset>
+</form>
+  
+﻿<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">列表</a></li>
+  <li><a href="/reward">打赏名单</a></li>
+  <li><a href="/aboutme">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Malloc函数详解</h1>
+    
+    
+      <p class="meta">
+        ﻿
+
+
+
+
+2015年09月07日
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>一、原型：extern void *malloc(unsigned int num_bytes);</p>
+
+<p>头文件：#include  或 #include  (注意：alloc.h 与 malloc.h 的内容是完全一致的。)</p>
+
+<p>功能：分配长度为num_bytes字节的内存块</p>
+
+<p>说明：如果分配成功则返回指向被分配内存的指针，否则返回空指针NULL。</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+<strong>一、原型：extern void *malloc(unsigned int num_bytes);</strong></p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+头文件：#include &lt;malloc.h&gt; 或 #include &lt;alloc.h&gt; (注意：alloc.h 与 malloc.h 的内容是完全一致的。)</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+功能：分配长度为num_bytes字节的内存块</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+说明：如果分配成功则返回指向被分配内存的指针，否则返回空指针NULL。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+当内存不再使用时，应使用free()函数将内存块释放。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+&nbsp;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+举例：<br>
+</p>
+
+
+<div class="dp-highlighter bg_c-sharp" style="font-family:Consolas,'Courier New',Courier,mono,serif; background-color:rgb(231,229,220); width:700.90625px; overflow:auto; padding-top:1px; margin:18px 0px!important">
+<div class="bar" style="padding-left:45px">
+<div class="tools" style="padding:3px 8px 10px 10px; font-size:9px; font-family:Verdana,Geneva,Arial,Helvetica,sans-serif; color:silver; background-color:rgb(248,248,248); border-left-width:3px; border-left-style:solid; border-left-color:rgb(108,226,108)">
+<strong>[c-sharp]</strong>&nbsp;<a target="_blank" target="_blank" href="http://blog.csdn.net/xw13106209/article/details/4962479#" class="ViewSource" title="view plain" style="color:rgb(160,160,160); text-decoration:none; background-color:inherit; border:none; padding:1px; margin:0px 10px 0px 0px; font-size:9px; display:inline-block; width:16px; height:16px; text-indent:-2000px">view
+ plain</a><a target="_blank" target="_blank" href="http://blog.csdn.net/xw13106209/article/details/4962479#" class="CopyToClipboard" title="copy" style="color:rgb(160,160,160); text-decoration:none; background-color:inherit; border:none; padding:1px; margin:0px 10px 0px 0px; font-size:9px; display:inline-block; width:16px; height:16px; text-indent:-2000px">copy</a>
+<div style="position:absolute; left:557px; top:723px; width:18px; height:18px; z-index:99">
+</div>
+</div>
+</div>
+<ol start="1" class="dp-c" style="padding:0px; border:none; list-style-position:initial; background-color:rgb(255,255,255); color:rgb(92,92,92); margin:0px 0px 1px 45px!important">
+<li class="alt" style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit"><span class="preprocessor" style="margin:0px; padding:0px; border:none; color:gray; background-color:inherit">#include&lt;stdio.h&gt;</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;&nbsp;</span></span></li><li style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; background-color:rgb(248,248,248); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit"><span class="preprocessor" style="margin:0px; padding:0px; border:none; color:gray; background-color:inherit">#include&lt;malloc.h&gt;</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;&nbsp;</span></span></li><li class="alt" style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit"><span class="keyword" style="margin:0px; padding:0px; border:none; color:rgb(0,102,153); background-color:inherit; font-weight:bold">int</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;main()&nbsp;&nbsp;</span></span></li><li style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; background-color:rgb(248,248,248); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">{&nbsp;&nbsp;</span></li><li class="alt" style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword" style="margin:0px; padding:0px; border:none; color:rgb(0,102,153); background-color:inherit; font-weight:bold">char</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;*p;&nbsp;&nbsp;</span></span></li><li style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; background-color:rgb(248,248,248); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;</span></li><li class="alt" style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;p=(<span class="keyword" style="margin:0px; padding:0px; border:none; color:rgb(0,102,153); background-color:inherit; font-weight:bold">char</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;*)malloc(100);&nbsp;&nbsp;</span></span></li><li style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; background-color:rgb(248,248,248); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword" style="margin:0px; padding:0px; border:none; color:rgb(0,102,153); background-color:inherit; font-weight:bold">if</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">(p)&nbsp;&nbsp;</span></span></li><li class="alt" style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<span class="string" style="margin:0px; padding:0px; border:none; color:blue; background-color:inherit">&quot;Memory&nbsp;Allocated&nbsp;at:&nbsp;%x/n&quot;</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">,p);&nbsp;&nbsp;</span></span></li><li style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; background-color:rgb(248,248,248); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword" style="margin:0px; padding:0px; border:none; color:rgb(0,102,153); background-color:inherit; font-weight:bold">else</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;&nbsp;</span></span></li><li class="alt" style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;printf(<span class="string" style="margin:0px; padding:0px; border:none; color:blue; background-color:inherit">&quot;Not&nbsp;Enough&nbsp;Memory!/n&quot;</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">);&nbsp;&nbsp;</span></span></li><li style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; background-color:rgb(248,248,248); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;free(p);&nbsp;&nbsp;</span></li><li class="alt" style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword" style="margin:0px; padding:0px; border:none; color:rgb(0,102,153); background-color:inherit; font-weight:bold">return</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;0;&nbsp;&nbsp;</span></span></li><li style="border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); list-style:decimal-leading-zero outside; background-color:rgb(248,248,248); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit">}&nbsp;&nbsp;</span></li></ol>
+</div>
+
+
+<p></p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+&nbsp;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+&nbsp;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+<strong>二、函数声明(函数原型)：</strong></p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　void *malloc(int size);</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　说明：malloc 向系统申请分配指定size个字节的内存空间。返回类型是 void* 类型。void* 表示未确定类型的指针。C,C&#43;&#43;规定，void* 类型可以强制转换为任何其它类型的指针。这个在MSDN上可以找到相关的解释，具体内容如下：</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+<strong>malloc</strong>&nbsp;returns a void pointer to the allocated space, or&nbsp;<strong>NULL</strong>&nbsp;if there is insufficient memory available. To return a pointer to a type other than&nbsp;<strong>void</strong>, use a type cast on the return value. The storage space
+ pointed to by the return value is guaranteed to be suitably aligned for storage of any type of object. If size is 0,&nbsp;<strong>malloc</strong>&nbsp;allocates a zero-length item in the heap and returns a valid pointer to that item. Always check the return from&nbsp;<strong>malloc</strong>,
+ even if the amount of memory requested is small.</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+<strong>三、malloc与new的不同点</strong></p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　从函数声明上可以看出。malloc 和 new 至少有两个不同:&nbsp;<em><strong>new 返回指定类型的指针，并且可以自动计算所需要大小。</strong></em>比如：</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int *p;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　p = new int; //返回类型为int* 类型(整数型指针)，分配大小为 sizeof(int);</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　或：</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　int* parr;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　parr = new int [100]; //返回类型为 int* 类型(整数型指针)，分配大小为 sizeof(int) * 100;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　&nbsp;&nbsp;&nbsp;<em><strong>而 malloc 则必须由我们计算要字节数，并且在返回后强行转换为实际类型的指针。</strong></em></p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+&nbsp;&nbsp; 　int* p;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　p = (int *) malloc (sizeof(int));</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+&nbsp;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　第一、malloc 函数返回的是 void * 类型，如果你写成：p = malloc (sizeof(int)); 则程序无法通过编译，报错：“不能将 void* 赋&#20540;给 int * 类型变量”。所以必须通过 (int *) 来将强制转换。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　第二、函数的实参为 sizeof(int) ，用于指明一个整型数据需要的大小。如果你写成：</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　int* p = (int *) malloc (1);</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　代码也能通过编译，但事实上只分配了1个字节大小的内存空间，当你往里头存入一个整数，就会有3个字节无家可归，而直接“住进邻居家”！造成的结果是后面的内存中原有数据内容全部被清空。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　malloc 也可以达到 new [] 的效果，申请出一段连续的内存，方法无非是指定你所需要内存大小。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　比如想分配100个int类型的空间：</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　int* p = (int *) malloc ( sizeof(int) * 100 ); //分配可以放得下100个整数的内存空间。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　另外有一点不能直接看出的区别是，malloc 只管分配内存，并不能对所得的内存进行初始化，所以得到的一片新内存中，其&#20540;将是随机的。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+　　除了分配及最后释放的方法不一样以外，通过malloc或new得到指针，在其它操作上保持一致。</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+&nbsp;</p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+<strong>&nbsp;总结：</strong></p>
+
+
+<p style="color:rgb(51,51,51); font-family:Arial; font-size:14px; line-height:26px">
+malloc()函数其实就在内存中找一片指定大小的空间，然后将这个空间的首地址范围给一个指针变量，这里的指针变量可以是一个单独的指针，也可以是一个数组的首地址，这要看malloc()函数中参数size的具体内容。我们这里malloc分配的内存空间在逻辑上连续的，而在物理上可以连续也可以不连续。对于我们程序员来说，我们关注的是逻辑上的连续，因为操作系统会帮我们安排内存分配，所以我们使用起来就可以当做是连续的。</p>
+
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">陈浩翔</span></span>
+
+      ﻿
+
+
+
+
+2015年09月07日
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/c-plus-plus/'>c-plus-plus</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+
+	﻿
+<div id="cyReward" role="cylabs" data-use="reward" sid="/blog/2015/09/07/malloc-The-function" style="margin-bottom: 10px; text-align: center;"></div>
+
+<!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_24x24" style="float: right;">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share?uid=2133017" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">
+var jiathis_config = {data_track_clickback:'true'};
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2133017" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+
+	
+		﻿<!--PC版-->
+
+<div id="SOHUCS" sid="/blog/2015/09/07/malloc-The-function"></div>
+<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+window.changyan.api.config({
+appid: 'cyt09iKYx',
+conf: 'prod_76c7228396087e1af80f06cfc0a912c4'
+});
+</script>
+
+<script type="text/javascript" charset="utf-8" src="https://changyan.itc.cn/js/lib/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt09iKYx"></script>
+	
+
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/07/HDOJ-1020-Encoding/" title="Previous Post: HDOJ1020 Encoding">&laquo; HDOJ1020 Encoding</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/09/08/General-type-definition-of-structure-type/" title="Next Post: 结构体类型定义的一般式">结构体类型定义的一般式 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    ﻿<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/09/09/Shiro-went-from-white-to-great-3/">【Shiro】Shiro从小白到大神(三)-权限认证(授权)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/08/Shiro-went-from-white-to-great-2/">【Shiro】Shiro从小白到大神(二)-Subject认证结合MySQL</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/07/Shiro-went-from-white-to-great-1/">【Shiro】Shiro从小白到大神(一)-Shiro入门</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/05/Flow-insert-extract-operator-and-type-conversion/">【C++】流插入、提取运算符和类型转换</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/09/04/Member-functions-overload-binary-and-unary-operators/">【C++】成员函数重载二元和一元运算符</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <script type="text/javascript" src="//rf.revolvermaps.com/0/0/6.js?i=59ilglu8mky&amp;m=0&amp;c=00fff6&amp;cr1=ff0000&amp;f=ubuntu&amp;l=0" async="async">
+  </script>
+</section>
+﻿
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/acm-c/'>acm-c (12)</a></li>
+<li class='category'><a href='/blog/categories/algorithm/'>algorithm (3)</a></li>
+<li class='category'><a href='/blog/categories/android/'>android (1)</a></li>
+<li class='category'><a href='/blog/categories/c-plus-plus/'>c-plus-plus (24)</a></li>
+<li class='category'><a href='/blog/categories/cocos2d-x/'>cocos2d-x (10)</a></li>
+<li class='category'><a href='/blog/categories/java/'>java (6)</a></li>
+<li class='category'><a href='/blog/categories/other/'>other (3)</a></li>
+<li class='category'><a href='/blog/categories/shiro/'>shiro (3)</a></li>
+<li class='category'><a href='/blog/categories/test/'>test (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/chenhaoxiang">@chenhaoxiang</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'chenhaoxiang',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+﻿
+	<section>
+<h1>友情链接</h1>
+	<ul>
+        <li>
+        <a href="http://blog.csdn.net/qq_26525215" target="_blank">大学之旅_谙忆</a>
+		</li>
+		<li>
+        <a href="http://blog.csdn.net/marksinoberg" target="_blank">纯臻</a>
+		</li>
+		<li>
+		<a href="http://blog.csdn.net/u013097262" target="_blank">Dream_M</a>
+		</li>
+		<li>
+		<a href="https://bbs.ksyun.com/forum.php" target="_blank">金山云</a>
+		</li>
+</ul>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 陈浩翔 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1261875079'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1261875079%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+  <script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  ﻿<script type="text/javascript" src="http://arrow.scrolltotop.com/arrow62.js"></script>
+<noscript>Not seeing a <a href="http://www.scrolltotop.com/">Scroll to Top Button</a>? Go to our FAQ page for more info.</noscript>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Acm-c | 谙忆-人生之旅]]></title>
   <link href="http://chenhaoxiang.github.io/blog/categories/acm-c/atom.xml" rel="self"/>
   <link href="http://chenhaoxiang.github.io/"/>
-  <updated>2017-09-15T18:39:44+08:00</updated>
+  <updated>2017-09-17T21:54:45+08:00</updated>
   <id>http://chenhaoxiang.github.io/</id>
   <author>
     <name><![CDATA[陈浩翔]]></name>
@@ -12,6 +12,105 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[HDOJ1020 Encoding]]></title>
+    <link href="http://chenhaoxiang.github.io/blog/2015/09/07/HDOJ-1020-Encoding/"/>
+    <updated>2015-09-07T04:06:28+08:00</updated>
+    <id>http://chenhaoxiang.github.io/blog/2015/09/07/HDOJ-1020-Encoding</id>
+    <content type="html"><![CDATA[<p>Problem Description<br/>
+Given a string containing only &lsquo;A&rsquo; - &lsquo;Z&rsquo;, we could encode it using the following method:</p>
+
+<ol>
+<li><p>Each sub-string containing k same characters should be encoded to &ldquo;kX&rdquo; where &ldquo;X&rdquo; is the only character in this sub-string.</p></li>
+<li><p>If the length of the sub-string is 1, &lsquo;1&rsquo; should be ignored.</p></li>
+</ol>
+
+
+<!-- more -->
+
+
+<hr />
+
+<p>Input<br/>
+The first line contains an integer N (1 &lt;= N &lt;= 100) which indicates the number of test cases. The next N lines contain N strings. Each string consists of only &lsquo;A&rsquo; - &lsquo;Z&rsquo; and the length is less than 10000.</p>
+
+<p>Output<br/>
+For each test case, output the encoded string in a line.</p>
+
+<p>Sample Input
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>2
+</span><span class='line'>ABC
+</span><span class='line'>ABBCCC&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Sample Output
+</span><span class='line'>ABC
+</span><span class='line'>A2B3C</span></code></pre></td></tr></table></div></figure></p>
+
+<p>简单的字符串题目<br/>
+需要注意的只有<br/>
+如果输入:AABBBAAA<br/>
+输出的是：2A3B3A<br/>
+而不是：5A3B</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+int main()
+{
+    int s,i,j,n,p,m;
+    char a[100000],temp;
+    scanf("%d",&amp;s);
+    while(s--)
+    {
+        scanf("%s",a);
+        n=strlen(a);
+        temp=a[0];
+        m=1;
+        for(i=1;i&lt;=n;i++)
+        {
+            p=1;
+            if(a[i]==temp)
+            {
+                m++;
+            }
+            if(a[i]!=temp)
+            {
+                p=0;
+                temp=a[i];
+            }
+            if(p==0)
+            {
+                if(m==1)
+                    printf("%c",a[i-1]);
+                else
+                    printf("%d%c",m,a[i-1]);
+                m=1;
+            }
+        }
+        printf("\n");
+    }
+            return 0;
+}
+</code></pre>
+
+<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
+欢迎转载，分享是进步的源泉。</p>
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[HDOJ 1175 连连看 DFS]]></title>
@@ -763,135 +862,6 @@ int main()
 <p>}</p>
 
 <p>```</p>
-
-<p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
-欢迎转载，分享是进步的源泉。</p>
-
-<blockquote cite='陈浩翔'>
-<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
-本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[HDOJ1518Square 深搜]]></title>
-    <link href="http://chenhaoxiang.github.io/blog/2015/08/24/HDOJ1518Square-Deep-search/"/>
-    <updated>2015-08-24T11:51:53+08:00</updated>
-    <id>http://chenhaoxiang.github.io/blog/2015/08/24/HDOJ1518Square-Deep-search</id>
-    <content type="html"><![CDATA[<p>Problem Description
-Given a set of sticks of various lengths, is it possible to join them end-to-end to form a square?</p>
-
-<!-- more -->
-
-
-<hr />
-
-<p>Input
-The first line of input contains N, the number of test cases. Each test case begins with an integer 4 &lt;= M &lt;= 20, the number of sticks. M integers follow; each gives the length of a stick - an integer between 1 and 10,000.</p>
-
-<p>Output
-For each case, output a line containing &ldquo;yes&rdquo; if is is possible to form a square; otherwise output &ldquo;no&rdquo;.</p>
-
-<pre><code>Sample Input
-3
-4 1 1 1 1
-5 10 20 30 40 50
-8 1 7 2 6 4 4 3 5
-
-
-Sample Output
-yes
-no
-yes
-</code></pre>
-
-<p> 题意就是：看这个数组中的数字组合是否能够构成一个正方形
- 不能分割数字，不能重复组合</p>
-
-<p>代码：</p>
-
-<pre><code>#include&lt;string.h&gt;
-#include&lt;stdio.h&gt;
-#include&lt;algorithm&gt;
-using namespace std;
-int n,s,su,a[1010],vis[1010],len;
-bool cmp(int a,int b)
-{
-    return a&gt;b;//从大到小排序
-}
-void dfs(int a1,int a2,int a3)//(0,0,1)
-{
-    if(a1==3)/**只需要筹齐3次，那么剩下的一定能够成len长度**/
-    {
-        su=1;
-        return ;
-    }
-    if(su==1)
-        return ;/**优化时间**/
-    for(int i=a3; i&lt;=n; i++)
-    {
-  /**对于那些用过的和不符合条件的，for那里可以不扫,故从a3开始**/
-   /**a3前面的对于最初的a2来说一定不符合**/
-        if(vis[i]==0)
-        {
-            vis[i]=1;
-            if(a2+a[i]==len)
-            {
-                dfs(a1+1,0,1);
-                 /**但是换另外一条边的时候a3要改回1,因为那些未用的，对上一条边来说不符合条件的，可能符合这条边的条件**/
-            }
-            else if(a2+a[i]&lt;len)
-            {
-                dfs(a1,a2+a[i],i+1);
-                /**没筹齐从i+1继续，前面的不符合**/
-                while(a[i]==a[i+1])
-                    i++;
-                    //回溯后如果后面的相同那么不需要再DFS
-       //前面的数和后面的相同就可以跳过这个数，剪枝
-            }
-            vis[i]=0;
-        }
-    }
-}
-
-int main()
-{
-    int i;
-    scanf("%d",&amp;s);
-    while(s--)
-    {
-        su=0;
-        len=0;
-        memset(vis,0,sizeof(vis));
-        //memset函数在string.h头文件中
-        scanf("%d",&amp;n);
-        for(i=1; i&lt;=n; i++)
-        {
-            scanf("%d",&amp;a[i]);
-            len=len+a[i];
-        }
-        int mm=len/4;
-        sort(a+1,a+n+1,cmp);
-        //在algorithm头文件中
-        if(len%4==0&amp;&amp;a[1]&lt;=mm&amp;&amp;n&gt;=4)
-        {
-            len/=4;
-            dfs(0,0,1);
-            if(su==1)
-                printf("yes\n");
-            else
-                printf("no\n");
-        }
-        else
-        {
-            printf("no\n");
-        }
-    }
-    return 0;
-}
-</code></pre>
 
 <p>本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。
 欢迎转载，分享是进步的源泉。</p>
