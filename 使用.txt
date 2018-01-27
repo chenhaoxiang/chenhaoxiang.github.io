@@ -87,3 +87,8 @@ source\_includes\navigation.html
 git clone -b source https://github.com/chenhaoxiang/chenhaoxiang.github.io.git octopress
 cd octopress
 git clone https://github.com/chenhaoxiang/chenhaoxiang.github.io.git _deploy
+
+
+20180127
+增加自动跳转站点 chenhaoxiang.cn
+source\_includes\custom\head.html 增加script
