@@ -1,0 +1,19 @@
+# Site settings
+name: 陈浩翔
+location: 杭州
+company: 飞链云
+companyUrl: https://feilianyun.cn/
+position: CEO&执行董事
+github: https://github.com/chenhaoxiang
+csdn: https://chenhx.blog.csdn.net/
+
+baseurl: ""
+
+permalink: /:year/:month/:day/:title/
+
+exclude: ['README.md']
+
+# Build settings
+markdown: kramdown
+
+include: [_layouts]

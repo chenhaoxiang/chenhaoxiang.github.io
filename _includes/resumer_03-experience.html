@@ -1,0 +1,208 @@
+<section class="section brd-btm" id="experience">
+    <div class="row">
+        <div class="col-sm-12 clear-mrg">
+            <h2 class="title-thin text-muted">工作经历</h2>
+            <br/>
+            <div class="education">
+                <div class="education-box">
+                    <time class="education-date" datetime="2019-05TNow">
+                        <span><strong class="text-upper">2019</strong>.5 - <strong>2022</strong>.11</span>
+                    </time>
+                    <h3>SaaS架构师 | <a href="https://www.dasouche.com/zh/" target="_blank">大搜车</a></h3>
+                    <span class="education-company">二手车板块 | 大风车SaaS内核研发部</span>
+                    <p></p>
+
+                    <p>负责SaaS内核的元数据与权限。
+                        <br/>为了打通一线业务与技术之间的信息差，主动参与一线业务开发以及出差了解一线车商诉求。
+                        <br/>参与公司2021年战略业务开发：基于新大风车，进行二手车的B2B交易。寄售、拍卖和一口价。
+                    </p>
+
+                    <h4>内核与权限介绍</h4>
+                    <p>元数据定义：描述数据的数据</p>
+
+                    <p>
+                        在实际业务中，为了能够更加抽象出业务模型，一共将数据分为了三层。从上至下：1.业务数据；2.描述业务数据的业务元数据（参考数据库中，建立业务表时的表字段）；3.描述业务元数据的元数据（参考数据库中，表字段的类型）。为便于区分，我将其划分为：业务数据、对象、对象元数据。
+                    </p>
+
+                    <p>与数据的三层对应，权限分为三部分。一：业务数据的权限控制；二：对象的权限控制；三：对象元数据的权限控制。 </p>
+
+                    <p>对象数据的描述信息分为7种大类型，分别为：按钮、字段、布局、业务流程、业务阶段、工具、列表。此7大类型为对象的属性。
+                        <br/>而对象元数据，则为：对象类型（普通对象、查找对象等）、字段（文本字段、数字字段、媒体字段、时间字段等）、布局（详情布局、编辑布局等）、按钮（新增按钮、编辑按钮、导出按钮、删除按钮、查询按钮等）以及相关对象的描述数据、均为对象元数据。
+                    </p>
+                    <p>工作简述：根据二手车行业领域建模，参考Java面向对象思想。
+                        <br/>将二手车行业的业务对象分为三大类：车辆对象、客户对象、订单对象，其他类型均为通用对象。建立相关元数据，建立相关元数据组件、搭建内核解释器。
+                    </p>
+                    <p>与数据的三层对应，权限分为三部分。一：业务数据的权限控制；二：对象的权限控制；三：对象元数据的权限控制。
+                    </p>
+
+                    <p>
+                        在实际实现中，通过type区分不同类型的数据。基于RBAC模型的改版：使用用户-角色-资源 +
+                        角色互斥（例如财务和销售，互斥是可选的）模型。通过网状的权限控制结构，可细化到控制单个字段的增删改查以及对象和对象元数据的配置权限。
+                        <br/>在权限中提出权限版本的概念。通过版本生成租户对象副本数据。解决租户个性化定制问题以及进行SaaS版本的收费
+                    </p>
+
+                    <p>
+                        基于对象的工具，可通过SaaS开放平台，快速接入第三方平台。实现新大风车小程序的营销收费，2020年，开启了大搜车二手车板块的SaaS服务收费，短短几个月，我们部门不仅仅完成了收支平衡，且开始了盈利。
+                    </p>
+
+                    <h4>相关数据</h4>
+                    <p>基于SaaS内核，新大风车从研发开始，到上线，花费的时间仅<strong>42天</strong>（2019年9月25日-2019年11月5日）。</p>
+                    <p>
+                        后续的部分需求迭代，产品经理可通过SaaS的可视化界面进行配置。例如：页面上字段的删减、是否展示的规则等等。且租户可自行通过管理端进行可视化配置。
+                    </p>
+                    <p>国内中大型二手车商使用大风车/新大风车的车商占比超<strong>90%</strong>。2020年，中国百强车商企业，使用占比为<strong>100%</strong></p>
+
+                    <p>2020年主导过一次SaaS系统重构、系统性能优化。99.9%接口响应时间从<strong>169ms->26ms</strong>
+                        <img src="{{ '/styles/img/souche/youhua01.png' | prepend: site.baseurl }}"/>
+                    </p>
+
+                    <h4>代表产品</h4>
+                    <p><a href="https://fengche.souche.com/" target="_blank">大风车</a> & <a
+                            href="https://apps.apple.com/cn/app/%E6%96%B0%E5%A4%A7%E9%A3%8E%E8%BD%A6/id1475447310"
+                            target="_blank">新大风车</a>
+                        （为什么会有大风车、新大风车。其实故事很长，有机会可以面谈。这个故事得从2013年开始说起...）
+                    </p>
+
+                    <h4>技术分享</h4>
+                    <p>
+                        2019-07-17 自动单元测试生成框架设计与原理分享。
+                        <br/>提高团队单元测试覆盖率。<strong>60%->90%</strong>。
+                    </p>
+                    <p>
+                        2020-05-06 SaaS内核元数据设计与使用分享。
+                        <br/>团队内普及内核元数据概念，减少沟通成本。
+                    </p>
+                    <p>
+                        2020-09-21 系统性能优化实战分享。
+                        <br/>降低服务响应时间，提升租户体验感。99.9%接口调用时间：169ms->26ms
+                    </p>
+                    <p>
+                        2021-03-03 SaaS内核研发实战与踩坑。
+                        <br/>集团内北京车易拍团队打算搭建汽车拍卖SaaS，直播做的分享。
+                    </p>
+
+                    <h4>集团荣誉</h4>
+                    <p>
+                        大搜车首届分享之星
+                    </p>
+                    <p>
+                        <img style="width: auto;height: 300px;"
+                             src="{{ '/styles/img/souche/fenxiang.png' | prepend: site.baseurl }}"/>
+
+                    </p>
+                </div>
+                <!-- .education-box -->
+                <div class="education-box">
+                    <time class="education-date" datetime="2018-06T2019-05">
+                        <span><strong class="text-upper">2018</strong>.6 - <strong>2019</strong>.5</span>
+                    </time>
+                    <h3>Java工程师 | <a href="http://www.fshows.com/" target="_blank">杭州首展科技</a></h3>
+                    <span class="education-company">支付与对账板块 | 付呗研发部门</span>
+                    <p></p>
+                    <p>负责付呗的支付与对账业务。
+                        <br/>维护底层支付逻辑与日常需求、参与支付渠道在线切换"战役"，在不影响用户支付的情况下，成功从平安银行支付渠道切换到乐刷科技支付渠道。
+                    </p>
+                    <p>当时我们内部将其比作：<strong>全速飞行中的火箭更换发动机</strong></p>
+                    <p>独立架构与研发付呗首个支付对账系统：总督系统。至今依然稳定支撑着付呗的对账业务。</p>
+
+                    <h4>总督系统</h4>
+                    <p>即对账系统。
+                        <br/>公司在总督系统上线之前，是没有专门负责对账的系统的。全程财务人工Excel对账。
+                        <br/>当时每日千万订单数据量的对账需要准实时出结果，对当时的我和团队而言都是一个挑战。
+                    <p>对账的实现与原理文档：</p>
+                    <p><a href="https://blog.csdn.net/qq_26525215/article/details/83348561"
+                          target="_blank">如何完成日千万级别以上的订单对账（一）</a>
+                    </p>
+                    <p><a href="https://blog.csdn.net/qq_26525215/article/details/85008363"
+                          target="_blank">如何完成日千万级别以上的订单对账（二）</a>
+                    </p>
+                    </p>
+
+                    <h4>相关数据</h4>
+                    <p>付呗日交易笔>千万。日流水>6亿。</p>
+
+                    <p>
+                        总督对账系统将对账速度提升了两个数量级。<strong>从天->分钟</strong>。
+                    </p>
+
+                    <h4>代表产品</h4>
+                    <p>
+                        <a href="https://www.51fubei.com/" target="_blank">付呗</a>
+                    </p>
+
+                    <h4>集团内荣誉</h4>
+                    <p>
+                    <p>
+                        <img style="width: auto;height: 400px;"
+                             src="{{ '/styles/img/souche/fs.png' | prepend: site.baseurl }}"/>
+                    </p>
+                    <p>
+                        <a href="https://mp.weixin.qq.com/s/zvMJDSmulxKTjxKNCnCJnQ" target="_blank">2019年Q4季度之星</a>
+                        南哥：付呗CTO
+                    </p>
+                    <div class="row" style="margin-bottom: 30px">
+                        <div class="col-sm-6 clear-mrg">
+                            <div class="award-box" style="margin-bottom: 5px">
+                                <img src="{{ '/styles/img/souche/10.jpeg' | prepend: site.baseurl }}" alt="">
+                            </div>
+                            <p class="award-title">技术书籍作者&编辑</p>
+                        </div><!-- .col-sm-6 -->
+
+                        <div class="col-sm-6 clear-mrg">
+                            <div class="award-box" style="margin-bottom: 5px">
+                                <img src="{{ '/styles/img/souche/11.jpeg' | prepend: site.baseurl }}" alt="">
+                            </div>
+                            <p class="award-title">重大事故处理与规避（造成故障的工程师非我）</p>
+                            <p class="award-title">我负责将整个故障流程复盘和总结</p>
+                        </div><!-- .col-sm-6 -->
+
+                    </div><!-- .row -->
+
+
+                </div>
+                <!-- .education-box -->
+                <div class="education-box">
+                    <time class="education-date" datetime="2016T2018-06">
+                        <span><strong class="text-upper">2016</strong> - <strong>2018</strong>.6</span>
+                    </time>
+                    <h3>全栈工程师&技术合伙人 | 一家创业公司</h3>
+                    <span class="education-company">3个开发的小团队</span>
+                    <p>
+                        此时我还未毕业，该公司是学院教授创办的。
+                    </p>
+                    <p>
+                        日常的Java企业项目开发与小组管理。因为人比较少，当时需要做很多东西，做的是偏全栈的，需要啥就学习啥。
+                        需要前端，就学习了HTML、JS、Bootstrap。应用需要上移动端，就学习了安卓、Object-C、H5 Web App、lua热更。
+                        需要游戏开发，就学了Cocos2dx。挺感谢这个经历的。
+                        一是锻炼了自己的学习能力和技术能力。二是让我更加明白了一些业务和技术之间的关系。
+                    </p>
+                    <p>
+                        如果已经选择了和其他人一起创业、而且自己不是创始人，那么需要考虑的就只有一点，这个创始人是不是靠谱。
+                        这个创始人是不是能一起走到最后。
+                        他的能力、他的格局、他的认知，决定了整个团队的上限和存活。
+                        如果选择好了创始人，那就专心做一件事，信任他，并且一起往前奔赴。
+                    </p>
+                    <p>
+                        关于技术和业务，我的一点理解。 <a href="https://chenhx.blog.csdn.net/article/details/86670660" target="_blank">身处业务的我们，技术上如何自拔？</a>
+                    </p>
+                </div>
+                <!-- .education-box -->
+                <!-- .education-box -->
+                <div class="education-box">
+                    <time class="education-date" datetime="2014T2016">
+                        <span><strong class="text-upper">2014</strong> - <strong>2016</strong></span>
+                    </time>
+                    <h3>创业 | 市场合伙人</h3>
+                    <p>
+                        类似现在华住会打通酒店一样的。打通学校边上质量比较好的店铺，商超、饮料店、美发店、图文店、KTV、网吧等，在这些店铺可以一站式通用的折扣Pass卡。
+                    </p>
+                    <p>
+                        发展顶峰的时候，把学校周边上百家不错的店铺都拿下了，前期向用户收费、商家免费，在学校内卖出了几千张卡，而且形成了一些比较好的口碑效应。
+                        开始要研发软件导流以及扩大规模的时候，已有的收费模式发现了一些问题，到要调整的时候。创始人他也正好遇到了一些问题，就没继续了。
+                    </p>
+                </div>
+                <!-- .education-box -->
+            </div>
+        </div>
+    </div>
+</section><!-- .section -->
